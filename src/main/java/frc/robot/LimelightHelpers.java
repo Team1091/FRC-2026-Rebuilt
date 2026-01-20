@@ -481,7 +481,7 @@ public class LimelightHelpers {
     static boolean profileJSON = false;
 
     static String sanitizeName(String name) {
-        if (name == null || name.equals("") ) {
+        if (name == null || name.isEmpty()) {
             return "limelight";
         }
         return name;
@@ -819,38 +819,6 @@ public class LimelightHelpers {
         return getLimelightNTString(limelightName, "json");
     }
 
-    /**
-     * Switch to getBotPose
-     *
-     * @param limelightName
-     * @return
-     */
-    @Deprecated
-    public static double[] getBotpose(String limelightName) {
-        return getLimelightNTDoubleArray(limelightName, "botpose");
-    }
-
-    /**
-     * Switch to getBotPose_wpiRed
-     *
-     * @param limelightName
-     * @return
-     */
-    @Deprecated
-    public static double[] getBotpose_wpiRed(String limelightName) {
-        return getLimelightNTDoubleArray(limelightName, "botpose_wpired");
-    }
-
-    /**
-     * Switch to getBotPose_wpiBlue
-     *
-     * @param limelightName
-     * @return
-     */
-    @Deprecated
-    public static double[] getBotpose_wpiBlue(String limelightName) {
-        return getLimelightNTDoubleArray(limelightName, "botpose_wpiblue");
-    }
 
     public static double[] getBotPose(String limelightName) {
         return getLimelightNTDoubleArray(limelightName, "botpose");
@@ -1194,9 +1162,7 @@ public class LimelightHelpers {
      * Asynchronously take snapshot.
      */
     public static CompletableFuture<Boolean> takeSnapshot(String tableName, String snapshotName) {
-        return CompletableFuture.supplyAsync(() -> {
-            return SYNCH_TAKESNAPSHOT(tableName, snapshotName);
-        });
+        return CompletableFuture.supplyAsync(() -> SYNCH_TAKESNAPSHOT(tableName, snapshotName));
     }
 
     private static boolean SYNCH_TAKESNAPSHOT(String tableName, String snapshotName) {
@@ -1204,7 +1170,7 @@ public class LimelightHelpers {
         try {
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
-            if (snapshotName != null && !snapshotName.equals("")) {
+            if (snapshotName != null && !snapshotName.isEmpty()) {
                 connection.setRequestProperty("snapname", snapshotName);
             }
 

@@ -77,6 +77,10 @@ public class RobotContainer {
     drive.resetGyro();
     drive.setFieldState(true);
 
+    //TODO: set up camera capture
+//    CameraServer.startAutomaticCapture().setExposureManual(40);
+//    Shuffleboard.getTab("General").add("Camera", 0).withWidget(BuiltInWidgets.kCameraStream);
+
 //    FollowPathCommand.warmupCommand().schedule();
   }
 
@@ -86,7 +90,7 @@ public class RobotContainer {
   }
 
   private void configureAutonomous() {
-    autoChooser = new  SendableChooser();
+    autoChooser = new SendableChooser<>();
     autoChooser.addOption("Spin Wildly", Autos.spinAuto(drive));
   }
 
@@ -101,12 +105,11 @@ public class RobotContainer {
    */
   private void configureBindings() {
 
-    drive.setDefaultCommand(
+      // x+ forward is front, x- is backward
+      drive.setDefaultCommand(
             DriveCommand.joystickDrive(
                     drive,
-                    () -> { // x+ forward is front, x- is backward
-                      return driverController.getLeftY();
-                    },
+                    driverController::getLeftY,
                     () -> { // y+ is to the left, y- is to the right
                       return -driverController.getLeftX();
                     },

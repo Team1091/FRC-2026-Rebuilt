@@ -26,6 +26,12 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
+
+  }
+
+  @Override
+  public void robotInit() {
+    m_robotContainer.robotInit();
   }
 
   /**
@@ -50,6 +56,15 @@ public class Robot extends TimedRobot {
 
   @Override
   public void disabledPeriodic() {}
+
+  /**
+   * This function is called each time the robot leaves the disabled state
+   * Aka - This method runs when the robot is enabled.
+   */
+  @Override
+  public void disabledExit() {
+    m_robotContainer.robotEnabled();
+  }
 
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override

@@ -31,7 +31,7 @@ public class Drive extends SubsystemBase {
     private boolean isFieldOriented = true;
     private boolean defenseMode = false;
     private ChassisSpeeds chassisSpeeds;
-    private Translation2d middle;
+//    private Translation2d middle;
     private final SwerveModulePosition[] modulePositions = new SwerveModulePosition[4];
     private PoseEstimationSubsystem poseEstimationSubsystem;
     private final StructArrayPublisher<SwerveModuleState> statePublisher;
@@ -54,11 +54,11 @@ public class Drive extends SubsystemBase {
 
         statePublisher = NetworkTableInstance.getDefault().getStructArrayTopic("States", SwerveModuleState.struct).publish();
 
-        if(isOnRed()){
-            middle = new Translation2d(13.25, 4);
-        } else {
-            middle = new Translation2d(4.5, 4);
-        }
+//        if(isOnRed()){
+//            middle = new Translation2d(13.25, 4);
+//        } else {
+//            middle = new Translation2d(4.5, 4);
+//        }
     }
 
     public void periodic() {
@@ -137,13 +137,10 @@ public class Drive extends SubsystemBase {
         SwerveDriveKinematics.desaturateWheelSpeeds(setpointStates, maxLinearSpeed);
 
         // Send setpoints to modules
-        SwerveModuleState[] optimizedSetpointStates = new SwerveModuleState[4];
         for (int i = 0; i < 4; i++) {
             // The module returns the optimized state, useful for logging
-            optimizedSetpointStates[i] = modules[i].runSetpoint(setpointStates[i]);
+             modules[i].runSetpoint(setpointStates[i]);
         }
-
-        optimizedSetpointStates = setpointStates;
     }
 
     /**
@@ -245,12 +242,9 @@ public class Drive extends SubsystemBase {
         SmartDashboard.putBoolean("Defense Mode", defenseMode);
     }
 
-    public boolean canMove() {
-        if (defenseMode){
-            return false;
-        }
-        return true;
-    }
+//    public boolean canMove() {
+//        return !defenseMode;
+//    }
 
     // public Rotation2d getHeadingToMiddle(){
     //     return getPose().getTranslation().minus(middle).getAngle();

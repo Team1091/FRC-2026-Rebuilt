@@ -130,20 +130,18 @@ public class Module {
     /**
      * Runs the module with the specified setpoint state. Returns the optimized state.
      */
-    public SwerveModuleState runSetpoint(SwerveModuleState state) {
+    public void runSetpoint(SwerveModuleState state) {
         // Optimize state based on current angle
         // Controllers run in "periodic" when the setpoint is not null
-        var optimizedState = SwerveModuleState.optimize(state, getAngle());
+        state.optimize( getAngle());
 
         // Update setpoints, controllers run in "periodic"
-        angleSetpoint = optimizedState.angle;
-        speedSetpoint = optimizedState.speedMetersPerSecond;
+        angleSetpoint = state.angle;
+        speedSetpoint = state.speedMetersPerSecond;
 
         // Logging
         targetAngle.setDouble(angleSetpoint.getDegrees());
         targetVelocity.setDouble(speedSetpoint);
-
-        return optimizedState;
     }
 
     /**
@@ -185,7 +183,6 @@ public class Module {
             return new Rotation2d(inputs.turnPosition.plus(turnRelativeOffset).getRadians() % Math.PI);
         }
     }
-    /** Returns the current turn angle of the module. */
 
     /**
      * Returns the current drive position of the module in meters.
