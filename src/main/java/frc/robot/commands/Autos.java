@@ -22,7 +22,7 @@ public final class Autos {
 
     public static Command driveForward(Drive drive) {
         // Make a spot 10 units in front, drive to there.
-        // How much is a unit?  Good question.
+        // How much is a unit?  Good question. Don't stand near it when we find out.
         var currentPose = drive.getPose();
         var newPos = currentPose.transformBy(new Transform2d(10.0, 0.0, Rotation2d.fromDegrees(0)));
 
