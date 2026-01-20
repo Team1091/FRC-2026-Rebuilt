@@ -22,9 +22,13 @@ public final class Autos {
 
     public static Command driveForward(Drive drive) {
         // Make a spot 10 units in front, drive to there.
-        // This calc probably should be moved inside a command, so it executes as the command is used rather than made.
+        // How much is a unit?  Good question.
         var currentPose = drive.getPose();
         var newPos = currentPose.transformBy(new Transform2d(10.0, 0.0, Rotation2d.fromDegrees(0)));
+
+        // TODO: While the 10 units in front of us wont be useful,
+        //  This will allow us to drive directly to a pose.
+        // We could have a driveToClimb, driveToShootSpot, driveToHopperFillSpot, etc
         return new DriveToPoseCommand(drive, newPos);
     }
 
