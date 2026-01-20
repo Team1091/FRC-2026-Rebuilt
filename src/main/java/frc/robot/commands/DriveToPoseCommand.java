@@ -42,15 +42,17 @@ public class DriveToPoseCommand extends Command {
     public void execute() {
         Pose2d currentPose = drive.getPose();
 
+        // Calculate the velocity to drive at using PID
         double xVelocity = xController.calculate(currentPose.getX(), targetPose.getX());
         double yVelocity = yController.calculate(currentPose.getY(), targetPose.getY());
         double thetaVelocity = thetaController.calculate(currentPose.getRotation().getRadians(), targetPose.getRotation().getRadians());
 
-        // Clamp to max speeds
+        // Clamp to max swerve speeds
         xVelocity = MathUtil.clamp(xVelocity, -Constants.Swerve.maxLinearSpeed, Constants.Swerve.maxLinearSpeed);
         yVelocity = MathUtil.clamp(yVelocity, -Constants.Swerve.maxLinearSpeed, Constants.Swerve.maxLinearSpeed);
         thetaVelocity = MathUtil.clamp(thetaVelocity, -Constants.Swerve.maxAngularSpeed, Constants.Swerve.maxAngularSpeed);
 
+        // Send Velocity to the drive
         drive.runVelocity(new Translation2d(xVelocity, yVelocity), thetaVelocity);
     }
 
