@@ -18,7 +18,7 @@ import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.hardware.core.CoreCANcoder;
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.spark.SparkBase.PersistMode;
+import com.revrobotics.PersistMode;
 import com.revrobotics.spark.SparkLowLevel;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkBaseConfig;
@@ -49,8 +49,8 @@ import static frc.robot.Constants.Swerve.FRONT_RIGHT;
 public class ModuleIOTalonFX implements ModuleIO {
     private final SparkMax driveSparkMax;
     private final SparkMax turnSparkMax;
-    private final SparkMaxConfig driveConfig;
-    private final SparkMaxConfig turnConfig;
+    private final SparkBaseConfig driveConfig;
+    private final SparkBaseConfig turnConfig;
     private final RelativeEncoder driveEncoder;
     private final RelativeEncoder turnRelativeEncoder;
     private final CoreCANcoder cancoder;
@@ -144,8 +144,8 @@ public class ModuleIOTalonFX implements ModuleIO {
         driveSparkMax.setCANTimeout(0);
         turnSparkMax.setCANTimeout(0);
 
-        driveSparkMax.configure(driveConfig, com.revrobotics.spark.SparkBase.ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-        turnSparkMax.configure(turnConfig, com.revrobotics.spark.SparkBase.ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+        driveSparkMax.configure(driveConfig, com.revrobotics.ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+        turnSparkMax.configure(turnConfig, com.revrobotics.ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     }
 
     @Override
