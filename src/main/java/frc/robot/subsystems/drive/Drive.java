@@ -31,7 +31,7 @@ public class Drive extends SubsystemBase {
     private boolean isFieldOriented = true;
     private boolean defenseMode = false;
     private ChassisSpeeds chassisSpeeds;
-//    private Translation2d middle;
+    //    private Translation2d middle;
     private final SwerveModulePosition[] modulePositions = new SwerveModulePosition[4];
     private PoseEstimationSubsystem poseEstimationSubsystem;
     private final StructArrayPublisher<SwerveModuleState> statePublisher;
@@ -139,7 +139,7 @@ public class Drive extends SubsystemBase {
         // Send setpoints to modules
         for (int i = 0; i < 4; i++) {
             // The module returns the optimized state, useful for logging
-             modules[i].runSetpoint(setpointStates[i]);
+            modules[i].runSetpoint(setpointStates[i]);
         }
     }
 
@@ -172,7 +172,7 @@ public class Drive extends SubsystemBase {
         stop();
     }
 
-    public void setFieldState(boolean bool) {
+    public void setIsFieldOriented(boolean bool) {
         isFieldOriented = bool;
     }
 
@@ -237,7 +237,7 @@ public class Drive extends SubsystemBase {
         return alliance.filter(value -> value == DriverStation.Alliance.Red).isPresent();
     }
 
-    public void toggleDefenseMode(){
+    public void toggleDefenseMode() {
         defenseMode = !defenseMode;
         SmartDashboard.putBoolean("Defense Mode", defenseMode);
     }

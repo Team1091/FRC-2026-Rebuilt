@@ -1,9 +1,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -27,22 +25,20 @@ public class DriveCommand {
     ) {
         return Commands.run(
                 () -> {
-                    // Apply deadband
-                    double linearMagnitude = MathUtil.applyDeadband(
-                            Math.hypot(xSupplier.getAsDouble(), ySupplier.getAsDouble()), Constants.Swerve.linearDeadband);
-                    Rotation2d linearDirection =
-                            new Rotation2d(-xSupplier.getAsDouble(), ySupplier.getAsDouble());
+                    double x = xSupplier.getAsDouble();
+                    double y = ySupplier.getAsDouble();
                     double omega = MathUtil.applyDeadband(omegaSupplier.getAsDouble(), Constants.Swerve.rotationalDeadband);
+
+                    // Apply deadband
+                    double linearMagnitude = MathUtil.applyDeadband(Math.hypot(x, y), Constants.Swerve.linearDeadband);
+                    Rotation2d linearDirection = new Rotation2d(-x, y);
 
                     // Square values
                     linearMagnitude = linearMagnitude * linearMagnitude;
                     omega = Math.copySign(omega * omega, omega);
 
                     // Calculate new linear velocity
-                    Translation2d linearVelocity =
-                            new Pose2d(new Translation2d(), linearDirection)
-                                    .transformBy(new Transform2d(linearMagnitude, 0.0, new Rotation2d()))
-                                    .getTranslation();
+                    Translation2d linearVelocity = new Translation2d(linearMagnitude, linearDirection);
 
                     drive.runVelocity(linearVelocity, omega);
                 },

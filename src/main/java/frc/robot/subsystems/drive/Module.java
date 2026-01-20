@@ -133,7 +133,7 @@ public class Module {
     public void runSetpoint(SwerveModuleState state) {
         // Optimize state based on current angle
         // Controllers run in "periodic" when the setpoint is not null
-        state.optimize( getAngle());
+        state.optimize(getAngle());
 
         // Update setpoints, controllers run in "periodic"
         angleSetpoint = state.angle;

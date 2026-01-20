@@ -4,9 +4,5 @@ public record ModulePidConfig(
         FeedForwardParams driveFeedForward,
         PidConfig drivePid,
         PidConfig turnPid
-
-
 ) {
-
-
 }
