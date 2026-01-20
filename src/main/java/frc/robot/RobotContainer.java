@@ -32,7 +32,6 @@ import static frc.robot.Constants.Swerve.FRONT_RIGHT;
  */
 public class RobotContainer {
     // The robot's subsystems and commands are defined here...
-//  private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
     private final Drive drive;
     private final PoseEstimationSubsystem poseEstimationSubsystem;
 
@@ -84,10 +83,10 @@ public class RobotContainer {
         drive.setIsFieldOriented(true);
 
         //TODO: set up camera capture
-//    CameraServer.startAutomaticCapture().setExposureManual(40);
-//    Shuffleboard.getTab("General").add("Camera", 0).withWidget(BuiltInWidgets.kCameraStream);
-
-//    FollowPathCommand.warmupCommand().schedule();
+        // CameraServer.startAutomaticCapture().setExposureManual(40);
+        // Shuffleboard.getTab("General").add("Camera", 0).withWidget(BuiltInWidgets.kCameraStream);
+        //
+        // FollowPathCommand.warmupCommand().schedule();
     }
 
     public void robotEnabled() {

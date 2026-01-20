@@ -58,6 +58,7 @@ public class DriveToPoseCommand extends Command {
 
     @Override
     public void end(boolean interrupted) {
+        // Shut the motor off when we're done
         drive.runVelocity(new ChassisSpeeds());
     }
 
