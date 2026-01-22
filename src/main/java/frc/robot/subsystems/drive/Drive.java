@@ -46,22 +46,16 @@ public class Drive extends SubsystemBase {
             ModuleIO blModuleIO,
             ModuleIO brModuleIO) {
         this.gyroIO = gyroIO;
-        modules[FRONT_LEFT] = new Module(flModuleIO, FRONT_LEFT, "FL");
-        modules[FRONT_RIGHT] = new Module(frModuleIO, FRONT_RIGHT, "FR");
-        modules[BACK_LEFT] = new Module(blModuleIO, BACK_LEFT, "BL");
-        modules[BACK_RIGHT] = new Module(brModuleIO, BACK_RIGHT, "BR");
+        modules[FRONT_LEFT] = new Module(flModuleIO, FRONT_LEFT, "FL", createDefaultPidConfig());
+        modules[FRONT_RIGHT] = new Module(frModuleIO, FRONT_RIGHT, "FR", createDefaultPidConfig());
+        modules[BACK_LEFT] = new Module(blModuleIO, BACK_LEFT, "BL", createDefaultPidConfig());
+        modules[BACK_RIGHT] = new Module(brModuleIO, BACK_RIGHT, "BR", createDefaultPidConfig());
 
         for (int i = 0; i < 4; i++) {
             modulePositions[i] = new SwerveModulePosition();
         }
 
         statePublisher = NetworkTableInstance.getDefault().getStructArrayTopic("States", SwerveModuleState.struct).publish();
-
-//        if(isOnRed()){
-//            middle = new Translation2d(13.25, 4);
-//        } else {
-//            middle = new Translation2d(4.5, 4);
-//        }
     }
 
     public void setPoseEstimationSubSystem(PoseEstimationSubsystem poseEstimationSubsystem) {
@@ -89,50 +83,30 @@ public class Drive extends SubsystemBase {
         statePublisher.set(getModuleStates());
     }
 
-//    public void configureAutoBuilder(PoseEstimationSubsystem poseEstimationSubsystem) {
-//        RobotConfig localConfig;
-//        try {
-//            localConfig = RobotConfig.fromGUISettings();
-//        } catch (Exception e) {
-//            localConfig = config;
-//            e.printStackTrace();
-//        }
-//        this.poseEstimationSubsystem = poseEstimationSubsystem;
-//        AutoBuilder.configure(
-//                this::getPose, // Robot pose supplier
-//                poseEstimationSubsystem::setCurrentPose, // Method to reset odometry (will be called if your auto has a starting pose)
-//                this::getRobotRelativeSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
-//                (speeds, feedforwards) -> runVelocity(speeds),
-//                controller, //The path planner controller
-//                localConfig, // The robot configuration
-//                this::isOnRed,
-//                this // Reference to this subsystem to set requirements
-//        );
-//    }
-
     /**
      * Runs the drive at the desired velocity.
      */
     public void runVelocity(Translation2d linearVelocity, double omega) {
-        Rotation2d rotation;
+        Rotation2d rotation = isFieldOriented ? getPose().getRotation() : new Rotation2d();
 
-        int invert = 1;
-
-        if (isOnRed() && isFieldOriented) {
-            invert = -1;
-        }
-
-        if (isFieldOriented) {
-            rotation = getPose().getRotation();
-        } else {
-            rotation = new Rotation2d(0);
-        }
         ChassisSpeeds chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
-                linearVelocity.getX() * maxLinearSpeed * invert,
-                linearVelocity.getY() * maxLinearSpeed * invert,
+                linearVelocity.getX() * maxLinearSpeed,
+                linearVelocity.getY() * maxLinearSpeed,
                 omega * maxAngularSpeed,
                 rotation
         );
+
+        // If we're on the red alliance, we need to flip the inputs because the field coordinate system
+        // is always blue-origin.
+        if (isOnRed() && isFieldOriented) {
+            chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
+                    -linearVelocity.getX() * maxLinearSpeed,
+                    -linearVelocity.getY() * maxLinearSpeed,
+                    omega * maxAngularSpeed,
+                    rotation
+            );
+        }
+
         runVelocity(chassisSpeeds);
     }
 
@@ -249,11 +223,13 @@ public class Drive extends SubsystemBase {
         SmartDashboard.putBoolean("Defense Mode", defenseMode);
     }
 
-//    public boolean canMove() {
-//        return !defenseMode;
-//    }
+    // These are some defaults that work for the PIDs in the wheels
+    private ModulePidConfig createDefaultPidConfig() {
+        return new ModulePidConfig( //FL
+                new FeedForwardParams(0.1, 0.13),
+                new PidConfig(0.05, 0.0, 0.0), // drive
+                new PidConfig(3, 0.0, 0.0)     // turn
+        );
+    }
 
-    // public Rotation2d getHeadingToMiddle(){
-    //     return getPose().getTranslation().minus(middle).getAngle();
-    // }
 }
