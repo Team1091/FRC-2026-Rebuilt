@@ -79,7 +79,7 @@ public class RobotContainer {
         // TODO: this sets the pose estimate to (0,0)
         //  which seems like it would think its in the corner till it detects a target.
         //  If we can start this off thinking its in a valid starting position (dropdown for starting position)
-        // It would be a lot more accurate for autonomous
+        //  It would be a lot more accurate for autonomous
         poseEstimationSubsystem.setCurrentPose(new Pose2d(new Translation2d(0, 0), new Rotation2d(0)));
         drive.resetGyro();
         drive.setIsFieldOriented(true);
@@ -87,8 +87,6 @@ public class RobotContainer {
         //TODO: set up camera capture
         // CameraServer.startAutomaticCapture().setExposureManual(40);
         // Shuffleboard.getTab("General").add("Camera", 0).withWidget(BuiltInWidgets.kCameraStream);
-        //
-        // FollowPathCommand.warmupCommand().schedule();
     }
 
     public void robotEnabled() {

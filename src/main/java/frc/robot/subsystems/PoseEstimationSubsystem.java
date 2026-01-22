@@ -13,6 +13,11 @@ import frc.robot.LimelightHelpers;
 
 import java.util.function.Supplier;
 
+/**
+ * The purpose of this subsystem is to estimate the robot's pose based on vision measurements and estimated drive speeds.
+ * <p>
+ * A Pose is made up of its location (Translation2d) and orientation (Rotation2d).
+ */
 public class PoseEstimationSubsystem extends SubsystemBase {
     private final SwerveDrivePoseEstimator poseEstimator;
     private final Supplier<Rotation2d> rotationSupplier;
@@ -52,6 +57,7 @@ public class PoseEstimationSubsystem extends SubsystemBase {
             DataLogManager.log(e.getMessage());
         }
 
+        // Set the field pose to show the dashboard where we think we are.
         field.setRobotPose(getCurrentPose());
         SmartDashboard.putData("Field", field);
         SmartDashboard.putNumber("X pos", getCurrentPose().getX());
