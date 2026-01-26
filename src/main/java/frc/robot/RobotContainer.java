@@ -6,25 +6,28 @@ package frc.robot;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.Constants.OperatorConstants;
-import frc.robot.commands.Autos;
-import frc.robot.commands.DriveCommand;
-import frc.robot.subsystems.PoseEstimationSubsystem;
-import frc.robot.subsystems.drive.Drive;
-import frc.robot.subsystems.drive.GyroIOPigeon2;
-import frc.robot.subsystems.drive.ModuleIOTalonFX;
+import frc.robot.Constants.Driving;
+import frc.robot.commands.AutoRoutines;
+import frc.robot.commands.ManualDriveCommand;
+import frc.robot.commands.SubsystemCommands;
+import frc.robot.subsystems.Feeder;
+import frc.robot.subsystems.Floor;
+import frc.robot.subsystems.Hanger;
+import frc.robot.subsystems.Hood;
+import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Limelight;
+import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Swerve;
+import frc.util.SwerveTelemetry;
 
-import static frc.robot.Constants.Swerve.BACK_LEFT;
-import static frc.robot.Constants.Swerve.BACK_RIGHT;
-import static frc.robot.Constants.Swerve.FRONT_LEFT;
-import static frc.robot.Constants.Swerve.FRONT_RIGHT;
+import java.util.Optional;
+
+import static edu.wpi.first.units.Units.MetersPerSecond;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -33,73 +36,48 @@ import static frc.robot.Constants.Swerve.FRONT_RIGHT;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
-    // The robot's subsystems and commands are defined here...
-    private final Drive drive;
-    private final PoseEstimationSubsystem poseEstimationSubsystem;
+    private final Swerve swerve = new Swerve();
+    private final Intake intake = new Intake();
+    private final Floor floor = new Floor();
+    private final Feeder feeder = new Feeder();
+    private final Shooter shooter = new Shooter();
+    private final Hood hood = new Hood();
+    private final Hanger hanger = new Hanger();
+    private final Limelight limelight = new Limelight("limelight");
 
+    private final SwerveTelemetry swerveTelemetry = new SwerveTelemetry(Driving.kMaxSpeed.in(MetersPerSecond));
 
-    // Replace with CommandPS4Controller or CommandJoystick if needed
-    private final CommandXboxController driverController =
-            new CommandXboxController(OperatorConstants.kDriverControllerPort);
+    private final CommandXboxController driver = new CommandXboxController(0);
 
-    // This lets us select the command to run in autonomous
-    private SendableChooser<Command> autoChooser;
+    private final AutoRoutines autoRoutines = new AutoRoutines(
+            swerve,
+            intake,
+            floor,
+            feeder,
+            shooter,
+            hood,
+            hanger,
+            limelight
+    );
+    private final SubsystemCommands subsystemCommands = new SubsystemCommands(
+            swerve,
+            intake,
+            floor,
+            feeder,
+            shooter,
+            hood,
+            hanger,
+            () -> -driver.getLeftY(),
+            () -> -driver.getLeftX()
+    );
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
     public RobotContainer() {
-
-        drive = new Drive(
-                new GyroIOPigeon2(),//change if using different gyro
-                new ModuleIOTalonFX(FRONT_LEFT),
-                new ModuleIOTalonFX(FRONT_RIGHT),
-                new ModuleIOTalonFX(BACK_LEFT),
-                new ModuleIOTalonFX(BACK_RIGHT)
-        );
-        poseEstimationSubsystem = new PoseEstimationSubsystem(
-                drive::getGyroRotation,
-                drive::getModulePositions
-        );
-
-        // TODO: set up more subsystems
-        // IntakeSubsystem - picks balls off the ground
-        // IndexSubsystem
-        // LaunchSubSystem - spins up a flywheel to launch the balls
-        // ClimberSubsystem - climbs up, holds, and back down
-
-
-        configureAutonomous();
-        // Configure the trigger bindings
         configureBindings();
-    }
-
-    // Set the defaults when powered on
-    public void robotInit() {
-        // TODO: this sets the pose estimate to (0,0)
-        //  which seems like it would think its in the corner till it detects a target.
-        //  If we can start this off thinking its in a valid starting position (dropdown for starting position)
-        //  It would be a lot more accurate for autonomous
-        poseEstimationSubsystem.setCurrentPose(new Pose2d(new Translation2d(0, 0), new Rotation2d(0)));
-        drive.resetGyro();
-        drive.setIsFieldOriented(true);
-
-        //TODO: set up camera capture
-        // CameraServer.startAutomaticCapture().setExposureManual(40);
-        // Shuffleboard.getTab("General").add("Camera", 0).withWidget(BuiltInWidgets.kCameraStream);
-    }
-
-    public void robotEnabled() {
-//    climberSubsystem.resetEncoder();
-        drive.straightenWheels();
-    }
-
-    private void configureAutonomous() {
-        autoChooser = new SendableChooser<>();
-        autoChooser.setDefaultOption("Do Nothing", new WaitCommand(1.0));
-        autoChooser.addOption("Spin Wildly", Autos.spinAuto(drive));
-        autoChooser.addOption("Drive Forward", Autos.driveForward(drive));
-        SmartDashboard.putData("Auto Mode", autoChooser);
+        autoRoutines.configure();
+        swerve.registerTelemetry(swerveTelemetry::telemeterize);
     }
 
     /**
@@ -112,34 +90,49 @@ public class RobotContainer {
      * joysticks}.
      */
     private void configureBindings() {
+        configureManualDriveBindings();
+        limelight.setDefaultCommand(updateVisionCommand());
 
-        // x+ forward is front, x- is backward
-        drive.setDefaultCommand(
-                DriveCommand.joystickDrive(
-                        drive,
-                        driverController::getLeftY,
-                        () -> { // y+ is to the left, y- is to the right
-                            return -driverController.getLeftX();
-                        },
-                        () -> { // z+ is rotating counterclockwise
-                            return -driverController.getRightX();
-                        }
-                )
-        );
+        RobotModeTriggers.autonomous().or(RobotModeTriggers.teleop())
+                .onTrue(intake.homingCommand())
+                .onTrue(hanger.homingCommand());
 
-        // TODO: add bindings
-        //  driver.rightBumper().whileTrue(new WheelCommand(chuteSubsystem, Constants.Chute.shootSpeed));
+        driver.rightTrigger().whileTrue(subsystemCommands.aimAndShoot());
+        driver.rightBumper().whileTrue(subsystemCommands.shootManually());
+        driver.leftTrigger().whileTrue(intake.intakeCommand());
+        driver.leftBumper().onTrue(intake.runOnce(() -> intake.set(Intake.Position.STOWED)));
 
-
+        driver.povUp().onTrue(hanger.positionCommand(Hanger.Position.HANGING));
+        driver.povDown().onTrue(hanger.positionCommand(Hanger.Position.HUNG));
     }
 
-    /**
-     * Use this to pass the autonomous command to the main {@link Robot} class.
-     *
-     * @return the command to run in autonomous
-     */
-    public Command getAutonomousCommand() {
-        // An example command will be run in autonomous
-        return autoChooser.getSelected();
+    private void configureManualDriveBindings() {
+        final ManualDriveCommand manualDriveCommand = new ManualDriveCommand(
+                swerve,
+                () -> -driver.getLeftY(),
+                () -> -driver.getLeftX(),
+                () -> -driver.getRightX()
+        );
+        swerve.setDefaultCommand(manualDriveCommand);
+        driver.a().onTrue(Commands.runOnce(() -> manualDriveCommand.setLockedHeading(Rotation2d.k180deg)));
+        driver.b().onTrue(Commands.runOnce(() -> manualDriveCommand.setLockedHeading(Rotation2d.kCW_90deg)));
+        driver.x().onTrue(Commands.runOnce(() -> manualDriveCommand.setLockedHeading(Rotation2d.kCCW_90deg)));
+        driver.y().onTrue(Commands.runOnce(() -> manualDriveCommand.setLockedHeading(Rotation2d.kZero)));
+        driver.back().onTrue(Commands.runOnce(() -> manualDriveCommand.seedFieldCentric()));
+    }
+
+    private Command updateVisionCommand() {
+        return limelight.run(() -> {
+                    final Pose2d currentRobotPose = swerve.getState().Pose;
+                    final Optional<Limelight.Measurement> measurement = limelight.getMeasurement(currentRobotPose);
+                    measurement.ifPresent(m -> {
+                        swerve.addVisionMeasurement(
+                                m.poseEstimate().pose,
+                                m.poseEstimate().timestampSeconds,
+                                m.standardDeviations()
+                        );
+                    });
+                })
+                .ignoringDisable(true);
     }
 }
