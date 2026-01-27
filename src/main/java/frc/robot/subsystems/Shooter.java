@@ -30,7 +30,8 @@ public class Shooter extends SubsystemBase {
     private static final AngularVelocity kVelocityTolerance = RPM.of(100);
 
     private final TalonFX leftMotor, middleMotor, rightMotor;
-    private final List<TalonFX> motors;
+    // TODO: remove this
+    //    private final List<TalonFX> motors;
     private final VelocityVoltage velocityRequest = new VelocityVoltage(0).withSlot(0);
     private final VoltageOut voltageRequest = new VoltageOut(0);
 
@@ -40,7 +41,8 @@ public class Shooter extends SubsystemBase {
         leftMotor = new TalonFX(Ports.kShooterLeft, Ports.kRoboRioCANBus);
         middleMotor = new TalonFX(Ports.kShooterMiddle, Ports.kRoboRioCANBus);
         rightMotor = new TalonFX(Ports.kShooterRight, Ports.kRoboRioCANBus);
-        motors = List.of(leftMotor, middleMotor, rightMotor);
+        // TODO: remove this
+        // motors = List.of(leftMotor, middleMotor, rightMotor);
 
         configureMotor(leftMotor, InvertedValue.CounterClockwise_Positive);
         configureMotor(middleMotor, InvertedValue.Clockwise_Positive);
@@ -79,21 +81,24 @@ public class Shooter extends SubsystemBase {
     }
 
     public void setRPM(double rpm) {
-        for (final TalonFX motor : motors) {
-            motor.setControl(
-                    velocityRequest
-                            .withVelocity(RPM.of(rpm))
-            );
-        }
+        // TODO: remove this
+//        for (final TalonFX motor : motors) {
+//            motor.setControl(
+//                    velocityRequest
+//                            .withVelocity(RPM.of(rpm))
+//            );
+//        }
     }
 
     public void setPercentOutput(double percentOutput) {
-        for (final TalonFX motor : motors) {
-            motor.setControl(
-                    voltageRequest
-                            .withOutput(Volts.of(percentOutput * 12.0))
-            );
-        }
+        // TODO: remove this
+
+//        for (final TalonFX motor : motors) {
+//            motor.setControl(
+//                    voltageRequest
+//                            .withOutput(Volts.of(percentOutput * 12.0))
+//            );
+//        }
     }
 
     public void stop() {
@@ -110,12 +115,16 @@ public class Shooter extends SubsystemBase {
     }
 
     public boolean isVelocityWithinTolerance() {
-        return motors.stream().allMatch(motor -> {
-            final boolean isInVelocityMode = motor.getAppliedControl().equals(velocityRequest);
-            final AngularVelocity currentVelocity = motor.getVelocity().getValue();
-            final AngularVelocity targetVelocity = velocityRequest.getVelocityMeasure();
-            return isInVelocityMode && currentVelocity.isNear(targetVelocity, kVelocityTolerance);
-        });
+        // TODO: remove this
+//        return motors.stream().allMatch(motor -> {
+//            final boolean isInVelocityMode = motor.getAppliedControl().equals(velocityRequest);
+//            final AngularVelocity currentVelocity = motor.getVelocity().getValue();
+//            final AngularVelocity targetVelocity = velocityRequest.getVelocityMeasure();
+//            return isInVelocityMode && currentVelocity.isNear(targetVelocity, kVelocityTolerance);
+//        });
+
+        // TODO: remove this
+        return false;
     }
 
     private void initSendable(SendableBuilder builder, TalonFX motor, String name) {
