@@ -27,6 +27,7 @@ import frc.robot.Ports;
 
 import static edu.wpi.first.units.Units.Amps;
 import static edu.wpi.first.units.Units.Inches;
+import static edu.wpi.first.units.Units.Radians;
 import static edu.wpi.first.units.Units.Rotations;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
 import static edu.wpi.first.units.Units.Second;
@@ -54,14 +55,14 @@ public class Hanger extends SubsystemBase {
     private static final Per<DistanceUnit, AngleUnit> kHangerExtensionPerMotorAngle = Inches.of(6).div(Rotations.of(142));
     private static final Distance kExtensionTolerance = Inches.of(1);
 
-    private final TalonFX motor;
+//    private final TalonFX motor;
     private final MotionMagicVoltage motionMagicRequest = new MotionMagicVoltage(0).withSlot(0);
     private final VoltageOut voltageRequest = new VoltageOut(0);
 
     private boolean isHomed = false;
 
     public Hanger() {
-        motor = new TalonFX(Ports.kHanger, Ports.kRoboRioCANBus);
+//        motor = new TalonFX(Ports.kHanger, Ports.kRoboRioCANBus);
 
         final TalonFXConfiguration config = new TalonFXConfiguration()
                 .withMotorOutput(
@@ -89,22 +90,22 @@ public class Hanger extends SubsystemBase {
                                 .withKV(12.0 / KrakenX60.kFreeSpeed.in(RotationsPerSecond)) // 12 volts when requesting max RPS
                 );
 
-        motor.getConfigurator().apply(config);
+//        motor.getConfigurator().apply(config);
         SmartDashboard.putData(this);
     }
 
     public void set(Position position) {
-        motor.setControl(
-                motionMagicRequest
-                        .withPosition(position.motorAngle())
-        );
+//        motor.setControl(
+//                motionMagicRequest
+//                        .withPosition(position.motorAngle())
+//        );
     }
 
     public void setPercentOutput(double percentOutput) {
-        motor.setControl(
-                voltageRequest
-                        .withOutput(Volts.of(percentOutput * 12.0))
-        );
+//        motor.setControl(
+//                voltageRequest
+//                        .withOutput(Volts.of(percentOutput * 12.0))
+//        );
     }
 
     public Command positionCommand(Position position) {
@@ -115,9 +116,14 @@ public class Hanger extends SubsystemBase {
     public Command homingCommand() {
         return Commands.sequence(
                         runOnce(() -> setPercentOutput(-0.05)),
-                        Commands.waitUntil(() -> motor.getSupplyCurrent().getValue().in(Amps) > 0.4),
+                        Commands.waitUntil(() ->
+                                false
+                                // TODO: remove this
+                                // motor.getSupplyCurrent().getValue().in(Amps) > 0.4
+                        ),
                         runOnce(() -> {
-                            motor.setPosition(Position.HOMED.motorAngle());
+                            // TODO: remove this
+//                            motor.setPosition(Position.HOMED.motorAngle());
                             isHomed = true;
                             set(Position.EXTEND_HOPPER);
                         })
@@ -131,7 +137,11 @@ public class Hanger extends SubsystemBase {
     }
 
     private boolean isExtensionWithinTolerance() {
-        final Distance currentExtension = motorAngleToExtension(motor.getPosition().getValue());
+        final Distance currentExtension = motorAngleToExtension(
+                // TODO: remove this
+//                motor.getPosition().getValue()
+                Angle.ofBaseUnits(0.0, Radians)
+        );
         final Distance targetExtension = motorAngleToExtension(motionMagicRequest.getPositionMeasure());
         return currentExtension.isNear(targetExtension, kExtensionTolerance);
     }
@@ -144,7 +154,8 @@ public class Hanger extends SubsystemBase {
     @Override
     public void initSendable(SendableBuilder builder) {
         builder.addStringProperty("Command", () -> getCurrentCommand() != null ? getCurrentCommand().getName() : "null", null);
-        builder.addDoubleProperty("Extension (inches)", () -> motorAngleToExtension(motor.getPosition().getValue()).in(Inches), null);
-        builder.addDoubleProperty("Supply Current", () -> motor.getSupplyCurrent().getValue().in(Amps), null);
+        // TODO: remove this
+//        builder.addDoubleProperty("Extension (inches)", () -> motorAngleToExtension(motor.getPosition().getValue()).in(Inches), null);
+//        builder.addDoubleProperty("Supply Current", () -> motor.getSupplyCurrent().getValue().in(Amps), null);
     }
 }
