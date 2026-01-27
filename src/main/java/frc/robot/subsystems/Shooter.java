@@ -29,7 +29,7 @@ import static edu.wpi.first.units.Units.Volts;
 public class Shooter extends SubsystemBase {
     private static final AngularVelocity kVelocityTolerance = RPM.of(100);
 
-    private final TalonFX leftMotor, middleMotor, rightMotor;
+//    private final TalonFX leftMotor, middleMotor, rightMotor;
     // TODO: remove this
     //    private final List<TalonFX> motors;
     private final VelocityVoltage velocityRequest = new VelocityVoltage(0).withSlot(0);
@@ -38,15 +38,15 @@ public class Shooter extends SubsystemBase {
     private double dashboardTargetRPM = 0.0;
 
     public Shooter() {
-        leftMotor = new TalonFX(Ports.kShooterLeft, Ports.kRoboRioCANBus);
-        middleMotor = new TalonFX(Ports.kShooterMiddle, Ports.kRoboRioCANBus);
-        rightMotor = new TalonFX(Ports.kShooterRight, Ports.kRoboRioCANBus);
         // TODO: remove this
+//        leftMotor = new TalonFX(Ports.kShooterLeft, Ports.kRoboRioCANBus);
+//        middleMotor = new TalonFX(Ports.kShooterMiddle, Ports.kRoboRioCANBus);
+//        rightMotor = new TalonFX(Ports.kShooterRight, Ports.kRoboRioCANBus);
         // motors = List.of(leftMotor, middleMotor, rightMotor);
 
-        configureMotor(leftMotor, InvertedValue.CounterClockwise_Positive);
-        configureMotor(middleMotor, InvertedValue.Clockwise_Positive);
-        configureMotor(rightMotor, InvertedValue.Clockwise_Positive);
+//        configureMotor(leftMotor, InvertedValue.CounterClockwise_Positive);
+//        configureMotor(middleMotor, InvertedValue.Clockwise_Positive);
+//        configureMotor(rightMotor, InvertedValue.Clockwise_Positive);
 
         SmartDashboard.putData(this);
     }
@@ -135,9 +135,10 @@ public class Shooter extends SubsystemBase {
 
     @Override
     public void initSendable(SendableBuilder builder) {
-        initSendable(builder, leftMotor, "Left");
-        initSendable(builder, middleMotor, "Middle");
-        initSendable(builder, rightMotor, "Right");
+        // TODO: remove this
+//        initSendable(builder, leftMotor, "Left");
+//        initSendable(builder, middleMotor, "Middle");
+//        initSendable(builder, rightMotor, "Right");
         builder.addStringProperty("Command", () -> getCurrentCommand() != null ? getCurrentCommand().getName() : "null", null);
         builder.addDoubleProperty("Dashboard RPM", () -> dashboardTargetRPM, value -> dashboardTargetRPM = value);
         builder.addDoubleProperty("Target RPM", () -> velocityRequest.getVelocityMeasure().in(RPM), null);
