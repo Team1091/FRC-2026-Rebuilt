@@ -43,10 +43,10 @@ public class Drive extends SubsystemBase {
             ModuleIO blModuleIO,
             ModuleIO brModuleIO) {
         this.gyroIO = gyroIO;
-        modules[FRONT_LEFT] = new Module(flModuleIO, 0, "FL");
-        modules[FRONT_RIGHT] = new Module(frModuleIO, 1, "FR");
-        modules[BACK_LEFT] = new Module(blModuleIO, 2, "BL");
-        modules[BACK_RIGHT] = new Module(brModuleIO, 3, "BR");
+        modules[FRONT_LEFT] = new Module(flModuleIO, FRONT_LEFT, "FL");
+        modules[FRONT_RIGHT] = new Module(frModuleIO, FRONT_RIGHT, "FR");
+        modules[BACK_LEFT] = new Module(blModuleIO, BACK_LEFT, "BL");
+        modules[BACK_RIGHT] = new Module(brModuleIO, BACK_RIGHT, "BR");
 
         for (int i = 0; i < 4; i++) {
             modulePositions[i] = new SwerveModulePosition();
