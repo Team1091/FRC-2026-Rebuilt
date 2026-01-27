@@ -37,12 +37,14 @@ public class Feeder extends SubsystemBase {
         }
     }
 
-    private final TalonFX motor;
+    // TODO: undo this
+    // private final TalonFX motor;
     private final VelocityVoltage velocityRequest = new VelocityVoltage(0).withSlot(0);
     private final VoltageOut voltageRequest = new VoltageOut(0);
 
     public Feeder() {
-        motor = new TalonFX(Ports.kFeeder, Ports.kRoboRioCANBus);
+        // TODO: undo this
+        // motor = new TalonFX(Ports.kFeeder, Ports.kRoboRioCANBus);
 
         final TalonFXConfiguration config = new TalonFXConfiguration()
                 .withMotorOutput(
@@ -65,22 +67,25 @@ public class Feeder extends SubsystemBase {
                                 .withKV(12.0 / KrakenX60.kFreeSpeed.in(RotationsPerSecond)) // 12 volts when requesting max RPS
                 );
 
-        motor.getConfigurator().apply(config);
+        // TODO: undo this
+        // motor.getConfigurator().apply(config);
         SmartDashboard.putData(this);
     }
 
     public void set(Speed speed) {
-        motor.setControl(
-                velocityRequest
-                        .withVelocity(speed.angularVelocity())
-        );
+// TODO: undo this
+//         motor.setControl(
+//                velocityRequest
+//                        .withVelocity(speed.angularVelocity())
+//        );
     }
 
     public void setPercentOutput(double percentOutput) {
-        motor.setControl(
-                voltageRequest
-                        .withOutput(Volts.of(percentOutput * 12.0))
-        );
+// TODO: undo this
+//         motor.setControl(
+//                voltageRequest
+//                        .withOutput(Volts.of(percentOutput * 12.0))
+//        );
     }
 
     public Command feedCommand() {
@@ -90,8 +95,9 @@ public class Feeder extends SubsystemBase {
     @Override
     public void initSendable(SendableBuilder builder) {
         builder.addStringProperty("Command", () -> getCurrentCommand() != null ? getCurrentCommand().getName() : "null", null);
-        builder.addDoubleProperty("RPM", () -> motor.getVelocity().getValue().in(RPM), null);
-        builder.addDoubleProperty("Stator Current", () -> motor.getStatorCurrent().getValue().in(Amps), null);
-        builder.addDoubleProperty("Supply Current", () -> motor.getSupplyCurrent().getValue().in(Amps), null);
+// TODO: undo this
+//        builder.addDoubleProperty("RPM", () -> motor.getVelocity().getValue().in(RPM), null);
+//        builder.addDoubleProperty("Stator Current", () -> motor.getStatorCurrent().getValue().in(Amps), null);
+//        builder.addDoubleProperty("Supply Current", () -> motor.getSupplyCurrent().getValue().in(Amps), null);
     }
 }
