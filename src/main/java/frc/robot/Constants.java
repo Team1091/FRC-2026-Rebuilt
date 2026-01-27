@@ -36,54 +36,54 @@ public final class Constants {
         public static final double rotationalDeadband = 0.1;
     }
 
-    public static final class Chute {
-        public static final int motorChannel = 11;
-        public static final int limitSwitchChannel = 3;
-        public static final double holdSpeed = 0.15;
-        public static final double shootSpeed = 0.3;
-    }
+//    public static final class Chute {
+//        public static final int motorChannel = 11;
+//        public static final int limitSwitchChannel = 3;
+//        public static final double holdSpeed = 0.15;
+//        public static final double shootSpeed = 0.3;
+//    }
 
-    public static final class Intake {
-        public static final int frontMotorChannel = 15;
-        public static final double suckSpeed = .5;
-        public static final double shootSpeed = .2;
-    }
+//    public static final class Intake {
+//        public static final int frontMotorChannel = 15;
+//        public static final double suckSpeed = .5;
+//        public static final double shootSpeed = .2;
+//    }
 
-    public static final class Pivot {
-        public static final int motorChannel = 17;
-        public static final int limitSwitchChannel = 9;
-        public static final double speed = 0.2;
-        public static final double outPosition = 30;
-        public static final double scorePosition = 10;
-    }
+//    public static final class Pivot {
+//        public static final int motorChannel = 17;
+//        public static final int limitSwitchChannel = 9;
+//        public static final double speed = 0.2;
+//        public static final double outPosition = 30;
+//        public static final double scorePosition = 10;
+//    }
 
-    public static final class Elevator {
-        public static final int motorChannel = 13;
-        public static final int limitSwitchChannelTop = 0;
-        public static final int limitSwitchChannelBottom = 4;
-        public static final double downSpeed = .6;
-        public static final double upSpeed = .8;
-        public static final double l2Position = 32;
-        public static final double l3Position = 69;
-        public static final double l4Position = 118;
-        public static final double algae1Position = 15;
-        public static final double algae2Position = 54;
-        public static final double retractPosition = 200;
-    }
+//    public static final class Elevator {
+//        public static final int motorChannel = 13;
+//        public static final int limitSwitchChannelTop = 0;
+//        public static final int limitSwitchChannelBottom = 4;
+//        public static final double downSpeed = .6;
+//        public static final double upSpeed = .8;
+//        public static final double l2Position = 32;
+//        public static final double l3Position = 69;
+//        public static final double l4Position = 118;
+//        public static final double algae1Position = 15;
+//        public static final double algae2Position = 54;
+//        public static final double retractPosition = 200;
+//    }
 
-    public static final class Extender {
-        public static final int motorChannel = 12;
-        public static final int limitSwitchChannel = 2;
-        public static final double speed = 0.5;
-        public static final double algaePosition = 20;
-        public static final double scorePosition = 0;
-    }
+//    public static final class Extender {
+//        public static final int motorChannel = 12;
+//        public static final int limitSwitchChannel = 2;
+//        public static final double speed = 0.5;
+//        public static final double algaePosition = 20;
+//        public static final double scorePosition = 0;
+//    }
 
-    public static final class Climber {
-        public static final int motorChannel = 14;
-        public static final double speed = 1;
-        public static final double outMax = 261;
-    }
+//    public static final class Climber {
+//        public static final int motorChannel = 14;
+//        public static final double speed = 1;
+//        public static final double outMax = 261;
+//    }
 
     public static final class PoseEstimation {
         public final static Vector<N3> stateStdDevs = VecBuilder.fill(0.1, 0.1, 0.1);
