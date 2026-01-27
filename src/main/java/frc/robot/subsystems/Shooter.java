@@ -16,7 +16,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.KrakenX60;
+import frc.robot.Constants.Neo;
 import frc.robot.Ports;
 
 import java.util.List;
@@ -29,24 +29,22 @@ import static edu.wpi.first.units.Units.Volts;
 public class Shooter extends SubsystemBase {
     private static final AngularVelocity kVelocityTolerance = RPM.of(100);
 
-//    private final TalonFX leftMotor, middleMotor, rightMotor;
-    // TODO: remove this
-    //    private final List<TalonFX> motors;
+    private final TalonFX leftMotor, middleMotor, rightMotor;
+    private final List<TalonFX> motors;
     private final VelocityVoltage velocityRequest = new VelocityVoltage(0).withSlot(0);
     private final VoltageOut voltageRequest = new VoltageOut(0);
 
     private double dashboardTargetRPM = 0.0;
 
     public Shooter() {
-        // TODO: remove this
-//        leftMotor = new TalonFX(Ports.kShooterLeft, Ports.kRoboRioCANBus);
-//        middleMotor = new TalonFX(Ports.kShooterMiddle, Ports.kRoboRioCANBus);
-//        rightMotor = new TalonFX(Ports.kShooterRight, Ports.kRoboRioCANBus);
-        // motors = List.of(leftMotor, middleMotor, rightMotor);
+        leftMotor = new TalonFX(Ports.kShooterLeft, Ports.kRoboRioCANBus);
+        middleMotor = new TalonFX(Ports.kShooterMiddle, Ports.kRoboRioCANBus);
+        rightMotor = new TalonFX(Ports.kShooterRight, Ports.kRoboRioCANBus);
+        motors = List.of(leftMotor, middleMotor, rightMotor);
 
-//        configureMotor(leftMotor, InvertedValue.CounterClockwise_Positive);
-//        configureMotor(middleMotor, InvertedValue.Clockwise_Positive);
-//        configureMotor(rightMotor, InvertedValue.Clockwise_Positive);
+        configureMotor(leftMotor, InvertedValue.CounterClockwise_Positive);
+        configureMotor(middleMotor, InvertedValue.Clockwise_Positive);
+        configureMotor(rightMotor, InvertedValue.Clockwise_Positive);
 
         SmartDashboard.putData(this);
     }
@@ -74,31 +72,28 @@ public class Shooter extends SubsystemBase {
                                 .withKP(0.5)
                                 .withKI(2)
                                 .withKD(0)
-                                .withKV(12.0 / KrakenX60.kFreeSpeed.in(RotationsPerSecond)) // 12 volts when requesting max RPS
+                                .withKV(12.0 / Neo.kFreeSpeed.in(RotationsPerSecond)) // 12 volts when requesting max RPS
                 );
 
         motor.getConfigurator().apply(config);
     }
 
     public void setRPM(double rpm) {
-        // TODO: remove this
-//        for (final TalonFX motor : motors) {
-//            motor.setControl(
-//                    velocityRequest
-//                            .withVelocity(RPM.of(rpm))
-//            );
-//        }
+        for (final TalonFX motor : motors) {
+            motor.setControl(
+                    velocityRequest
+                            .withVelocity(RPM.of(rpm))
+            );
+        }
     }
 
     public void setPercentOutput(double percentOutput) {
-        // TODO: remove this
-
-//        for (final TalonFX motor : motors) {
-//            motor.setControl(
-//                    voltageRequest
-//                            .withOutput(Volts.of(percentOutput * 12.0))
-//            );
-//        }
+        for (final TalonFX motor : motors) {
+            motor.setControl(
+                    voltageRequest
+                            .withOutput(Volts.of(percentOutput * 12.0))
+            );
+        }
     }
 
     public void stop() {
@@ -115,16 +110,12 @@ public class Shooter extends SubsystemBase {
     }
 
     public boolean isVelocityWithinTolerance() {
-        // TODO: remove this
-//        return motors.stream().allMatch(motor -> {
-//            final boolean isInVelocityMode = motor.getAppliedControl().equals(velocityRequest);
-//            final AngularVelocity currentVelocity = motor.getVelocity().getValue();
-//            final AngularVelocity targetVelocity = velocityRequest.getVelocityMeasure();
-//            return isInVelocityMode && currentVelocity.isNear(targetVelocity, kVelocityTolerance);
-//        });
-
-        // TODO: remove this
-        return false;
+        return motors.stream().allMatch(motor -> {
+            final boolean isInVelocityMode = motor.getAppliedControl().equals(velocityRequest);
+            final AngularVelocity currentVelocity = motor.getVelocity().getValue();
+            final AngularVelocity targetVelocity = velocityRequest.getVelocityMeasure();
+            return isInVelocityMode && currentVelocity.isNear(targetVelocity, kVelocityTolerance);
+        });
     }
 
     private void initSendable(SendableBuilder builder, TalonFX motor, String name) {
@@ -135,10 +126,9 @@ public class Shooter extends SubsystemBase {
 
     @Override
     public void initSendable(SendableBuilder builder) {
-        // TODO: remove this
-//        initSendable(builder, leftMotor, "Left");
-//        initSendable(builder, middleMotor, "Middle");
-//        initSendable(builder, rightMotor, "Right");
+        initSendable(builder, leftMotor, "Left");
+        initSendable(builder, middleMotor, "Middle");
+        initSendable(builder, rightMotor, "Right");
         builder.addStringProperty("Command", () -> getCurrentCommand() != null ? getCurrentCommand().getName() : "null", null);
         builder.addDoubleProperty("Dashboard RPM", () -> dashboardTargetRPM, value -> dashboardTargetRPM = value);
         builder.addDoubleProperty("Target RPM", () -> velocityRequest.getVelocityMeasure().in(RPM), null);
