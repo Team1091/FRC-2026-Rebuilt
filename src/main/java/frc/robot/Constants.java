@@ -106,6 +106,12 @@ public final class Constants {
 
     }
 
+    public class Intake {
+        public static int intakeMotorChannel = 11;
+        public static int extenderMotorChannel = 12;
+        public static double extenderMotorPower = 0.25;
+    }
+
 //  public static final class PathPlanner {
 //    public static final PPHolonomicDriveController controller = new PPHolonomicDriveController(
 //            new PIDConstants(.5, 0, 0), // 2.0 Translation constants 3
