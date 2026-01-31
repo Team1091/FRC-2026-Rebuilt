@@ -61,6 +61,10 @@ public class Drive extends SubsystemBase {
 //        }
     }
 
+    public void setPoseEstimationSubSystem(PoseEstimationSubsystem poseEstimationSubsystem) {
+        this.poseEstimationSubsystem = poseEstimationSubsystem;
+    }
+
     public void periodic() {
         gyroIO.updateInputs(gyroInputs);
         for (var module : modules) {

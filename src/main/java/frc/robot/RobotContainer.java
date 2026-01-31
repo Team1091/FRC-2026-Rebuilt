@@ -74,6 +74,7 @@ public class RobotContainer {
                 drive::getGyroRotation,
                 drive::getModulePositions
         );
+        drive.setPoseEstimationSubSystem(poseEstimationSubsystem);
 
         climberSubsystem = new ClimberSubsystem();
         intakeSubsystem = new IntakeSubsystem();
