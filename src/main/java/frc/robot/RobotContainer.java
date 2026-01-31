@@ -16,7 +16,10 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
 import frc.robot.commands.DriveCommand;
+import frc.robot.subsystems.ClimberSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.PoseEstimationSubsystem;
+import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.GyroIOPigeon2;
 import frc.robot.subsystems.drive.ModuleIOTalonFX;
@@ -36,7 +39,9 @@ public class RobotContainer {
     // The robot's subsystems and commands are defined here...
     private final Drive drive;
     private final PoseEstimationSubsystem poseEstimationSubsystem;
-
+    private final ClimberSubsystem climberSubsystem;
+    private final IntakeSubsystem  intakeSubsystem;
+    private final ShooterSubsystem shooterSubsystem;
 
     // Replace with CommandPS4Controller or CommandJoystick if needed
     private final CommandXboxController driverController =
@@ -62,12 +67,9 @@ public class RobotContainer {
                 drive::getModulePositions
         );
 
-        // TODO: set up more subsystems
-        // IntakeSubsystem - picks balls off the ground
-        // IndexSubsystem
-        // LaunchSubSystem - spins up a flywheel to launch the balls
-        // ClimberSubsystem - climbs up, holds, and back down
-
+        climberSubsystem = new ClimberSubsystem();
+        intakeSubsystem = new IntakeSubsystem();
+        shooterSubsystem = new ShooterSubsystem();
 
         configureAutonomous();
         // Configure the trigger bindings
