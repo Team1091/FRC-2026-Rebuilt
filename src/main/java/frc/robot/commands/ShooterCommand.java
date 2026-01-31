@@ -7,11 +7,12 @@ import frc.robot.subsystems.ShooterSubsystem;
 public class ShooterCommand extends Command {
 
     private final ShooterSubsystem shooterSubsystem;
-    private ShooterState shooterState;
+    private final ShooterState shooterState;
 
     public ShooterCommand(ShooterSubsystem shooterSubsystem, ShooterState shooterState) {
         this.shooterSubsystem = shooterSubsystem;
         this.shooterState = shooterState;
+        addRequirements(shooterSubsystem);
     }
 
     @Override

@@ -21,8 +21,10 @@ import frc.robot.commands.Autos;
 import frc.robot.commands.ClimberCommand;
 import frc.robot.commands.DriveCommand;
 import frc.robot.commands.DriveWhilePointingAtCommand;
+import frc.robot.commands.RunIntakeCommand;
 import frc.robot.commands.ShooterCommand;
 import frc.robot.enums.ClimberPosition;
+import frc.robot.enums.IntakeState;
 import frc.robot.enums.ShooterState;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
@@ -159,6 +161,9 @@ public class RobotContainer {
         driverController.leftBumper().whileTrue(new ClimberCommand(climberSubsystem, ClimberPosition.UP));
         driverController.rightBumper().whileTrue(new ClimberCommand(climberSubsystem, ClimberPosition.DOWN));
         // TODO: add additional bindings
+
+        // Intake
+        driverController.a().whileTrue(new RunIntakeCommand(intakeSubsystem, IntakeState.HARVEST));
     }
 
     /**

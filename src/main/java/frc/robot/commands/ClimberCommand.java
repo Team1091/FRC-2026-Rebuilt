@@ -5,12 +5,13 @@ import frc.robot.enums.ClimberPosition;
 import frc.robot.subsystems.ClimberSubsystem;
 
 public class ClimberCommand extends Command {
-    private ClimberPosition target;
-    private ClimberSubsystem climber;
+    private final ClimberPosition target;
+    private final ClimberSubsystem climber;
 
     public ClimberCommand(ClimberSubsystem climber, ClimberPosition target) {
         this.target = target;
         this.climber = climber;
+        addRequirements(climber);
     }
 
     @Override
