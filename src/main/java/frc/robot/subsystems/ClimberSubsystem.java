@@ -3,7 +3,11 @@ package frc.robot.subsystems;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkLowLevel;
 import com.revrobotics.spark.SparkMax;
+import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
+import frc.robot.enums.ClimberPosition;
 
 // climbs up, holds, and back down
 public class ClimberSubsystem extends SubsystemBase {
@@ -11,21 +15,33 @@ public class ClimberSubsystem extends SubsystemBase {
     private final SparkMax rightClimberMotor;
     private final RelativeEncoder leftClimberEncoder;
     private final RelativeEncoder rightClimberEncoder;
-    private double leftClimberSpeed;
-    private double rightClimberSpeed;
+    private ClimberPosition climberPosition;
+    private final PIDController leftClimberController = new PIDController(2.0, 0, 0);
+    private final PIDController rightClimberController = new PIDController(2.0, 0, 0);
 
-    public ClimberSubsystem(){
-        leftClimberMotor = new SparkMax(9,SparkLowLevel.MotorType.kBrushless);
-        rightClimberMotor = new SparkMax(10, SparkLowLevel.MotorType.kBrushless);
+    public ClimberSubsystem() {
+        leftClimberMotor = new SparkMax(Constants.Climber.leftMotorChannel, SparkLowLevel.MotorType.kBrushless);
+        rightClimberMotor = new SparkMax(Constants.Climber.rightMotorChannel, SparkLowLevel.MotorType.kBrushless);
         leftClimberEncoder = leftClimberMotor.getEncoder();
         rightClimberEncoder = rightClimberMotor.getEncoder();
-        leftClimberSpeed = 0;
-        rightClimberSpeed = 0;
+        leftClimberEncoder.setPosition(0.0);
+        rightClimberEncoder.setPosition(0.0);
+        climberPosition = ClimberPosition.DOWN;
     }
 
-    public void setClimberSpeed(double speed){
-        leftClimberSpeed = speed;
-        rightClimberSpeed = speed;
+    public void setClimberPosition(ClimberPosition position) {
+        climberPosition = position;
     }
 
+    @Override
+    public void periodic() {
+
+        var leftClimberPow = leftClimberController.calculate(leftClimberEncoder.getPosition(), climberPosition.climberPosition);
+        leftClimberPow = MathUtil.clamp(leftClimberPow, -Constants.Climber.leftMotorPower, Constants.Climber.leftMotorPower);
+        leftClimberMotor.set(leftClimberPow);
+
+        var rightClimberPow = rightClimberController.calculate(rightClimberEncoder.getPosition(), climberPosition.climberPosition);
+        rightClimberPow = MathUtil.clamp(rightClimberPow, -Constants.Climber.rightMotorPower, Constants.Climber.rightMotorPower);
+        rightClimberMotor.set(rightClimberPow);
+    }
 }

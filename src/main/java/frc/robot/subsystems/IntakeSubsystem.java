@@ -35,7 +35,7 @@ public class IntakeSubsystem extends SubsystemBase {
         intakeMotor.set(state.intakeMotorSpeed);
 
         var extenderPow = extenderController.calculate(extenderEncoder.getPosition(), state.extenderMotorPosition);
-        MathUtil.clamp(extenderPow, -Constants.Intake.extenderMotorPower, Constants.Intake.extenderMotorPower);
+        extenderPow = MathUtil.clamp(extenderPow, -Constants.Intake.extenderMotorPower, Constants.Intake.extenderMotorPower);
         extenderMotor.set(extenderPow);
     }
 

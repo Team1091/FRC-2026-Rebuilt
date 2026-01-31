@@ -112,6 +112,13 @@ public final class Constants {
         public static double extenderMotorPower = 0.25;
     }
 
+    public class Climber {
+        public static int leftMotorChannel = 9;
+        public static int rightMotorChannel = 10;
+        public static double leftMotorPower = 0.25;
+        public static double rightMotorPower = 0.25;
+    }
+
 //  public static final class PathPlanner {
 //    public static final PPHolonomicDriveController controller = new PPHolonomicDriveController(
 //            new PIDConstants(.5, 0, 0), // 2.0 Translation constants 3
