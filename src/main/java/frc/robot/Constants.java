@@ -2,6 +2,8 @@ package frc.robot;
 
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.Vector;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.numbers.N3;
@@ -88,6 +90,20 @@ public final class Constants {
     public static final class PoseEstimation {
         public final static Vector<N3> stateStdDevs = VecBuilder.fill(0.1, 0.1, 0.1);
         public final static Vector<N3> visionMeasurementStdDevs = VecBuilder.fill(.7, .7, 9999999);
+    }
+
+    public static final class Locations {
+
+        // This is the target position
+        public static Pose2d hubPose = new Pose2d(
+                new Translation2d(
+                        Units.inchesToMeters(158.6),
+                        Units.inchesToMeters(317.7 / 2.0)
+                ),
+                Rotation2d.k180deg
+        );
+
+
     }
 
 //  public static final class PathPlanner {
