@@ -105,3 +105,16 @@ wpi.java.configureTestTasks(test)
 tasks.withType(JavaCompile) {
     options.compilerArgs.add '-XDstringConcat=inline'
 }
+
+
+task compileAndDeploy() {
+    group "team1091"
+    description "Compile all the projects and deploy the robot code"
+
+    dependsOn(getTasksByName('assemble', true))
+
+    finalizedBy("deploy")
+    doLast {
+        println "Done Compiling, will try to deploy"
+    }
+}
