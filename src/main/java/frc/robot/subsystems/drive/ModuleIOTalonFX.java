@@ -74,28 +74,28 @@ public class ModuleIOTalonFX implements ModuleIO {
             case FRONT_LEFT:
                 driveSparkMax = new SparkMax(6, SparkLowLevel.MotorType.kBrushless);
                 turnSparkMax = new SparkMax(5, SparkLowLevel.MotorType.kBrushless);
-                cancoder = new CoreCANcoder(2);
+                cancoder = new CoreCANcoder(4);
                 absoluteEncoderOffset = Rotation2d.fromDegrees(-45);
                 title = "FL";
                 break;
             case FRONT_RIGHT:
                 driveSparkMax = new SparkMax(8, SparkLowLevel.MotorType.kBrushless);
                 turnSparkMax = new SparkMax(7, SparkLowLevel.MotorType.kBrushless);
-                cancoder = new CoreCANcoder(3);
+                cancoder = new CoreCANcoder(2);
                 absoluteEncoderOffset = Rotation2d.fromDegrees(85);
                 title = "FR";
                 break;
             case BACK_LEFT:
                 driveSparkMax = new SparkMax(1, SparkLowLevel.MotorType.kBrushless);
                 turnSparkMax = new SparkMax(2, SparkLowLevel.MotorType.kBrushless);
-                cancoder = new CoreCANcoder(4);
+                cancoder = new CoreCANcoder(1);
                 absoluteEncoderOffset = Rotation2d.fromDegrees(-55);
                 title = "BL";
                 break;
             case BACK_RIGHT:
                 driveSparkMax = new SparkMax(3, SparkLowLevel.MotorType.kBrushless);
                 turnSparkMax = new SparkMax(4, SparkLowLevel.MotorType.kBrushless);
-                cancoder = new CoreCANcoder(1);
+                cancoder = new CoreCANcoder(3);
                 absoluteEncoderOffset = Rotation2d.fromDegrees(80);
                 title = "BR";
                 break;
