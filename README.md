@@ -6,10 +6,10 @@ This repository contains the robot code for FRC Team 1091's 2026 season robot.
 
 To build and run this project, you should have the following installed:
 
-*   **WPILib 2026**: It is recommended to use the WPILib installer for the current season.
-*   **Java 17**: The project is configured to use Java 17 (standard for 2026 WPILib).
-*   **Gradle**: Included via the Gradle wrapper (`./gradlew`).
-
+*   **WPILib 2026**: Use the [WPILib installer](https://docs.wpilib.org/en/stable/docs/zero-to-robot/step-2/wpilib-setup.html) for the current season.
+*   **Java 17 JDK**: The project is configured to use Java 17, but any one newer should work.
+*   **An IDE**: Intellij IDEA or VS Code are recommended.
+*   **FRC Driver Station**: If you want to drive, you'll need the [FRC Driver Station](https://docs.wpilib.org/en/stable/docs/software/driverstation/driver-station.html).
 ## Getting Started
 
 ### Cloning the Repository
