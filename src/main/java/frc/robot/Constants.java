@@ -11,6 +11,7 @@ import edu.wpi.first.math.util.Units;
 
 public final class Constants {
 
+
     public static class OperatorConstants {
         public static final int kDriverControllerPort = 0;
     }
@@ -36,6 +37,49 @@ public final class Constants {
         public static final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(moduleTranslations);
         public static final double linearDeadband = 0.1;
         public static final double rotationalDeadband = 0.1;
+    }
+
+    public static class Shooter {
+        public static boolean disabled = true;
+        // TODO: we may want target RPMs here for the flywheel
+    }
+
+    public class Intake {
+        public static boolean disabled = true;
+        public static int intakeMotorChannel = 11;
+        public static int extenderMotorChannel = 12;
+        public static double extenderMotorPower = 0.25;
+    }
+
+    public class Climber {
+        public static boolean disabled = true;
+        public static int leftMotorChannel = 9;
+        public static double leftMotorPower = 0.25;
+        public static int rightMotorChannel = 10;
+        public static double rightMotorPower = 0.25;
+        public static int indexerMotorChannel = 13;
+    }
+
+    public class Camera {
+        public static boolean disabled = true;
+    }
+
+
+    public static final class PoseEstimation {
+        public final static Vector<N3> stateStdDevs = VecBuilder.fill(0.1, 0.1, 0.1);
+        public final static Vector<N3> visionMeasurementStdDevs = VecBuilder.fill(.7, .7, 9999999);
+    }
+
+    public static final class Locations {
+
+        // This is the target position
+        public static Pose2d hubPose = new Pose2d(
+                new Translation2d(
+                        Units.inchesToMeters(158.6),
+                        Units.inchesToMeters(317.7 / 2.0)
+                ),
+                Rotation2d.k180deg
+        );
     }
 
 //    public static final class Chute {
@@ -87,37 +131,6 @@ public final class Constants {
 //        public static final double outMax = 261;
 //    }
 
-    public static final class PoseEstimation {
-        public final static Vector<N3> stateStdDevs = VecBuilder.fill(0.1, 0.1, 0.1);
-        public final static Vector<N3> visionMeasurementStdDevs = VecBuilder.fill(.7, .7, 9999999);
-    }
-
-    public static final class Locations {
-
-        // This is the target position
-        public static Pose2d hubPose = new Pose2d(
-                new Translation2d(
-                        Units.inchesToMeters(158.6),
-                        Units.inchesToMeters(317.7 / 2.0)
-                ),
-                Rotation2d.k180deg
-        );
-
-
-    }
-
-    public class Intake {
-        public static int intakeMotorChannel = 11;
-        public static int extenderMotorChannel = 12;
-        public static double extenderMotorPower = 0.25;
-    }
-
-    public class Climber {
-        public static int leftMotorChannel = 9;
-        public static int rightMotorChannel = 10;
-        public static double leftMotorPower = 0.25;
-        public static double rightMotorPower = 0.25;
-    }
 
 //  public static final class PathPlanner {
 //    public static final PPHolonomicDriveController controller = new PPHolonomicDriveController(

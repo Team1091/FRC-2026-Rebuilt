@@ -7,6 +7,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.enums.IntakeState;
 
 // picks balls off the ground
 public class IntakeSubsystem extends SubsystemBase {
@@ -14,12 +15,18 @@ public class IntakeSubsystem extends SubsystemBase {
     private IntakeState state = IntakeState.RETRACTED;
 
     private final SparkMax intakeMotor;
-
     private final SparkMax extenderMotor;
     private final RelativeEncoder extenderEncoder;
     private final PIDController extenderController = new PIDController(2.0, 0, 0);
 
     public IntakeSubsystem() {
+        if (Constants.Intake.disabled) {
+            intakeMotor = null;
+            extenderMotor = null;
+            extenderEncoder = null;
+            return;
+        }
+
         // set up motors
         intakeMotor = new SparkMax(Constants.Intake.intakeMotorChannel, SparkLowLevel.MotorType.kBrushless);
 
@@ -30,6 +37,7 @@ public class IntakeSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
+        if (Constants.Intake.disabled) return;
 
         // set motor speeds
         intakeMotor.set(state.intakeMotorSpeed);
@@ -44,17 +52,4 @@ public class IntakeSubsystem extends SubsystemBase {
         this.state = state;
     }
 
-    public enum IntakeState {
-        RETRACTED(0.0, 0.0),
-        EXTENDED(0.0, 0.5),
-        HARVEST(1.0, 0.5);
-
-        IntakeState(Double intakeMotorSpeed, Double extenderMotorPosition) {
-            this.intakeMotorSpeed = intakeMotorSpeed;
-            this.extenderMotorPosition = extenderMotorPosition;
-        }
-
-        final double intakeMotorSpeed;
-        final double extenderMotorPosition;
-    }
 }

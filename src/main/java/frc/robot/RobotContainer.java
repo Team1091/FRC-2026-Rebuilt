@@ -4,9 +4,12 @@
 
 package frc.robot;
 
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -14,8 +17,13 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.commands.*;
+import frc.robot.commands.Autos;
+import frc.robot.commands.ClimberCommand;
+import frc.robot.commands.DriveCommand;
+import frc.robot.commands.DriveWhilePointingAtCommand;
+import frc.robot.commands.ShooterCommand;
 import frc.robot.enums.ClimberPosition;
+import frc.robot.enums.ShooterState;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.PoseEstimationSubsystem;
@@ -28,7 +36,6 @@ import static frc.robot.Constants.Swerve.BACK_LEFT;
 import static frc.robot.Constants.Swerve.BACK_RIGHT;
 import static frc.robot.Constants.Swerve.FRONT_LEFT;
 import static frc.robot.Constants.Swerve.FRONT_RIGHT;
-import static frc.robot.enums.ShooterState.ShooterState;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -87,9 +94,10 @@ public class RobotContainer {
         drive.resetGyro();
         drive.setIsFieldOriented(true);
 
-        //TODO: set up camera capture
-        // CameraServer.startAutomaticCapture().setExposureManual(40);
-        // Shuffleboard.getTab("General").add("Camera", 0).withWidget(BuiltInWidgets.kCameraStream);
+        if (!Constants.Camera.disabled) {
+            CameraServer.startAutomaticCapture().setExposureManual(40);
+            Shuffleboard.getTab("General").add("Camera", 0).withWidget(BuiltInWidgets.kCameraStream);
+        }
     }
 
     public void robotEnabled() {
@@ -143,9 +151,10 @@ public class RobotContainer {
                 }
         ));
         // spin up while shooting
-        driverController.leftTrigger().whileTrue(new ShooterCommand(ShooterState.SPIN_UP));
+        driverController.leftTrigger().whileTrue(new ShooterCommand(shooterSubsystem, ShooterState.SPIN_UP));
+        driverController.rightTrigger().whileTrue(new ShooterCommand(shooterSubsystem, ShooterState.FIRE));
 
-
+        // Climber uses bumpers
         driverController.leftBumper().whileTrue(new ClimberCommand(climberSubsystem, ClimberPosition.UP));
         driverController.rightBumper().whileTrue(new ClimberCommand(climberSubsystem, ClimberPosition.DOWN));
         // TODO: add additional bindings

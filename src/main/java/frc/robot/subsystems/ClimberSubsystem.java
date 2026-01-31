@@ -20,6 +20,14 @@ public class ClimberSubsystem extends SubsystemBase {
     private final PIDController rightClimberController = new PIDController(2.0, 0, 0);
 
     public ClimberSubsystem() {
+        if (Constants.Climber.disabled) {
+            leftClimberMotor = null;
+            rightClimberMotor = null;
+            leftClimberEncoder = null;
+            rightClimberEncoder = null;
+            return;
+        }
+
         leftClimberMotor = new SparkMax(Constants.Climber.leftMotorChannel, SparkLowLevel.MotorType.kBrushless);
         rightClimberMotor = new SparkMax(Constants.Climber.rightMotorChannel, SparkLowLevel.MotorType.kBrushless);
         leftClimberEncoder = leftClimberMotor.getEncoder();
@@ -35,6 +43,7 @@ public class ClimberSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
+        if (Constants.Climber.disabled) return;
 
         var leftClimberPow = leftClimberController.calculate(leftClimberEncoder.getPosition(), climberPosition.climberPosition);
         leftClimberPow = MathUtil.clamp(leftClimberPow, -Constants.Climber.leftMotorPower, Constants.Climber.leftMotorPower);
