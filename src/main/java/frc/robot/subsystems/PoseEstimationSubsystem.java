@@ -71,4 +71,12 @@ public class PoseEstimationSubsystem extends SubsystemBase {
     public void setCurrentPose(Pose2d newPose) {
         poseEstimator.resetPosition(rotationSupplier.get(), modulePositionSupplier.get(), newPose);
     }
+
+    public Rotation2d getHeadingToTarget(Pose2d targetPose){
+        var currentPose = getCurrentPose();
+        var differenceInPos = targetPose.getTranslation().minus(currentPose.getTranslation());
+
+        // need to calculate the heading to the target
+        return Rotation2d.fromRadians( Math.atan2(differenceInPos.getY(), differenceInPos.getX()));
+    }
 }

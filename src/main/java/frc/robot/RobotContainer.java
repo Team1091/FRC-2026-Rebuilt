@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
 import frc.robot.commands.DriveCommand;
+import frc.robot.commands.DriveWhilePointingAtCommand;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.PoseEstimationSubsystem;
@@ -40,7 +41,7 @@ public class RobotContainer {
     private final Drive drive;
     private final PoseEstimationSubsystem poseEstimationSubsystem;
     private final ClimberSubsystem climberSubsystem;
-    private final IntakeSubsystem  intakeSubsystem;
+    private final IntakeSubsystem intakeSubsystem;
     private final ShooterSubsystem shooterSubsystem;
 
     // Replace with CommandPS4Controller or CommandJoystick if needed
@@ -129,11 +130,23 @@ public class RobotContainer {
                 )
         );
 
-        // TODO: add bindings
-        //  driver.rightBumper().whileTrue(new WheelCommand(chuteSubsystem, Constants.Chute.shootSpeed));
+        // Aim while driving
+        driverController.leftTrigger().whileTrue(new DriveWhilePointingAtCommand(
+                drive,
+                poseEstimationSubsystem,
+                Constants.Locations.hubPose,
+                () -> { // y+ is to the left, y- is to the right
+                    return -driverController.getLeftX();
+                },
+                () -> { // z+ is rotating counterclockwise
+                    return -driverController.getRightX();
+                }
+        ));
 
+        // TODO: add additional bindings
+    }
 
-    }/**
+    /**
      * Use this to pass the autonomous command to the main {@link Robot} class.
      *
      * @return the command to run in autonomous
