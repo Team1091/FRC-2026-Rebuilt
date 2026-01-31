@@ -4,9 +4,12 @@
 
 package frc.robot;
 
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -15,8 +18,16 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
+import frc.robot.commands.ClimberCommand;
 import frc.robot.commands.DriveCommand;
+import frc.robot.commands.DriveWhilePointingAtCommand;
+import frc.robot.commands.ShooterCommand;
+import frc.robot.enums.ClimberPosition;
+import frc.robot.enums.ShooterState;
+import frc.robot.subsystems.ClimberSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.PoseEstimationSubsystem;
+import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.GyroIOPigeon2;
 import frc.robot.subsystems.drive.ModuleIOTalonFX;
@@ -36,7 +47,9 @@ public class RobotContainer {
     // The robot's subsystems and commands are defined here...
     private final Drive drive;
     private final PoseEstimationSubsystem poseEstimationSubsystem;
-
+    private final ClimberSubsystem climberSubsystem;
+    private final IntakeSubsystem intakeSubsystem;
+    private final ShooterSubsystem shooterSubsystem;
 
     // Replace with CommandPS4Controller or CommandJoystick if needed
     private final CommandXboxController driverController =
@@ -62,12 +75,9 @@ public class RobotContainer {
                 drive::getModulePositions
         );
 
-        // TODO: set up more subsystems
-        // IntakeSubsystem - picks balls off the ground
-        // IndexSubsystem
-        // LaunchSubSystem - spins up a flywheel to launch the balls
-        // ClimberSubsystem - climbs up, holds, and back down
-
+        climberSubsystem = new ClimberSubsystem();
+        intakeSubsystem = new IntakeSubsystem();
+        shooterSubsystem = new ShooterSubsystem();
 
         configureAutonomous();
         // Configure the trigger bindings
@@ -84,9 +94,10 @@ public class RobotContainer {
         drive.resetGyro();
         drive.setIsFieldOriented(true);
 
-        //TODO: set up camera capture
-        // CameraServer.startAutomaticCapture().setExposureManual(40);
-        // Shuffleboard.getTab("General").add("Camera", 0).withWidget(BuiltInWidgets.kCameraStream);
+        if (!Constants.Camera.disabled) {
+            CameraServer.startAutomaticCapture().setExposureManual(40);
+            Shuffleboard.getTab("General").add("Camera", 0).withWidget(BuiltInWidgets.kCameraStream);
+        }
     }
 
     public void robotEnabled() {
@@ -127,10 +138,26 @@ public class RobotContainer {
                 )
         );
 
-        // TODO: add bindings
-        //  driver.rightBumper().whileTrue(new WheelCommand(chuteSubsystem, Constants.Chute.shootSpeed));
+        // Aim while driving
+        driverController.leftTrigger().whileTrue(new DriveWhilePointingAtCommand(
+                drive,
+                poseEstimationSubsystem,
+                Constants.Locations.hubPose,
+                () -> { // y+ is to the left, y- is to the right
+                    return -driverController.getLeftX();
+                },
+                () -> { // z+ is rotating counterclockwise
+                    return -driverController.getRightX();
+                }
+        ));
+        // spin up while shooting
+        driverController.leftTrigger().whileTrue(new ShooterCommand(shooterSubsystem, ShooterState.SPIN_UP));
+        driverController.rightTrigger().whileTrue(new ShooterCommand(shooterSubsystem, ShooterState.FIRE));
 
-
+        // Climber uses bumpers
+        driverController.leftBumper().whileTrue(new ClimberCommand(climberSubsystem, ClimberPosition.UP));
+        driverController.rightBumper().whileTrue(new ClimberCommand(climberSubsystem, ClimberPosition.DOWN));
+        // TODO: add additional bindings
     }
 
     /**
