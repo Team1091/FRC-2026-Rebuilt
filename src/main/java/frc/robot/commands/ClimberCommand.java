@@ -7,18 +7,19 @@ import frc.robot.subsystems.ClimberSubsystem;
 public class ClimberCommand extends Command {
     private ClimberPosition target;
     private ClimberSubsystem climber;
-    public ClimberCommand(ClimberSubsystem climber , ClimberPosition target){
+
+    public ClimberCommand(ClimberSubsystem climber, ClimberPosition target) {
         this.target = target;
         this.climber = climber;
     }
 
     @Override
-    public void execute(){
+    public void execute() {
         climber.setClimberPosition(target);
     }
 
     @Override
-    public boolean isFinished(){
+    public boolean isFinished() {
         return true;
     }
 }

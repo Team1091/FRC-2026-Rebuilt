@@ -14,9 +14,8 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.commands.Autos;
-import frc.robot.commands.DriveCommand;
-import frc.robot.commands.DriveWhilePointingAtCommand;
+import frc.robot.commands.*;
+import frc.robot.enums.ClimberPosition;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.PoseEstimationSubsystem;
@@ -29,6 +28,7 @@ import static frc.robot.Constants.Swerve.BACK_LEFT;
 import static frc.robot.Constants.Swerve.BACK_RIGHT;
 import static frc.robot.Constants.Swerve.FRONT_LEFT;
 import static frc.robot.Constants.Swerve.FRONT_RIGHT;
+import static frc.robot.enums.ShooterState.ShooterState;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -142,7 +142,12 @@ public class RobotContainer {
                     return -driverController.getRightX();
                 }
         ));
+        // spin up while shooting
+        driverController.leftTrigger().whileTrue(new ShooterCommand(ShooterState.SPIN_UP));
 
+
+        driverController.leftBumper().whileTrue(new ClimberCommand(climberSubsystem, ClimberPosition.UP));
+        driverController.rightBumper().whileTrue(new ClimberCommand(climberSubsystem, ClimberPosition.DOWN));
         // TODO: add additional bindings
     }
 
