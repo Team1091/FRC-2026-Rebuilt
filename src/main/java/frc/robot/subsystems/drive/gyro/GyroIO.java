@@ -19,4 +19,7 @@ public interface GyroIO {
 
     default void resetGyro() {
     }
+
+    default void setUpLogging() {
+    }
 }

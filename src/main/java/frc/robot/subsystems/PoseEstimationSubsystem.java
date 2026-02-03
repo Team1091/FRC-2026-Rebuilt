@@ -53,8 +53,7 @@ public class PoseEstimationSubsystem extends SubsystemBase {
                         limelightMeasurement.timestampSeconds);
             }
         } catch (Exception e) {
-            // TODO: handle exception
-            DataLogManager.log(e.getMessage());
+            DataLogManager.log("Vision error: " + e.getMessage());
         }
 
         // Set the field pose to show the dashboard where we think we are.

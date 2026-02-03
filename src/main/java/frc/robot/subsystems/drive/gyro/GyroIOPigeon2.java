@@ -10,6 +10,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 
 /**
  * IO implementation for Pigeon2
@@ -40,5 +41,10 @@ public class GyroIOPigeon2 implements GyroIO {
         inputs.yawVelocityRadPerSec = Units.degreesToRadians(yawVelocity.getValueAsDouble());
         // inputs.pitchPosition = Rotation2d.fromDegrees(pitch.getValueAsDouble());
         // inputs.rollPosition = Rotation2d.fromDegrees(roll.getValueAsDouble());
+    }
+
+    @Override
+    public void setUpLogging() {
+        Shuffleboard.getTab("Gyro").add(pigeon);
     }
 }

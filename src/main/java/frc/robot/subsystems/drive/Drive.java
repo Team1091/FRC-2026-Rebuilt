@@ -12,18 +12,20 @@ import edu.wpi.first.networktables.StructArrayPublisher;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.subsystems.PoseEstimationSubsystem;
+import frc.robot.subsystems.drive.config.FeedForwardParams;
+import frc.robot.subsystems.drive.config.ModulePidConfig;
+import frc.robot.subsystems.drive.config.PidConfig;
 import frc.robot.subsystems.drive.gyro.GyroIO;
+import frc.robot.subsystems.drive.gyro.GyroIOPigeon2;
 import frc.robot.subsystems.drive.module.Module;
-import frc.robot.subsystems.drive.module.ModuleIO;
+import frc.robot.subsystems.drive.module.ModuleIOTalonFX;
 
-import static frc.robot.Constants.Swerve.BACK_LEFT;
-import static frc.robot.Constants.Swerve.BACK_RIGHT;
-import static frc.robot.Constants.Swerve.FRONT_LEFT;
-import static frc.robot.Constants.Swerve.FRONT_RIGHT;
 import static frc.robot.Constants.Swerve.kinematics;
 import static frc.robot.Constants.Swerve.maxAngularSpeed;
 import static frc.robot.Constants.Swerve.maxLinearSpeed;
+import static frc.robot.Constants.Swerve.moduleConfigs;
 import static frc.robot.Constants.Swerve.moduleTranslations;
 
 public class Drive extends SubsystemBase {
@@ -34,25 +36,23 @@ public class Drive extends SubsystemBase {
     private boolean isFieldOriented = true;
     private boolean defenseMode = false;
     private ChassisSpeeds chassisSpeeds;
-    //    private Translation2d middle;
+
     private final SwerveModulePosition[] modulePositions = new SwerveModulePosition[4];
     private PoseEstimationSubsystem poseEstimationSubsystem;
     private final StructArrayPublisher<SwerveModuleState> statePublisher;
 
-    public Drive(
-            GyroIO gyroIO,
-            ModuleIO flModuleIO,
-            ModuleIO frModuleIO,
-            ModuleIO blModuleIO,
-            ModuleIO brModuleIO) {
-        this.gyroIO = gyroIO;
-        modules[FRONT_LEFT] = new Module(flModuleIO, FRONT_LEFT, "FL", createDefaultPidConfig());
-        modules[FRONT_RIGHT] = new Module(frModuleIO, FRONT_RIGHT, "FR", createDefaultPidConfig());
-        modules[BACK_LEFT] = new Module(blModuleIO, BACK_LEFT, "BL", createDefaultPidConfig());
-        modules[BACK_RIGHT] = new Module(brModuleIO, BACK_RIGHT, "BR", createDefaultPidConfig());
+    public Drive() {
 
-        for (int i = 0; i < 4; i++) {
-            modulePositions[i] = new SwerveModulePosition();
+        this.gyroIO = new GyroIOPigeon2();
+        this.gyroIO.setUpLogging();
+
+        for (Constants.ModuleConfig moduleConfig : moduleConfigs) {
+            modules[moduleConfig.index()] = new Module(
+                    new ModuleIOTalonFX(moduleConfig),
+                    moduleConfig.title(),
+                    createDefaultPidConfig());
+
+            modulePositions[moduleConfig.index()] = new SwerveModulePosition();
         }
 
         statePublisher = NetworkTableInstance.getDefault().getStructArrayTopic("States", SwerveModuleState.struct).publish();

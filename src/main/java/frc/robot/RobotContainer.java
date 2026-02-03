@@ -34,13 +34,6 @@ import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.PoseEstimationSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.drive.Drive;
-import frc.robot.subsystems.drive.gyro.GyroIOPigeon2;
-import frc.robot.subsystems.drive.module.ModuleIOTalonFX;
-
-import static frc.robot.Constants.Swerve.BACK_LEFT;
-import static frc.robot.Constants.Swerve.BACK_RIGHT;
-import static frc.robot.Constants.Swerve.FRONT_LEFT;
-import static frc.robot.Constants.Swerve.FRONT_RIGHT;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -68,13 +61,7 @@ public class RobotContainer {
      */
     public RobotContainer() {
 
-        drive = new Drive(
-                new GyroIOPigeon2(),//change if using different gyro
-                new ModuleIOTalonFX(FRONT_LEFT),
-                new ModuleIOTalonFX(FRONT_RIGHT),
-                new ModuleIOTalonFX(BACK_LEFT),
-                new ModuleIOTalonFX(BACK_RIGHT)
-        );
+        drive = new Drive();
         poseEstimationSubsystem = new PoseEstimationSubsystem(
                 drive::getGyroRotation,
                 drive::getModulePositions

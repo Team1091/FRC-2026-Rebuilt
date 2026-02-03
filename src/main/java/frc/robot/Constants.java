@@ -21,6 +21,7 @@ public final class Constants {
         public static final int FRONT_RIGHT = 1;
         public static final int BACK_LEFT = 2;
         public static final int BACK_RIGHT = 3;
+
         public static final double trackWidthX = Units.inchesToMeters(20.375);
         public static final double trackWidthY = Units.inchesToMeters(22.25);
         public static final double driveBaseRadius = Math.hypot(trackWidthX / 2.0, trackWidthY / 2.0);
@@ -28,6 +29,13 @@ public final class Constants {
         public static final double maxLinearAcceleration = Units.feetToMeters(10);
         public static final double maxAngularSpeed = maxLinearSpeed / driveBaseRadius;
         public static final double maxAngularAcceleration = maxLinearAcceleration / driveBaseRadius;
+
+        public static final ModuleConfig[] moduleConfigs = {
+                new ModuleConfig("FL", FRONT_LEFT, 6, 5, 4, Rotation2d.fromDegrees(42)),
+                new ModuleConfig("FR", FRONT_RIGHT, 8, 7, 2, Rotation2d.fromDegrees(37)),
+                new ModuleConfig("BL", BACK_LEFT, 1, 2, 1, Rotation2d.fromDegrees(-195)),
+                new ModuleConfig("BR", BACK_RIGHT, 3, 4, 3, Rotation2d.fromDegrees(174))
+        };
         public static final Translation2d[] moduleTranslations = {
                 new Translation2d(trackWidthX / 2.0, trackWidthY / 2.0), // FL
                 new Translation2d(trackWidthX / 2.0, -trackWidthY / 2.0), // FR
@@ -37,6 +45,24 @@ public final class Constants {
         public static final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(moduleTranslations);
         public static final double linearDeadband = 0.1;
         public static final double rotationalDeadband = 0.1;
+
+        public static class Module{
+            public static final double WHEEL_RADIUS_METERS = Units.inchesToMeters(2.0);
+
+            // Gear ratios for SDS MK4i L2
+            public static final double DRIVE_GEAR_RATIO = (50.0 / 14.0) * (17.0 / 27.0) * (45.0 / 15.0);
+            public static final double TURN_GEAR_RATIO = 150.0 / 7.0;
+
+            public static final int DRIVE_CURRENT_LIMIT_AMPS = 40;
+            public static final int TURN_CURRENT_LIMIT_AMPS = 20;
+
+            public static final double VOLTAGE_COMPENSATION = 12.0;
+
+            public static final int ENCODER_MEASUREMENT_PERIOD_MS = 10;
+            public static final int ENCODER_AVERAGE_DEPTH = 2;
+
+            public static final int CAN_TIMEOUT_MS = 250;
+        }
     }
 
     public static class Shooter {
@@ -90,5 +116,16 @@ public final class Constants {
         public static double hoodMotorPower = 0.25;
         public static double angleCloseEnough = 0.1;
     }
+
+    public record ModuleConfig(
+            String title,
+            int index,
+            int driveId,
+            int turnId,
+            int cancoderId,
+            Rotation2d absoluteEncoderOffset
+    ) {
+    }
+
 
 }
