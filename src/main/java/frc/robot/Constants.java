@@ -82,12 +82,10 @@ public final class Constants {
         );
     }
 
+    public static final class Hood {
+        public static boolean disabled = true;
+        public static int hoodMotorChannel = 13;
+        public static double hoodMotorPower = 0.25;
+    }
 
-//  public static final class PathPlanner {
-//    public static final PPHolonomicDriveController controller = new PPHolonomicDriveController(
-//            new PIDConstants(.5, 0, 0), // 2.0 Translation constants 3
-//            new PIDConstants(3, 0, 0) // 1.3 Rotation constants 3
-//    );
-//    public static final RobotConfig config = new RobotConfig(15, 1, new ModuleConfig(0.0508, 3, 1.2, DCMotor.getNEO(1).withReduction((50.0 / 14.0) * (17.0 / 27.0) * (45.0 / 15.0)), 120.0, 1), trackWidthX);
-//  }
 }
