@@ -86,6 +86,7 @@ public final class Constants {
         public static boolean disabled = true;
         public static int hoodMotorChannel = 13;
         public static double hoodMotorPower = 0.25;
+        public static double angleCloseEnough = 0.1;
     }
 
 }

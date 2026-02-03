@@ -14,7 +14,7 @@ public class HoodSubsystem extends SubsystemBase {
     private final PIDController hoodController = new PIDController(2.0, 0, 0);
     private double hoodAngle;
 
-    HoodSubsystem(){
+    public HoodSubsystem() {
         hoodAngle = 0;
         if (Constants.Hood.disabled) {
             hoodMotor = null;
@@ -25,15 +25,27 @@ public class HoodSubsystem extends SubsystemBase {
         hoodEncoder = hoodMotor.getEncoder();
     }
 
+    public boolean isCloseEnoughToTarget() {
+        if (Constants.Hood.disabled) {
+            return true;
+        }
+        return Math.abs(hoodAngle - hoodEncoder.getPosition()) < Constants.Hood.angleCloseEnough;
+    }
+
+    public void setTargetAngle(double hoodAngle) {
+        this.hoodAngle = hoodAngle;
+    }
+
     @Override
-    public void periodic(){
-        if (Constants.Hood.disabled){
+    public void periodic() {
+        if (Constants.Hood.disabled) {
             return;
         }
         var hoodPow = hoodController.calculate(hoodEncoder.getPosition(), hoodAngle);
         hoodPow = MathUtil.clamp(hoodPow, -Constants.Hood.hoodMotorPower, Constants.Hood.hoodMotorPower);
         hoodMotor.set(hoodPow);
     }
+
 }
 
 
