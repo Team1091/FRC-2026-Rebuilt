@@ -39,10 +39,10 @@ public class Module {
 
         // Set up shuffleboard
         var tab = Shuffleboard.getTab(title);
-        realAngle = tab.add("Real Angle " + title, 0).getEntry();
-        realVelocity = tab.add("Real Velocity " + title, 0).getEntry();
-        targetAngle = tab.add("Target Angle " + title, 0).getEntry();
-        targetVelocity = tab.add("Target Velocity " + title, 0).getEntry();
+        realAngle = tab.add("Real Angle", 0).getEntry();
+        realVelocity = tab.add("Real Velocity", 0).getEntry();
+        targetAngle = tab.add("Target Angle", 0).getEntry();
+        targetVelocity = tab.add("Target Velocity", 0).getEntry();
 
         // Constants here may change for SIM
         driveFeedforward = config.driveFeedForward().toSimpleMotorFeedforward();
