@@ -41,26 +41,28 @@ public final class Constants {
 
     public static class Shooter {
         public static boolean disabled = true;
+        public static int leftMotorChannel = 13;
+        public static int rightMotorChannel = 14;
+        public static int indexerMotorChannel = 15;
         // TODO: we may want target RPMs here for the flywheel
     }
 
-    public class Intake {
+    public static class Intake {
         public static boolean disabled = true;
         public static int intakeMotorChannel = 11;
         public static int extenderMotorChannel = 12;
         public static double extenderMotorPower = 0.25;
     }
 
-    public class Climber {
+    public static class Climber {
         public static boolean disabled = true;
         public static int leftMotorChannel = 9;
         public static double leftMotorPower = 0.25;
         public static int rightMotorChannel = 10;
         public static double rightMotorPower = 0.25;
-        public static int indexerMotorChannel = 13;
     }
 
-    public class Camera {
+    public static class Camera {
         public static boolean disabled = true;
     }
 

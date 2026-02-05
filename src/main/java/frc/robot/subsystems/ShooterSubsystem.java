@@ -22,9 +22,9 @@ public class ShooterSubsystem extends SubsystemBase {
             indexerMotor = null;
             return;
         }
-        leftShooterMotor = new SparkMax(Constants.Climber.leftMotorChannel, SparkLowLevel.MotorType.kBrushless);
-        rightShooterMotor = new SparkMax(Constants.Climber.rightMotorChannel, SparkLowLevel.MotorType.kBrushless);
-        indexerMotor = new SparkMax(Constants.Climber.indexerMotorChannel, SparkLowLevel.MotorType.kBrushless);
+        leftShooterMotor = new SparkMax(Constants.Shooter.leftMotorChannel, SparkLowLevel.MotorType.kBrushless);
+        rightShooterMotor = new SparkMax(Constants.Shooter.rightMotorChannel, SparkLowLevel.MotorType.kBrushless);
+        indexerMotor = new SparkMax(Constants.Shooter.indexerMotorChannel, SparkLowLevel.MotorType.kBrushless);
     }
 
 
