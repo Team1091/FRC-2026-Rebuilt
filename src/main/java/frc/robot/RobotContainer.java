@@ -54,8 +54,7 @@ public class RobotContainer {
     private final ShooterSubsystem shooterSubsystem;
 
     // Replace with CommandPS4Controller or CommandJoystick if needed
-    private final CommandXboxController driverController =
-            new CommandXboxController(OperatorConstants.kDriverControllerPort);
+    private final CommandXboxController driverController = new CommandXboxController(OperatorConstants.kDriverControllerPort);
 
     // This lets us select the command to run in autonomous
     private SendableChooser<Command> autoChooser;
