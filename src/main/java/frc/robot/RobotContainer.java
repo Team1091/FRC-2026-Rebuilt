@@ -149,7 +149,7 @@ public class RobotContainer {
                                     return -driverController.getRightX();
                                 }
                         ),
-                        new PrepareShotCommand(hoodSubsystem, () -> poseEstimationSubsystem.getCurrentPose() )
+                        new PrepareShotCommand(hoodSubsystem, () -> poseEstimationSubsystem.getCurrentPose())
                 )
         );
         // spin up while shooting

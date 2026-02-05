@@ -76,7 +76,7 @@ public class Module {
             // If we don't have active control, we should not be running the motors
             io.setTurnVoltage(0.0);
             io.setDriveVoltage(0.0);
-        }else{
+        } else {
             // Run closed loop turn control
             io.setTurnVoltage(
                     turnFeedback.calculate(getAngle().getRadians(), targetState.angle.getRadians()));

@@ -46,7 +46,7 @@ public final class Constants {
         public static final double linearDeadband = 0.1;
         public static final double rotationalDeadband = 0.1;
 
-        public static class Module{
+        public static class Module {
             public static final double WHEEL_RADIUS_METERS = Units.inchesToMeters(2.0);
 
             // Gear ratios for SDS MK4i L2
