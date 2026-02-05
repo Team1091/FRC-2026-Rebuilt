@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -21,12 +22,14 @@ import frc.robot.commands.Autos;
 import frc.robot.commands.ClimberCommand;
 import frc.robot.commands.DriveCommand;
 import frc.robot.commands.DriveWhilePointingAtCommand;
+import frc.robot.commands.PrepareShotCommand;
 import frc.robot.commands.RunIntakeCommand;
 import frc.robot.commands.ShooterCommand;
 import frc.robot.enums.ClimberPosition;
 import frc.robot.enums.IntakeState;
 import frc.robot.enums.ShooterState;
 import frc.robot.subsystems.ClimberSubsystem;
+import frc.robot.subsystems.HoodSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.PoseEstimationSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
@@ -52,6 +55,7 @@ public class RobotContainer {
     private final ClimberSubsystem climberSubsystem;
     private final IntakeSubsystem intakeSubsystem;
     private final ShooterSubsystem shooterSubsystem;
+    private final HoodSubsystem hoodSubsystem;
 
     // Replace with CommandPS4Controller or CommandJoystick if needed
     private final CommandXboxController driverController = new CommandXboxController(OperatorConstants.kDriverControllerPort);
@@ -80,6 +84,7 @@ public class RobotContainer {
         climberSubsystem = new ClimberSubsystem();
         intakeSubsystem = new IntakeSubsystem();
         shooterSubsystem = new ShooterSubsystem();
+        hoodSubsystem = new HoodSubsystem();
 
         configureAutonomous();
         // Configure the trigger bindings
@@ -142,17 +147,22 @@ public class RobotContainer {
         );
 
         // Aim while driving
-        driverController.leftTrigger().whileTrue(new DriveWhilePointingAtCommand(
-                drive,
-                poseEstimationSubsystem,
-                Constants.Locations.hubPose,
-                () -> { // y+ is to the left, y- is to the right
-                    return -driverController.getLeftX();
-                },
-                () -> { // z+ is rotating counterclockwise
-                    return -driverController.getRightX();
-                }
-        ));
+        driverController.leftTrigger().whileTrue(
+                new ParallelCommandGroup(
+                        new DriveWhilePointingAtCommand(
+                                drive,
+                                poseEstimationSubsystem,
+                                Constants.Locations.hubPose,
+                                () -> { // y+ is to the left, y- is to the right
+                                    return -driverController.getLeftX();
+                                },
+                                () -> { // z+ is rotating counterclockwise
+                                    return -driverController.getRightX();
+                                }
+                        ),
+                        new PrepareShotCommand(hoodSubsystem, () -> poseEstimationSubsystem.getCurrentPose() )
+                )
+        );
         // spin up while shooting
         driverController.leftTrigger().whileTrue(new ShooterCommand(shooterSubsystem, ShooterState.SPIN_UP));
         driverController.rightTrigger().whileTrue(new ShooterCommand(shooterSubsystem, ShooterState.FIRE));
