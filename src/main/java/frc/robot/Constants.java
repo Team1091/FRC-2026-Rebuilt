@@ -41,26 +41,28 @@ public final class Constants {
 
     public static class Shooter {
         public static boolean disabled = true;
+        public static int leftMotorChannel = 13;
+        public static int rightMotorChannel = 14;
+        public static int indexerMotorChannel = 15;
         // TODO: we may want target RPMs here for the flywheel
     }
 
-    public class Intake {
+    public static class Intake {
         public static boolean disabled = true;
         public static int intakeMotorChannel = 11;
         public static int extenderMotorChannel = 12;
         public static double extenderMotorPower = 0.25;
     }
 
-    public class Climber {
+    public static class Climber {
         public static boolean disabled = true;
         public static int leftMotorChannel = 9;
         public static double leftMotorPower = 0.25;
         public static int rightMotorChannel = 10;
         public static double rightMotorPower = 0.25;
-        public static int indexerMotorChannel = 13;
     }
 
-    public class Camera {
+    public static class Camera {
         public static boolean disabled = true;
     }
 
@@ -82,12 +84,11 @@ public final class Constants {
         );
     }
 
+    public static final class Hood {
+        public static boolean disabled = true;
+        public static int hoodMotorChannel = 13;
+        public static double hoodMotorPower = 0.25;
+        public static double angleCloseEnough = 0.1;
+    }
 
-//  public static final class PathPlanner {
-//    public static final PPHolonomicDriveController controller = new PPHolonomicDriveController(
-//            new PIDConstants(.5, 0, 0), // 2.0 Translation constants 3
-//            new PIDConstants(3, 0, 0) // 1.3 Rotation constants 3
-//    );
-//    public static final RobotConfig config = new RobotConfig(15, 1, new ModuleConfig(0.0508, 3, 1.2, DCMotor.getNEO(1).withReduction((50.0 / 14.0) * (17.0 / 27.0) * (45.0 / 15.0)), 120.0, 1), trackWidthX);
-//  }
 }
