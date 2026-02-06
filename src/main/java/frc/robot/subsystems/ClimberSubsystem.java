@@ -37,6 +37,11 @@ public class ClimberSubsystem extends SubsystemBase {
         climberPosition = ClimberPosition.DOWN;
     }
 
+    public void resetEncoders(){
+        leftClimberEncoder.setPosition(0);
+        rightClimberEncoder.setPosition(0);
+    }
+
     public void setClimberPosition(ClimberPosition position) {
         climberPosition = position;
     }
