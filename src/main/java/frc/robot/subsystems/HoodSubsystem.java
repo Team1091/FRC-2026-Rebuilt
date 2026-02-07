@@ -25,6 +25,10 @@ public class HoodSubsystem extends SubsystemBase {
         hoodEncoder = hoodMotor.getEncoder();
     }
 
+    public void resetEncoder(){
+        hoodEncoder.setPosition(0);
+    }
+
     public boolean isCloseEnoughToTarget() {
         if (Constants.Hood.disabled) {
             return true;

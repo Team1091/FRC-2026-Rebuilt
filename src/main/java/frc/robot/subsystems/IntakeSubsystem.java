@@ -35,6 +35,10 @@ public class IntakeSubsystem extends SubsystemBase {
         extenderEncoder.setPosition(0.0);
     }
 
+    public void resetEncoder(){
+        extenderEncoder.setPosition(0);
+    }
+
     @Override
     public void periodic() {
         if (Constants.Intake.disabled) return;

@@ -109,6 +109,8 @@ public class RobotContainer {
 
     public void robotEnabled() {
         climberSubsystem.resetEncoders();
+        intakeSubsystem.resetEncoder();
+        hoodSubsystem.resetEncoder();
         drive.straightenWheels();
     }
 
