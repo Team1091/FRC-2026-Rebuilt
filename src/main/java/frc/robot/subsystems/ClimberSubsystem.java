@@ -40,6 +40,7 @@ public class ClimberSubsystem extends SubsystemBase {
     }
 
     public void resetEncoders() {
+        if(Constants.Climber.disabled) return;
         leftClimberEncoder.setPosition(0);
         rightClimberEncoder.setPosition(0);
     }

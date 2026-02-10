@@ -36,6 +36,7 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
     public void resetEncoder(){
+        if(Constants.Intake.disabled) return;
         extenderEncoder.setPosition(0);
     }
 

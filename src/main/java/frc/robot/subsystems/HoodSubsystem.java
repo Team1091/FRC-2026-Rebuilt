@@ -26,6 +26,7 @@ public class HoodSubsystem extends SubsystemBase {
     }
 
     public void resetEncoder(){
+        if(Constants.Hood.disabled) return;
         hoodEncoder.setPosition(0);
     }
 
