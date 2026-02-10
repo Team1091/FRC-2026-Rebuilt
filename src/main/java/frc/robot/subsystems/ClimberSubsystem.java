@@ -16,8 +16,9 @@ public class ClimberSubsystem extends SubsystemBase {
     private final RelativeEncoder leftClimberEncoder;
     private final RelativeEncoder rightClimberEncoder;
     private ClimberPosition climberPosition;
-    private final PIDController leftClimberController = new PIDController(2.0, 0, 0);
-    private final PIDController rightClimberController = new PIDController(2.0, 0, 0);
+    private double climberTarget;
+    private final PIDController leftClimberController = new PIDController(1.0, 0, 0);
+    private final PIDController rightClimberController = new PIDController(1.0, 0, 0);
 
     public ClimberSubsystem() {
         if (Constants.Climber.disabled) {
@@ -35,9 +36,10 @@ public class ClimberSubsystem extends SubsystemBase {
         leftClimberEncoder.setPosition(0.0);
         rightClimberEncoder.setPosition(0.0);
         climberPosition = ClimberPosition.DOWN;
+        climberTarget = climberPosition.position;
     }
 
-    public void resetEncoders(){
+    public void resetEncoders() {
         leftClimberEncoder.setPosition(0);
         rightClimberEncoder.setPosition(0);
     }
@@ -50,11 +52,19 @@ public class ClimberSubsystem extends SubsystemBase {
     public void periodic() {
         if (Constants.Climber.disabled) return;
 
-        var leftClimberPow = leftClimberController.calculate(leftClimberEncoder.getPosition(), climberPosition.climberPosition);
+        if (Math.abs(climberTarget - climberPosition.position) < Constants.Climber.climbingSpeed) {
+            climberTarget = climberPosition.position;
+        } else if (climberTarget < climberPosition.position) {
+            climberTarget += Constants.Climber.climbingSpeed;
+        } else {
+            climberTarget -= Constants.Climber.climbingSpeed;
+        }
+
+        var leftClimberPow = leftClimberController.calculate(leftClimberEncoder.getPosition(), climberTarget);
         leftClimberPow = MathUtil.clamp(leftClimberPow, -Constants.Climber.leftMotorPower, Constants.Climber.leftMotorPower);
         leftClimberMotor.set(leftClimberPow);
 
-        var rightClimberPow = rightClimberController.calculate(rightClimberEncoder.getPosition(), climberPosition.climberPosition);
+        var rightClimberPow = rightClimberController.calculate(rightClimberEncoder.getPosition(), climberTarget);
         rightClimberPow = MathUtil.clamp(rightClimberPow, -Constants.Climber.rightMotorPower, Constants.Climber.rightMotorPower);
         rightClimberMotor.set(rightClimberPow);
     }

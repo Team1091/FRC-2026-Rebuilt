@@ -60,6 +60,7 @@ public final class Constants {
         public static double leftMotorPower = 0.25;
         public static int rightMotorChannel = 10;
         public static double rightMotorPower = 0.25;
+        public static double climbingSpeed;
     }
 
     public static class Camera {

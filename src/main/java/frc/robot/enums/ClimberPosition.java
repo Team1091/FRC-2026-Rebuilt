@@ -5,8 +5,8 @@ public enum ClimberPosition {
     DOWN(0.0);
 
     ClimberPosition(double pos) {
-        climberPosition = pos;
+        position = pos;
     }
 
-    public final double climberPosition;
+    public final double position;
 }
