@@ -4,6 +4,7 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -11,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.subsystems.drive.Drive;
 
 public final class Autos {
+
 
     // Spin wildly for a second.
     public static Command spinAuto(Drive drive) {
@@ -32,7 +34,23 @@ public final class Autos {
         return new DriveToPoseCommand(drive, newPos);
     }
 
+    public static Command win(Drive drive) {
+//        return Commands.sequence(
+//                new DriveToPoseCommand(drive, )
+//        );
+        return null;
+    }
+
     private Autos() {
         throw new UnsupportedOperationException("This is a utility class!");
     }
+
+    final Pose2d leftLine = new Pose2d(0, 0, Rotation2d.fromDegrees(0));
+    final Pose2d rightLine = new Pose2d(0, 0, Rotation2d.fromDegrees(0));
+    final Pose2d leftBalls = new Pose2d(0, 0, Rotation2d.fromDegrees(0));
+    final Pose2d rightBalls = new Pose2d(0, 0, Rotation2d.fromDegrees(0));
+
+    final Pose2d shootingBalls = new Pose2d(0, 0, Rotation2d.fromDegrees(0));
+    final Pose2d climbRight = new Pose2d(0, 0, Rotation2d.fromDegrees(0));
+    final Pose2d climbLeft = new Pose2d(0, 0, Rotation2d.fromDegrees(0));
 }
