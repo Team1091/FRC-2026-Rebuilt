@@ -5,6 +5,8 @@ import com.revrobotics.spark.SparkLowLevel;
 import com.revrobotics.spark.SparkMax;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.networktables.GenericEntry;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.enums.ClimberPosition;
@@ -19,8 +21,12 @@ public class ClimberSubsystem extends SubsystemBase {
     private double climberTarget;
     private final PIDController leftClimberController = new PIDController(1.0, 0, 0);
     private final PIDController rightClimberController = new PIDController(1.0, 0, 0);
-
+    private final GenericEntry targetPosition;
+    private final GenericEntry actualPosition;
     public ClimberSubsystem() {
+        var tab = Shuffleboard.getTab("Climber");
+        targetPosition = tab.add("Target Position", 0).getEntry();
+        actualPosition = tab.add("Actual Position", 0).getEntry();
         if (Constants.Climber.disabled) {
             leftClimberMotor = null;
             rightClimberMotor = null;
@@ -61,6 +67,7 @@ public class ClimberSubsystem extends SubsystemBase {
             climberTarget -= Constants.Climber.climbingSpeed;
         }
 
+
         var leftClimberPow = leftClimberController.calculate(leftClimberEncoder.getPosition(), climberTarget);
         leftClimberPow = MathUtil.clamp(leftClimberPow, -Constants.Climber.leftMotorPower, Constants.Climber.leftMotorPower);
         leftClimberMotor.set(leftClimberPow);
@@ -68,5 +75,8 @@ public class ClimberSubsystem extends SubsystemBase {
         var rightClimberPow = rightClimberController.calculate(rightClimberEncoder.getPosition(), climberTarget);
         rightClimberPow = MathUtil.clamp(rightClimberPow, -Constants.Climber.rightMotorPower, Constants.Climber.rightMotorPower);
         rightClimberMotor.set(rightClimberPow);
+
+        targetPosition.setDouble(climberTarget);
+        actualPosition.setDouble(rightClimberEncoder.getPosition());
     }
 }
