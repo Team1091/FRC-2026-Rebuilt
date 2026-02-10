@@ -9,6 +9,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import frc.robot.enums.StartPosish;
 import frc.robot.subsystems.drive.Drive;
 
 public final class Autos {
@@ -34,23 +35,35 @@ public final class Autos {
         return new DriveToPoseCommand(drive, newPos);
     }
 
-    public static Command win(Drive drive) {
-//        return Commands.sequence(
-//                new DriveToPoseCommand(drive, )
-//        );
-        return null;
+    public static Command win(Drive drive, StartPosish startPosish) {
+
+        return switch (startPosish) {
+            case LEFT -> Commands.sequence(
+                    new DriveToPoseCommand(drive, leftLine),
+                    new DriveToPoseCommand(drive, leftBalls),
+                    new DriveToPoseCommand(drive, rightBalls),
+                    new DriveToPoseCommand(drive, rightLine),
+                    new DriveToPoseCommand(drive, shootingBalls),
+                    // spin up shooter, shoot
+                    new DriveToPoseCommand(drive, climb)
+            );
+
+            case RIGHT -> Commands.sequence();
+
+            case CENTER -> Commands.sequence();
+
+        };
     }
 
     private Autos() {
         throw new UnsupportedOperationException("This is a utility class!");
     }
 
-    final Pose2d leftLine = new Pose2d(0, 0, Rotation2d.fromDegrees(0));
-    final Pose2d rightLine = new Pose2d(0, 0, Rotation2d.fromDegrees(0));
-    final Pose2d leftBalls = new Pose2d(0, 0, Rotation2d.fromDegrees(0));
-    final Pose2d rightBalls = new Pose2d(0, 0, Rotation2d.fromDegrees(0));
+    final static Pose2d rightLine = new Pose2d(3.67, 0.68, Rotation2d.fromDegrees(0));
+    final static Pose2d rightBalls = new Pose2d(7.71, 0.68, Rotation2d.fromDegrees(0));
+    final static Pose2d leftBalls = new Pose2d(7.71, 7.32, Rotation2d.fromDegrees(0));
+    final static Pose2d leftLine = new Pose2d(3.67, 7.32, Rotation2d.fromDegrees(0));
 
-    final Pose2d shootingBalls = new Pose2d(0, 0, Rotation2d.fromDegrees(0));
-    final Pose2d climbRight = new Pose2d(0, 0, Rotation2d.fromDegrees(0));
-    final Pose2d climbLeft = new Pose2d(0, 0, Rotation2d.fromDegrees(0));
+    final static Pose2d shootingBalls = new Pose2d(2.24, 5.05, Rotation2d.fromDegrees(0));
+    final static Pose2d climb = new Pose2d(1.56, 3.70, Rotation2d.fromDegrees(180));
 }
