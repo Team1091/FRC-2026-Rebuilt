@@ -1,4 +1,4 @@
-package frc.robot.subsystems.drive;
+package frc.robot.subsystems.drive.config;
 
 public record ModulePidConfig(
         FeedForwardParams driveFeedForward,

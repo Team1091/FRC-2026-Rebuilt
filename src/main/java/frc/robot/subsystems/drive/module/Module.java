@@ -1,4 +1,4 @@
-package frc.robot.subsystems.drive;
+package frc.robot.subsystems.drive.module;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
@@ -9,6 +9,9 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import frc.robot.subsystems.drive.config.FeedForwardParams;
+import frc.robot.subsystems.drive.config.ModulePidConfig;
+import frc.robot.subsystems.drive.config.PidConfig;
 
 public class Module {
     private static final double WHEEL_RADIUS = Units.inchesToMeters(2.0);
