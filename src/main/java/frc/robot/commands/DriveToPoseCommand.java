@@ -17,9 +17,9 @@ public class DriveToPoseCommand extends Command {
     private final Pose2d targetPose;
 
     // TODO: these probably will need to be configured, or will go out of control all over the place
-    private final PIDController xController = new PIDController(2.0, 0, 0);
-    private final PIDController yController = new PIDController(2.0, 0, 0);
-    private final PIDController thetaController = new PIDController(2.0, 0, 0);
+    private final PIDController xController = new PIDController(1.0, 0, 0);
+    private final PIDController yController = new PIDController(1.0, 0, 0);
+    private final PIDController thetaController = new PIDController(1.0, 0, 0);
 
     public DriveToPoseCommand(
             Drive drive,

@@ -55,7 +55,7 @@ public final class Constants {
     }
 
     public static class Climber {
-        public static boolean disabled = true;
+        public static boolean disabled = false;
         public static int leftMotorChannel = 9;
         public static double leftMotorPower = 0.25;
         public static int rightMotorChannel = 10;
