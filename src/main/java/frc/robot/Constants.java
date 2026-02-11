@@ -20,6 +20,13 @@ public final class Constants {
     }
 
     public static class Swerve {
+        public record ModuleConfig(int driveMotorId,
+                                   int turnMotorId,
+                                   int cancoderId,
+                                   Rotation2d absoluteEncoderOffset,
+                                   String title,
+                                   boolean isTurnMotorInverted,
+                                   boolean isDriveMotorInverted) {}
         public static final int FRONT_LEFT = 0;
         public static final int FRONT_RIGHT = 1;
         public static final int BACK_LEFT = 2;
@@ -42,6 +49,15 @@ public final class Constants {
                 new Translation2d(-trackWidthX / 2.0, -trackWidthY / 2.0) // BR
         };
         public static final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(moduleTranslations);
+
+        // Per-module hardware configuration (IDs, offsets, titles, inversion)
+        public static final ModuleConfig[] moduleHardware = new ModuleConfig[]{
+                new ModuleConfig(6, 5, 4, Rotation2d.fromDegrees(42 + 180), "FL", true, false),
+                new ModuleConfig(8, 7, 2, Rotation2d.fromDegrees(37 + 180), "FR", true, false),
+                new ModuleConfig(1, 2, 1, Rotation2d.fromDegrees(-195 + 180), "BL", true, false),
+                new ModuleConfig(3, 4, 3, Rotation2d.fromDegrees(174 + 180), "BR", true, false)
+        };
+
         public static final ModulePidConfig[] moduleConfigs = {
                 new ModulePidConfig( //FL
                         new FeedForwardParams(0.1, 0.13),

@@ -68,10 +68,10 @@ public class RobotContainer {
     public RobotContainer() {
         drive = new Drive(
                 new GyroIOPigeon2(),//change if using different gyro
-                new ModuleIOTalonFX(FRONT_LEFT),
-                new ModuleIOTalonFX(FRONT_RIGHT),
-                new ModuleIOTalonFX(BACK_LEFT),
-                new ModuleIOTalonFX(BACK_RIGHT)
+                new ModuleIOTalonFX(Constants.Swerve.moduleHardware[FRONT_LEFT]),
+                new ModuleIOTalonFX(Constants.Swerve.moduleHardware[FRONT_RIGHT]),
+                new ModuleIOTalonFX(Constants.Swerve.moduleHardware[BACK_LEFT]),
+                new ModuleIOTalonFX(Constants.Swerve.moduleHardware[BACK_RIGHT])
         );
         poseEstimationSubsystem = new PoseEstimationSubsystem(
                 drive::getGyroRotation,

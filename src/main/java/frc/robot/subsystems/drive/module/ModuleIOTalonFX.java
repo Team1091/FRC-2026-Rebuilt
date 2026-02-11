@@ -28,11 +28,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-
-import static frc.robot.Constants.Swerve.BACK_LEFT;
-import static frc.robot.Constants.Swerve.BACK_RIGHT;
-import static frc.robot.Constants.Swerve.FRONT_LEFT;
-import static frc.robot.Constants.Swerve.FRONT_RIGHT;
+import frc.robot.Constants;
 
 /**
  * Module IO implementation for Talon FX drive motor controller, Talon FX turn motor controller, and
@@ -65,43 +61,18 @@ public class ModuleIOTalonFX implements ModuleIO {
     private static final double DRIVE_GEAR_RATIO = (50.0 / 14.0) * (17.0 / 27.0) * (45.0 / 15.0);
     private static final double TURN_GEAR_RATIO = 150.0 / 7.0;
 
-    private final boolean isTurnMotorInverted = true;
-    private final boolean isDriveMotorInverted = false;
+    private final boolean isTurnMotorInverted;
+    private final boolean isDriveMotorInverted;
     private final Rotation2d absoluteEncoderOffset;
 
-    public ModuleIOTalonFX(int index) {
-        switch (index) {
-            case FRONT_LEFT:
-                driveSparkMax = new SparkMax(6, SparkLowLevel.MotorType.kBrushless);
-                turnSparkMax = new SparkMax(5, SparkLowLevel.MotorType.kBrushless);
-                cancoder = new CoreCANcoder(4);
-                absoluteEncoderOffset = Rotation2d.fromDegrees(42 + 180);
-                title = "FL";
-                break;
-            case FRONT_RIGHT:
-                driveSparkMax = new SparkMax(8, SparkLowLevel.MotorType.kBrushless);
-                turnSparkMax = new SparkMax(7, SparkLowLevel.MotorType.kBrushless);
-                cancoder = new CoreCANcoder(2);
-                absoluteEncoderOffset = Rotation2d.fromDegrees(37 + 180);
-                title = "FR";
-                break;
-            case BACK_LEFT:
-                driveSparkMax = new SparkMax(1, SparkLowLevel.MotorType.kBrushless);
-                turnSparkMax = new SparkMax(2, SparkLowLevel.MotorType.kBrushless);
-                cancoder = new CoreCANcoder(1);
-                absoluteEncoderOffset = Rotation2d.fromDegrees(-195 + 180);
-                title = "BL";
-                break;
-            case BACK_RIGHT:
-                driveSparkMax = new SparkMax(3, SparkLowLevel.MotorType.kBrushless);
-                turnSparkMax = new SparkMax(4, SparkLowLevel.MotorType.kBrushless);
-                cancoder = new CoreCANcoder(3);
-                absoluteEncoderOffset = Rotation2d.fromDegrees(174 + 180);
-                title = "BR";
-                break;
-            default:
-                throw new RuntimeException("Invalid module index");
-        }
+    public ModuleIOTalonFX(Constants.Swerve.ModuleConfig config) {
+        this.title = config.title();
+        driveSparkMax = new SparkMax(config.driveMotorId(), SparkLowLevel.MotorType.kBrushless);
+        turnSparkMax = new SparkMax(config.turnMotorId(), SparkLowLevel.MotorType.kBrushless);
+        cancoder = new CoreCANcoder(config.cancoderId());
+        absoluteEncoderOffset = config.absoluteEncoderOffset();
+        isTurnMotorInverted = config.isTurnMotorInverted();
+        isDriveMotorInverted = config.isDriveMotorInverted();
 
         var tab = Shuffleboard.getTab(title);
         absoluteEncoderReading = tab.add("Absolute Encoder Reading" + title, 0).getEntry();
