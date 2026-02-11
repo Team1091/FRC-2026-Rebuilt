@@ -9,14 +9,14 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import frc.robot.Constants;
+import frc.robot.subsystems.drive.config.ModulePidConfig;
 
 public class Module {
     private static final double WHEEL_RADIUS = Units.inchesToMeters(2.0);
 
     private final ModuleIO io;
+    private final String title;
     private final ModuleIO.ModuleIOInputs inputs = new ModuleIO.ModuleIOInputs();
-    private final int index;
     private final GenericEntry realAngle;
     private final GenericEntry realVelocity;
     private final GenericEntry targetAngle;
@@ -32,9 +32,9 @@ public class Module {
     private double lastPositionMeters = 0.0; // Used for delta calculation
 
 
-    public Module(ModuleIO io, int index, String title) {
+    public Module(ModuleIO io, ModulePidConfig pidConfig, String title) {
         this.io = io;
-        this.index = index;
+        this.title = title;
 
         // Set up shuffleboard
         var tab = Shuffleboard.getTab(title);
@@ -43,12 +43,10 @@ public class Module {
         targetAngle = tab.add("Target Angle" + title, 0).getEntry();
         targetVelocity = tab.add("Target Velocity" + title, 0).getEntry();
 
-        var config = Constants.Swerve.moduleConfigs[index];
-
         // Constants here may change for SIM
-        driveFeedforward = config.driveFeedForward().toSimpleMotorFeedforward();
-        driveFeedback = config.drivePid().toPidController();
-        turnFeedback = config.turnPid().toPidController();
+        driveFeedforward = pidConfig.driveFeedForward().toSimpleMotorFeedforward();
+        driveFeedback = pidConfig.drivePid().toPidController();
+        turnFeedback = pidConfig.turnPid().toPidController();
 
         turnFeedback.enableContinuousInput(-Math.PI, Math.PI);
         setBrakeMode(true);
@@ -64,7 +62,7 @@ public class Module {
             turnRelativeOffset = inputs.turnAbsolutePosition.minus(inputs.turnPosition);
             DriverStation.reportError(
                     "Drive/Module"
-                            + index
+                            + title
                             + "/TurnROffset:    "
                             + turnRelativeOffset.getRadians()
                             + "   "

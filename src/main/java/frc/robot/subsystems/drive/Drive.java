@@ -12,6 +12,7 @@ import edu.wpi.first.networktables.StructArrayPublisher;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.subsystems.PoseEstimationSubsystem;
 import frc.robot.subsystems.drive.gyro.GyroIO;
 import frc.robot.subsystems.drive.module.Module;
@@ -46,10 +47,11 @@ public class Drive extends SubsystemBase {
             ModuleIO blModuleIO,
             ModuleIO brModuleIO) {
         this.gyroIO = gyroIO;
-        modules[FRONT_LEFT] = new Module(flModuleIO, FRONT_LEFT, "FL");
-        modules[FRONT_RIGHT] = new Module(frModuleIO, FRONT_RIGHT, "FR");
-        modules[BACK_LEFT] = new Module(blModuleIO, BACK_LEFT, "BL");
-        modules[BACK_RIGHT] = new Module(brModuleIO, BACK_RIGHT, "BR");
+
+        modules[FRONT_LEFT] = new Module(flModuleIO, Constants.Swerve.moduleConfigs[FRONT_LEFT], "FL");
+        modules[FRONT_RIGHT] = new Module(frModuleIO, Constants.Swerve.moduleConfigs[FRONT_RIGHT], "FR");
+        modules[BACK_LEFT] = new Module(blModuleIO, Constants.Swerve.moduleConfigs[BACK_LEFT], "BL");
+        modules[BACK_RIGHT] = new Module(brModuleIO, Constants.Swerve.moduleConfigs[BACK_RIGHT], "BR");
 
         for (int i = 0; i < 4; i++) {
             modulePositions[i] = new SwerveModulePosition();
