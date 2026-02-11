@@ -39,34 +39,34 @@ public final class Constants {
         public static final double rotationalDeadband = 0.1;
     }
 
-    public static class Shooter {
-        public static boolean disabled = true;
-        public static int leftMotorChannel = 13;
-        public static int rightMotorChannel = 14;
-        public static int indexerMotorChannel = 15;
+    public static final class Shooter {
+        public static final boolean disabled = true;
+        public static final int leftMotorChannel = 13;
+        public static final int rightMotorChannel = 14;
+        public static final int indexerMotorChannel = 15;
         // TODO: we may want target RPMs here for the flywheel
     }
 
-    public static class Intake {
-        public static boolean disabled = true;
-        public static int intakeMotorChannel = 11;
-        public static int extenderMotorChannel = 12;
-        public static double extenderMotorPower = 0.25;
+    public static final class Intake {
+        public static final boolean disabled = true;
+        public static final int intakeMotorChannel = 11;
+        public static final int extenderMotorChannel = 12;
+        public static final double extenderMotorPower = 0.25;
     }
 
-    public static class Climber {
-        public static boolean disabled = false;
-        public static int leftMotorChannel = 9;
-        public static int dumbLeftMotorChannel = 17;
-        public static int dumbRightMotorChannel = 21;
-        public static double leftMotorPower = 0.25;
-        public static int rightMotorChannel = 10;
-        public static double rightMotorPower = 0.25;
-        public static double climbingSpeed = 0.25;
+    public static final class Climber {
+        public static final boolean disabled = false;
+        public static final int leftMotorChannel = 9;
+        public static final int dumbLeftMotorChannel = 17;
+        public static final int dumbRightMotorChannel = 21;
+        public static final double leftMotorPower = 0.25;
+        public static final int rightMotorChannel = 10;
+        public static final double rightMotorPower = 0.25;
+        public static final double climbingSpeed = 0.25;
     }
 
-    public static class Camera {
-        public static boolean disabled = true;
+    public static final class Camera {
+        public static final boolean disabled = true;
     }
 
 
@@ -88,10 +88,10 @@ public final class Constants {
     }
 
     public static final class Hood {
-        public static boolean disabled = true;
-        public static int hoodMotorChannel = 13;
-        public static double hoodMotorPower = 0.25;
-        public static double angleCloseEnough = 0.1;
+        public static final boolean disabled = true;
+        public static final int hoodMotorChannel = 13;
+        public static final double hoodMotorPower = 0.25;
+        public static final double angleCloseEnough = 0.1;
     }
 
 }
