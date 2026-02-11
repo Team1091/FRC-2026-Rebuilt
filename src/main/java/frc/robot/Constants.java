@@ -57,10 +57,12 @@ public final class Constants {
     public static class Climber {
         public static boolean disabled = false;
         public static int leftMotorChannel = 9;
+        public static int dumbLeftMotorChannel = 17;
+        public static int dumbRightMotorChannel = 21;
         public static double leftMotorPower = 0.25;
         public static int rightMotorChannel = 10;
         public static double rightMotorPower = 0.25;
-        public static double climbingSpeed;
+        public static double climbingSpeed = 0.25;
     }
 
     public static class Camera {

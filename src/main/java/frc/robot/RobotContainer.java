@@ -18,21 +18,10 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.commands.Autos;
-import frc.robot.commands.ClimberCommand;
-import frc.robot.commands.DriveCommand;
-import frc.robot.commands.DriveWhilePointingAtCommand;
-import frc.robot.commands.PrepareShotCommand;
-import frc.robot.commands.RunIntakeCommand;
-import frc.robot.commands.ShooterCommand;
-import frc.robot.enums.ClimberPosition;
+import frc.robot.commands.*;
 import frc.robot.enums.IntakeState;
 import frc.robot.enums.ShooterState;
-import frc.robot.subsystems.ClimberSubsystem;
-import frc.robot.subsystems.HoodSubsystem;
-import frc.robot.subsystems.IntakeSubsystem;
-import frc.robot.subsystems.PoseEstimationSubsystem;
-import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.*;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.gyro.GyroIOPigeon2;
 import frc.robot.subsystems.drive.module.ModuleIOTalonFX;
@@ -52,7 +41,7 @@ public class RobotContainer {
     // The robot's subsystems and commands are defined here...
     private final Drive drive;
     private final PoseEstimationSubsystem poseEstimationSubsystem;
-    private final ClimberSubsystem climberSubsystem;
+    private final ManualClimberSubsystem manualClimberSubsystem;
     private final IntakeSubsystem intakeSubsystem;
     private final ShooterSubsystem shooterSubsystem;
     private final HoodSubsystem hoodSubsystem;
@@ -67,7 +56,6 @@ public class RobotContainer {
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
     public RobotContainer() {
-
         drive = new Drive(
                 new GyroIOPigeon2(),//change if using different gyro
                 new ModuleIOTalonFX(FRONT_LEFT),
@@ -81,10 +69,11 @@ public class RobotContainer {
         );
         drive.setPoseEstimationSubSystem(poseEstimationSubsystem);
 
-        climberSubsystem = new ClimberSubsystem();
         intakeSubsystem = new IntakeSubsystem();
         shooterSubsystem = new ShooterSubsystem();
         hoodSubsystem = new HoodSubsystem();
+        manualClimberSubsystem = new ManualClimberSubsystem();
+
 
         configureAutonomous();
         // Configure the trigger bindings
@@ -108,7 +97,6 @@ public class RobotContainer {
     }
 
     public void robotEnabled() {
-        climberSubsystem.resetEncoders();
         intakeSubsystem.resetEncoder();
         hoodSubsystem.resetEncoder();
         drive.straightenWheels();
@@ -170,8 +158,9 @@ public class RobotContainer {
         driverController.rightTrigger().whileTrue(new ShooterCommand(shooterSubsystem, ShooterState.FIRE));
 
         // Climber uses bumpers
-        driverController.leftBumper().whileTrue(new ClimberCommand(climberSubsystem, ClimberPosition.UP));
-        driverController.rightBumper().whileTrue(new ClimberCommand(climberSubsystem, ClimberPosition.DOWN));
+        driverController.leftBumper().whileTrue((new ManualClimberCommand(manualClimberSubsystem, Constants.Climber.climbingSpeed)));
+        driverController.rightBumper().whileTrue((new ManualClimberCommand(manualClimberSubsystem, -Constants.Climber.climbingSpeed)));
+
         // TODO: add additional bindings
 
         // Intake
