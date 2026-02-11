@@ -9,9 +9,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import frc.robot.subsystems.drive.config.FeedForwardParams;
-import frc.robot.subsystems.drive.config.ModulePidConfig;
-import frc.robot.subsystems.drive.config.PidConfig;
+import frc.robot.Constants;
 
 public class Module {
     private static final double WHEEL_RADIUS = Units.inchesToMeters(2.0);
@@ -34,31 +32,6 @@ public class Module {
     private double lastPositionMeters = 0.0; // Used for delta calculation
 
 
-    private final static ModulePidConfig[] configs = {
-
-            new ModulePidConfig( //FL
-                    new FeedForwardParams(0.1, 0.13),
-                    new PidConfig(0.05, 0.0, 0.0), // drive
-                    new PidConfig(3, 0.0, 0.0)     // turn
-            ),
-            new ModulePidConfig( // FR
-                    new FeedForwardParams(0.1, 0.13),
-                    new PidConfig(0.05, 0.0, 0.0), // drive
-                    new PidConfig(3, 0.0, 0.0)     // turn
-            ),
-            new ModulePidConfig( // BL
-                    new FeedForwardParams(0.1, 0.13),
-                    new PidConfig(0.05, 0.0, 0.0), // drive
-                    new PidConfig(3, 0.0, 0.0)     // turn
-            ),
-            new ModulePidConfig( // BR
-                    new FeedForwardParams(0.1, 0.13),
-                    new PidConfig(0.05, 0.0, 0.0), // drive
-                    new PidConfig(3, 0.0, 0.0)     // turn
-            )
-    };
-
-
     public Module(ModuleIO io, int index, String title) {
         this.io = io;
         this.index = index;
@@ -70,7 +43,7 @@ public class Module {
         targetAngle = tab.add("Target Angle" + title, 0).getEntry();
         targetVelocity = tab.add("Target Velocity" + title, 0).getEntry();
 
-        var config = configs[index];
+        var config = Constants.Swerve.moduleConfigs[index];
 
         // Constants here may change for SIM
         driveFeedforward = config.driveFeedForward().toSimpleMotorFeedforward();

@@ -8,6 +8,9 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
+import frc.robot.subsystems.drive.config.FeedForwardParams;
+import frc.robot.subsystems.drive.config.ModulePidConfig;
+import frc.robot.subsystems.drive.config.PidConfig;
 
 public final class Constants {
 
@@ -28,6 +31,9 @@ public final class Constants {
         public static final double maxLinearAcceleration = Units.feetToMeters(10);
         public static final double maxAngularSpeed = maxLinearSpeed / driveBaseRadius;
         public static final double maxAngularAcceleration = maxLinearAcceleration / driveBaseRadius;
+        public static final double linearDeadband = 0.1;
+        public static final double rotationalDeadband = 0.1;
+
         public static final Translation2d[] moduleTranslations = {
                 new Translation2d(trackWidthX / 2.0, trackWidthY / 2.0), // FL
                 new Translation2d(trackWidthX / 2.0, -trackWidthY / 2.0), // FR
@@ -35,8 +41,28 @@ public final class Constants {
                 new Translation2d(-trackWidthX / 2.0, -trackWidthY / 2.0) // BR
         };
         public static final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(moduleTranslations);
-        public static final double linearDeadband = 0.1;
-        public static final double rotationalDeadband = 0.1;
+        public static final ModulePidConfig[] moduleConfigs = {
+                new ModulePidConfig( //FL
+                        new FeedForwardParams(0.1, 0.13),
+                        new PidConfig(0.05, 0.0, 0.0), // drive
+                        new PidConfig(3, 0.0, 0.0)     // turn
+                ),
+                new ModulePidConfig( // FR
+                        new FeedForwardParams(0.1, 0.13),
+                        new PidConfig(0.05, 0.0, 0.0), // drive
+                        new PidConfig(3, 0.0, 0.0)     // turn
+                ),
+                new ModulePidConfig( // BL
+                        new FeedForwardParams(0.1, 0.13),
+                        new PidConfig(0.05, 0.0, 0.0), // drive
+                        new PidConfig(3, 0.0, 0.0)     // turn
+                ),
+                new ModulePidConfig( // BR
+                        new FeedForwardParams(0.1, 0.13),
+                        new PidConfig(0.05, 0.0, 0.0), // drive
+                        new PidConfig(3, 0.0, 0.0)     // turn
+                )
+        };
     }
 
     public static final class Shooter {
