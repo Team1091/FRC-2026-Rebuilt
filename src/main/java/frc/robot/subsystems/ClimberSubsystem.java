@@ -13,6 +13,7 @@ public class ClimberSubsystem extends SubsystemBase {
     private final RelativeEncoder leftClimberEncoder;
     private final RelativeEncoder rightClimberEncoder;
     private double speed;
+
     public ClimberSubsystem() {
         if (Constants.Climber.disabled) {
             leftClimberMotor = null;
@@ -31,12 +32,12 @@ public class ClimberSubsystem extends SubsystemBase {
     }
 
     public void resetEncoders() {
-        if(Constants.Climber.disabled) return;
+        if (Constants.Climber.disabled) return;
         leftClimberEncoder.setPosition(0);
         rightClimberEncoder.setPosition(0);
     }
 
-    public void setClimberSpeed(double speed){
+    public void setClimberSpeed(double speed) {
         this.speed = speed;
     }
 

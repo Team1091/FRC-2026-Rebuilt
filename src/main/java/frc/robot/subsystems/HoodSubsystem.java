@@ -25,8 +25,8 @@ public class HoodSubsystem extends SubsystemBase {
         hoodEncoder = hoodMotor.getEncoder();
     }
 
-    public void resetEncoder(){
-        if(Constants.Hood.disabled) return;
+    public void resetEncoder() {
+        if (Constants.Hood.disabled) return;
         hoodEncoder.setPosition(0);
     }
 

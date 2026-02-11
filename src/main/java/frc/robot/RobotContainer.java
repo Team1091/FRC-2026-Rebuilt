@@ -18,10 +18,20 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.commands.*;
+import frc.robot.commands.Autos;
+import frc.robot.commands.ClimberCommand;
+import frc.robot.commands.DriveCommand;
+import frc.robot.commands.DriveWhilePointingAtCommand;
+import frc.robot.commands.PrepareShotCommand;
+import frc.robot.commands.RunIntakeCommand;
+import frc.robot.commands.ShooterCommand;
 import frc.robot.enums.IntakeState;
 import frc.robot.enums.ShooterState;
-import frc.robot.subsystems.*;
+import frc.robot.subsystems.ClimberSubsystem;
+import frc.robot.subsystems.HoodSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.PoseEstimationSubsystem;
+import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.gyro.GyroIOPigeon2;
 import frc.robot.subsystems.drive.module.ModuleIOTalonFX;
@@ -150,7 +160,7 @@ public class RobotContainer {
                                     return -driverController.getRightX();
                                 }
                         ),
-                        new PrepareShotCommand(hoodSubsystem, () -> poseEstimationSubsystem.getCurrentPose() )
+                        new PrepareShotCommand(hoodSubsystem, () -> poseEstimationSubsystem.getCurrentPose())
                 )
         );
         // spin up while shooting

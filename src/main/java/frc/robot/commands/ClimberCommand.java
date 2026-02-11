@@ -19,7 +19,7 @@ public class ClimberCommand extends Command {
     }
 
     @Override
-    public void end(boolean interrupted){
+    public void end(boolean interrupted) {
         climber.setClimberSpeed(0.0);
     }
 

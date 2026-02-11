@@ -35,8 +35,8 @@ public class IntakeSubsystem extends SubsystemBase {
         extenderEncoder.setPosition(0.0);
     }
 
-    public void resetEncoder(){
-        if(Constants.Intake.disabled) return;
+    public void resetEncoder() {
+        if (Constants.Intake.disabled) return;
         extenderEncoder.setPosition(0);
     }
 
