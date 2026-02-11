@@ -1,13 +1,13 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.ManualClimberSubsystem;
+import frc.robot.subsystems.ClimberSubsystem;
 
-public class ManualClimberCommand extends Command {
+public class ClimberCommand extends Command {
     private final double speed;
-    private final ManualClimberSubsystem climber;
+    private final ClimberSubsystem climber;
 
-    public ManualClimberCommand(ManualClimberSubsystem climber, double speed) {
+    public ClimberCommand(ClimberSubsystem climber, double speed) {
         this.speed = speed;
         this.climber = climber;
         addRequirements(climber);

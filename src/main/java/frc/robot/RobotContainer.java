@@ -41,7 +41,7 @@ public class RobotContainer {
     // The robot's subsystems and commands are defined here...
     private final Drive drive;
     private final PoseEstimationSubsystem poseEstimationSubsystem;
-    private final ManualClimberSubsystem manualClimberSubsystem;
+    private final ClimberSubsystem climberSubsystem;
     private final IntakeSubsystem intakeSubsystem;
     private final ShooterSubsystem shooterSubsystem;
     private final HoodSubsystem hoodSubsystem;
@@ -72,7 +72,7 @@ public class RobotContainer {
         intakeSubsystem = new IntakeSubsystem();
         shooterSubsystem = new ShooterSubsystem();
         hoodSubsystem = new HoodSubsystem();
-        manualClimberSubsystem = new ManualClimberSubsystem();
+        climberSubsystem = new ClimberSubsystem();
 
 
         configureAutonomous();
@@ -158,8 +158,8 @@ public class RobotContainer {
         driverController.rightTrigger().whileTrue(new ShooterCommand(shooterSubsystem, ShooterState.FIRE));
 
         // Climber uses bumpers
-        driverController.leftBumper().whileTrue((new ManualClimberCommand(manualClimberSubsystem, Constants.Climber.climbingSpeed)));
-        driverController.rightBumper().whileTrue((new ManualClimberCommand(manualClimberSubsystem, -Constants.Climber.climbingSpeed)));
+        driverController.leftBumper().whileTrue((new ClimberCommand(climberSubsystem, Constants.Climber.climbingSpeed)));
+        driverController.rightBumper().whileTrue((new ClimberCommand(climberSubsystem, -Constants.Climber.climbingSpeed)));
 
         // TODO: add additional bindings
 

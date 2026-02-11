@@ -7,13 +7,13 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 // climbs up, holds, and back down
-public class ManualClimberSubsystem extends SubsystemBase {
+public class ClimberSubsystem extends SubsystemBase {
     private final SparkMax leftClimberMotor;
     private final SparkMax rightClimberMotor;
     private final RelativeEncoder leftClimberEncoder;
     private final RelativeEncoder rightClimberEncoder;
     private double speed;
-    public ManualClimberSubsystem() {
+    public ClimberSubsystem() {
         if (Constants.Climber.disabled) {
             leftClimberMotor = null;
             rightClimberMotor = null;
