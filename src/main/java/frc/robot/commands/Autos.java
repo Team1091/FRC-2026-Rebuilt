@@ -11,9 +11,11 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
+import frc.robot.enums.IntakeState;
 import frc.robot.enums.ShooterState;
 import frc.robot.enums.StartPosish;
 import frc.robot.subsystems.HoodSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.PoseEstimationSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.drive.Drive;
@@ -47,14 +49,17 @@ public final class Autos {
             Drive drive,
             HoodSubsystem hoodSubsystem,
             ShooterSubsystem shooterSubsystem,
+            IntakeSubsystem intakeSubsystem,
             PoseEstimationSubsystem poseEstimationSubsystem,
             StartPosish startPosish
     ) {
 
         return switch (startPosish) {
             case LEFT -> Commands.sequence(
+                    new RunIntakeCommand(intakeSubsystem, IntakeState.EXTENDED),
                     new DriveToPoseCommand(drive, leftLine),
                     new DriveToPoseCommand(drive, leftBalls),
+
                     new DriveToPoseCommand(drive, rightBalls),
                     new DriveToPoseCommand(drive, rightLine),
                     // Move to shooting position and spin up

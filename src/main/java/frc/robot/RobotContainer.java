@@ -27,6 +27,7 @@ import frc.robot.commands.RunIntakeCommand;
 import frc.robot.commands.ShooterCommand;
 import frc.robot.enums.IntakeState;
 import frc.robot.enums.ShooterState;
+import frc.robot.enums.StartPosish;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.HoodSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
@@ -118,6 +119,14 @@ public class RobotContainer {
         autoChooser.setDefaultOption("Do Nothing", new WaitCommand(1.0));
         autoChooser.addOption("Spin Wildly", Autos.spinAuto(drive));
         autoChooser.addOption("Drive Forward", Autos.driveForward(drive));
+        autoChooser.addOption("Win", Autos.win(
+                drive,
+                hoodSubsystem,
+                shooterSubsystem,
+                intakeSubsystem,
+                poseEstimationSubsystem,
+                StartPosish.RIGHT
+        ));
         SmartDashboard.putData("Auto Mode", autoChooser);
     }
 

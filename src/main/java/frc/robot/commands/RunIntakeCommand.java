@@ -27,5 +27,8 @@ public class RunIntakeCommand extends Command {
         intakeSubsystem.setState(IntakeState.EXTENDED);
     }
 
-
+    @Override
+    public boolean isFinished() {
+        return true;
+    }
 }
