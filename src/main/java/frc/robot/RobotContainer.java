@@ -19,7 +19,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
-import frc.robot.commands.ClimberCommand;
+import frc.robot.commands.ManualClimbCommand;
 import frc.robot.commands.DriveCommand;
 import frc.robot.commands.DriveWhilePointingAtCommand;
 import frc.robot.commands.PrepareShotCommand;
@@ -124,6 +124,7 @@ public class RobotContainer {
                 hoodSubsystem,
                 shooterSubsystem,
                 intakeSubsystem,
+                climberSubsystem,
                 poseEstimationSubsystem,
                 StartPosish.RIGHT
         ));
@@ -178,8 +179,8 @@ public class RobotContainer {
         driverController.rightTrigger().whileTrue(new ShooterCommand(shooterSubsystem, ShooterState.FIRE));
 
         // Climber uses bumpers
-        driverController.leftBumper().whileTrue((new ClimberCommand(climberSubsystem, Constants.Climber.climbingSpeed)));
-        driverController.rightBumper().whileTrue((new ClimberCommand(climberSubsystem, -Constants.Climber.climbingSpeed)));
+        driverController.leftBumper().whileTrue((new ManualClimbCommand(climberSubsystem, Constants.Climber.climbingSpeed)));
+        driverController.rightBumper().whileTrue((new ManualClimbCommand(climberSubsystem, -Constants.Climber.climbingSpeed)));
 
         // TODO: add additional bindings
 

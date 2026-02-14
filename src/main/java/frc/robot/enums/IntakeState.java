@@ -1,15 +1,12 @@
 package frc.robot.enums;
 
 public enum IntakeState {
-    RETRACTED(0.0, 0.0),
-    EXTENDED(0.0, 0.5),
-    HARVEST(1.0, 0.5);
+    RETRACTED(0.0), // starting
+    EXTENDED(0.0),
+    HARVEST(1.0);
 
-    IntakeState(Double intakeMotorSpeed, Double extenderMotorPosition) {
+    IntakeState(Double intakeMotorSpeed) {
         this.intakeMotorSpeed = intakeMotorSpeed;
-        this.extenderMotorPosition = extenderMotorPosition;
     }
-
     public final double intakeMotorSpeed;
-    public final double extenderMotorPosition;
 }

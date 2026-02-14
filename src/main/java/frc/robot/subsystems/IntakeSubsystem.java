@@ -3,7 +3,6 @@ package frc.robot.subsystems;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkLowLevel;
 import com.revrobotics.spark.SparkMax;
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -17,7 +16,6 @@ public class IntakeSubsystem extends SubsystemBase {
     private final SparkMax intakeMotor;
     private final SparkMax extenderMotor;
     private final RelativeEncoder extenderEncoder;
-    private final PIDController extenderController = new PIDController(2.0, 0, 0);
 
     public IntakeSubsystem() {
         if (Constants.Intake.disabled) {
@@ -47,9 +45,11 @@ public class IntakeSubsystem extends SubsystemBase {
         // set motor speeds
         intakeMotor.set(state.intakeMotorSpeed);
 
-        var extenderPow = extenderController.calculate(extenderEncoder.getPosition(), state.extenderMotorPosition);
-        extenderPow = MathUtil.clamp(extenderPow, -Constants.Intake.extenderMotorPower, Constants.Intake.extenderMotorPower);
-        extenderMotor.set(extenderPow);
+        if (state == IntakeState.EXTENDED && extenderEncoder.getPosition() < 0.5) {
+            extenderMotor.set(Constants.Intake.extenderMotorPower);
+        } else {
+            extenderMotor.set(0.0);
+        }
     }
 
 

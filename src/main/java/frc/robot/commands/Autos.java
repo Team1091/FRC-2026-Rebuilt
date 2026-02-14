@@ -11,9 +11,11 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
+import frc.robot.Constants;
 import frc.robot.enums.IntakeState;
 import frc.robot.enums.ShooterState;
 import frc.robot.enums.StartPosish;
+import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.HoodSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.PoseEstimationSubsystem;
@@ -50,6 +52,7 @@ public final class Autos {
             HoodSubsystem hoodSubsystem,
             ShooterSubsystem shooterSubsystem,
             IntakeSubsystem intakeSubsystem,
+            ClimberSubsystem climberSubsystem,
             PoseEstimationSubsystem poseEstimationSubsystem,
             StartPosish startPosish
     ) {
@@ -62,6 +65,8 @@ public final class Autos {
 
                     new DriveToPoseCommand(drive, rightBalls),
                     new DriveToPoseCommand(drive, rightLine),
+                    // Extend climber
+                    new AutoClimbCommand(climberSubsystem, Constants.Climber.climbingSpeed),
                     // Move to shooting position and spin up
                     new ParallelCommandGroup(
                             new DriveToPoseCommand(drive, shootingBalls),
@@ -74,7 +79,9 @@ public final class Autos {
                             new ShooterCommand(shooterSubsystem, ShooterState.FIRE),
                             new PrepareShotCommand(hoodSubsystem, poseEstimationSubsystem::getCurrentPose)
                     ),
-                    new DriveToPoseCommand(drive, climb)
+                    new DriveToPoseCommand(drive, climb),
+                    // Retract climber
+                    new AutoClimbCommand(climberSubsystem, -Constants.Climber.climbingSpeed)
             );
 
             case RIGHT -> Commands.sequence(
@@ -82,6 +89,8 @@ public final class Autos {
                     new DriveToPoseCommand(drive, rightBalls),
                     new DriveToPoseCommand(drive, leftBalls),
                     new DriveToPoseCommand(drive, leftLine),
+                    // Extend climber
+                    new AutoClimbCommand(climberSubsystem, Constants.Climber.climbingSpeed),
                     // Move to shooting position and spin up
                     new ParallelCommandGroup(
                             new DriveToPoseCommand(drive, shootingBalls),
@@ -94,7 +103,8 @@ public final class Autos {
                             new ShooterCommand(shooterSubsystem, ShooterState.FIRE),
                             new PrepareShotCommand(hoodSubsystem, poseEstimationSubsystem::getCurrentPose)
                     ),
-                    new DriveToPoseCommand(drive, climb)
+                    new DriveToPoseCommand(drive, climb),
+                    new AutoClimbCommand(climberSubsystem, -Constants.Climber.climbingSpeed)
             );
 
             case CENTER -> Commands.sequence();
