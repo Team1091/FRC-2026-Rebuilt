@@ -109,6 +109,7 @@ public class RobotContainer {
     public void robotEnabled() {
         intakeSubsystem.resetEncoder();
         hoodSubsystem.resetEncoder();
+        climberSubsystem.resetEncoders();
         drive.straightenWheels();
     }
 
@@ -160,7 +161,7 @@ public class RobotContainer {
                                     return -driverController.getRightX();
                                 }
                         ),
-                        new PrepareShotCommand(hoodSubsystem, () -> poseEstimationSubsystem.getCurrentPose())
+                        new PrepareShotCommand(hoodSubsystem, poseEstimationSubsystem::getCurrentPose)
                 )
         );
         // spin up while shooting

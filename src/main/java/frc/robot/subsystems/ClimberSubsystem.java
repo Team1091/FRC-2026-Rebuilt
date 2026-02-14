@@ -44,9 +44,20 @@ public class ClimberSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         if (Constants.Climber.disabled) return;
-
-        leftClimberMotor.set(speed);
-        rightClimberMotor.set(speed);
+        if ((leftClimberEncoder.getPosition() >= Constants.Climber.maxEncoderCount && speed > 0)
+                || (leftClimberEncoder.getPosition() <= 0 && speed < 0)
+        ) {
+            leftClimberMotor.set(0);
+        } else {
+            leftClimberMotor.set(speed);
+        }
+        if ((rightClimberEncoder.getPosition() >= Constants.Climber.maxEncoderCount && speed > 0)
+                || (rightClimberEncoder.getPosition() <= 0 && speed < 0)
+        ) {
+            rightClimberMotor.set(0);
+        } else {
+            rightClimberMotor.set(speed);
+        }
 
     }
 }
