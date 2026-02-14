@@ -20,13 +20,17 @@ public final class Constants {
     }
 
     public static class Swerve {
-        public record ModuleConfig(int driveMotorId,
-                                   int turnMotorId,
-                                   int cancoderId,
-                                   Rotation2d absoluteEncoderOffset,
-                                   String title,
-                                   boolean isTurnMotorInverted,
-                                   boolean isDriveMotorInverted) {}
+        public record ModuleConfig(
+                int driveMotorId,
+                int turnMotorId,
+                int cancoderId,
+                Rotation2d absoluteEncoderOffset,
+                String title,
+                boolean isTurnMotorInverted,
+                boolean isDriveMotorInverted
+        ) {
+        }
+
         public static final int FRONT_LEFT = 0;
         public static final int FRONT_RIGHT = 1;
         public static final int BACK_LEFT = 2;

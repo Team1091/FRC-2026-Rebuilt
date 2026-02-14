@@ -9,8 +9,16 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
+import frc.robot.enums.ShooterState;
 import frc.robot.enums.StartPosish;
+import frc.robot.subsystems.HoodSubsystem;
+import frc.robot.subsystems.PoseEstimationSubsystem;
+import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.drive.Drive;
+
+import java.time.Duration;
 
 public final class Autos {
 
@@ -19,7 +27,7 @@ public final class Autos {
     public static Command spinAuto(Drive drive) {
         return Commands.race(
                 DriveCommand.joystickDrive(drive, () -> 0.0, () -> 0.0, () -> 1.0),
-                new TimerCommand(2000)
+                new TimerCommand(Duration.ofSeconds(2))
         );
     }
 
@@ -35,7 +43,13 @@ public final class Autos {
         return new DriveToPoseCommand(drive, newPos);
     }
 
-    public static Command win(Drive drive, StartPosish startPosish) {
+    public static Command win(
+            Drive drive,
+            HoodSubsystem hoodSubsystem,
+            ShooterSubsystem shooterSubsystem,
+            PoseEstimationSubsystem poseEstimationSubsystem,
+            StartPosish startPosish
+    ) {
 
         return switch (startPosish) {
             case LEFT -> Commands.sequence(
@@ -43,12 +57,40 @@ public final class Autos {
                     new DriveToPoseCommand(drive, leftBalls),
                     new DriveToPoseCommand(drive, rightBalls),
                     new DriveToPoseCommand(drive, rightLine),
-                    new DriveToPoseCommand(drive, shootingBalls),
+                    // Move to shooting position and spin up
+                    new ParallelCommandGroup(
+                            new DriveToPoseCommand(drive, shootingBalls),
+                            new ShooterCommand(shooterSubsystem, ShooterState.SPIN_UP),
+                            new PrepareShotCommand(hoodSubsystem, poseEstimationSubsystem::getCurrentPose)
+                    ),
                     // spin up shooter, shoot
+                    new ParallelDeadlineGroup(
+                            new TimerCommand(Duration.ofSeconds(5)),
+                            new ShooterCommand(shooterSubsystem, ShooterState.FIRE),
+                            new PrepareShotCommand(hoodSubsystem, poseEstimationSubsystem::getCurrentPose)
+                    ),
                     new DriveToPoseCommand(drive, climb)
             );
 
-            case RIGHT -> Commands.sequence();
+            case RIGHT -> Commands.sequence(
+                    new DriveToPoseCommand(drive, rightLine),
+                    new DriveToPoseCommand(drive, rightBalls),
+                    new DriveToPoseCommand(drive, leftBalls),
+                    new DriveToPoseCommand(drive, leftLine),
+                    // Move to shooting position and spin up
+                    new ParallelCommandGroup(
+                            new DriveToPoseCommand(drive, shootingBalls),
+                            new ShooterCommand(shooterSubsystem, ShooterState.SPIN_UP),
+                            new PrepareShotCommand(hoodSubsystem, poseEstimationSubsystem::getCurrentPose)
+                    ),
+                    // spin up shooter, shoot
+                    new ParallelDeadlineGroup(
+                            new TimerCommand(Duration.ofSeconds(5)),
+                            new ShooterCommand(shooterSubsystem, ShooterState.FIRE),
+                            new PrepareShotCommand(hoodSubsystem, poseEstimationSubsystem::getCurrentPose)
+                    ),
+                    new DriveToPoseCommand(drive, climb)
+            );
 
             case CENTER -> Commands.sequence();
 
