@@ -47,7 +47,9 @@ public class IntakeSubsystem extends SubsystemBase {
 
         if (state == IntakeState.EXTENDED && extenderEncoder.getPosition() < 0.5) {
             extenderMotor.set(Constants.Intake.extenderMotorPower);
-        } else {
+        } else if(state == IntakeState.RETRACTED && extenderEncoder.getPosition() > 0.05){
+            extenderMotor.set(-Constants.Intake.extenderMotorPower);
+        } else{
             extenderMotor.set(0.0);
         }
     }

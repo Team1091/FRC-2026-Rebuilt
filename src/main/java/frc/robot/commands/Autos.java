@@ -47,6 +47,87 @@ public final class Autos {
         return new DriveToPoseCommand(drive, newPos);
     }
 
+    public static Command driveToOpponent(
+            Drive drive,
+            HoodSubsystem hoodSubsystem,
+            ShooterSubsystem shooterSubsystem,
+            PoseEstimationSubsystem poseEstimationSubsystem,
+            StartPosish startPosish
+    ) {
+        return switch (startPosish) {
+            case LEFT -> Commands.sequence(
+                    new ParallelDeadlineGroup(
+                            new TimerCommand(Duration.ofSeconds(1)),
+                            new ShooterCommand(shooterSubsystem, ShooterState.SPIN_UP),
+                            new PrepareShotCommand(hoodSubsystem, poseEstimationSubsystem::getCurrentPose)
+                    ),
+                    new ParallelDeadlineGroup(
+                            new TimerCommand(Duration.ofSeconds(5)),
+                            new DriveWhilePointingAtCommand(drive, poseEstimationSubsystem, Constants.Locations.hubPose, ()->0.0, ()->0.0),
+                            new ShooterCommand(shooterSubsystem, ShooterState.FIRE),
+                            new PrepareShotCommand(hoodSubsystem, poseEstimationSubsystem::getCurrentPose)
+                    ),
+                    new DriveToPoseCommand(drive, leftBalls),
+                    new TimerCommand(Duration.ofSeconds(3)),
+                    new DriveToPoseCommand(drive, leftOpponent)
+            );
+            case RIGHT -> Commands.sequence(
+                    new ParallelDeadlineGroup(
+                            new TimerCommand(Duration.ofSeconds(1)),
+                            new ShooterCommand(shooterSubsystem, ShooterState.SPIN_UP),
+                            new PrepareShotCommand(hoodSubsystem, poseEstimationSubsystem::getCurrentPose)
+                    ),
+                    new ParallelDeadlineGroup(
+                            new TimerCommand(Duration.ofSeconds(5)),
+                            new DriveWhilePointingAtCommand(drive, poseEstimationSubsystem, Constants.Locations.hubPose, ()->0.0, ()->0.0),
+                            new ShooterCommand(shooterSubsystem, ShooterState.FIRE),
+                            new PrepareShotCommand(hoodSubsystem, poseEstimationSubsystem::getCurrentPose)
+                    ),
+                    new DriveToPoseCommand(drive, rightBalls),
+                    new TimerCommand(Duration.ofSeconds(3)),
+                    new DriveToPoseCommand(drive, rightOpponent)
+            );
+            case CENTER -> Commands.sequence();
+        };
+    }
+
+    public static Command humanPickup(
+            Drive drive,
+            HoodSubsystem hoodSubsystem,
+            ShooterSubsystem shooterSubsystem,
+            ClimberSubsystem climberSubsystem,
+            PoseEstimationSubsystem poseEstimationSubsystem
+    ) {
+        return Commands.sequence(
+                new ParallelDeadlineGroup(
+                        new TimerCommand(Duration.ofSeconds(1)),
+                        new ShooterCommand(shooterSubsystem, ShooterState.SPIN_UP),
+                        new PrepareShotCommand(hoodSubsystem, poseEstimationSubsystem::getCurrentPose)
+                ),
+                new ParallelDeadlineGroup(
+                        new TimerCommand(Duration.ofSeconds(5)),
+                        new DriveWhilePointingAtCommand(drive, poseEstimationSubsystem, Constants.Locations.hubPose, ()->0.0, ()->0.0),
+                        new ShooterCommand(shooterSubsystem, ShooterState.FIRE),
+                        new PrepareShotCommand(hoodSubsystem, poseEstimationSubsystem::getCurrentPose)
+                ),
+                new DriveToPoseCommand(drive, humanPlayer),
+                new ParallelDeadlineGroup(
+                        new TimerCommand(Duration.ofSeconds(1)),
+                        new ShooterCommand(shooterSubsystem, ShooterState.SPIN_UP),
+                        new PrepareShotCommand(hoodSubsystem, poseEstimationSubsystem::getCurrentPose)
+                ),
+                new ParallelDeadlineGroup(
+                        new TimerCommand(Duration.ofSeconds(5)),
+                        new DriveWhilePointingAtCommand(drive, poseEstimationSubsystem, Constants.Locations.hubPose, ()->0.0, ()->0.0),
+                        new ShooterCommand(shooterSubsystem, ShooterState.FIRE),
+                        new PrepareShotCommand(hoodSubsystem, poseEstimationSubsystem::getCurrentPose)
+                ),
+                new DriveToPoseCommand(drive, shootingBalls),
+                new DriveToPoseCommand(drive, climb),
+                new AutoClimbCommand(climberSubsystem, -Constants.Climber.climbingSpeed)
+        );
+    }
+
     public static Command win(
             Drive drive,
             HoodSubsystem hoodSubsystem,
@@ -76,6 +157,7 @@ public final class Autos {
                     // spin up shooter, shoot
                     new ParallelDeadlineGroup(
                             new TimerCommand(Duration.ofSeconds(5)),
+                            new DriveWhilePointingAtCommand(drive, poseEstimationSubsystem, Constants.Locations.hubPose, ()->0.0, ()->0.0),
                             new ShooterCommand(shooterSubsystem, ShooterState.FIRE),
                             new PrepareShotCommand(hoodSubsystem, poseEstimationSubsystem::getCurrentPose)
                     ),
@@ -100,6 +182,7 @@ public final class Autos {
                     // spin up shooter, shoot
                     new ParallelDeadlineGroup(
                             new TimerCommand(Duration.ofSeconds(5)),
+                            new DriveWhilePointingAtCommand(drive, poseEstimationSubsystem, Constants.Locations.hubPose, ()->0.0, ()->0.0),
                             new ShooterCommand(shooterSubsystem, ShooterState.FIRE),
                             new PrepareShotCommand(hoodSubsystem, poseEstimationSubsystem::getCurrentPose)
                     ),
@@ -118,9 +201,12 @@ public final class Autos {
 
     final static Pose2d rightLine = new Pose2d(3.67, 0.68, Rotation2d.fromDegrees(0));
     final static Pose2d rightBalls = new Pose2d(7.71, 0.68, Rotation2d.fromDegrees(0));
-    final static Pose2d leftBalls = new Pose2d(7.71, 7.32, Rotation2d.fromDegrees(0));
+    final static Pose2d rightOpponent = new Pose2d(14.71, 0.64, Rotation2d.fromDegrees(0));
     final static Pose2d leftLine = new Pose2d(3.67, 7.32, Rotation2d.fromDegrees(0));
+    final static Pose2d leftBalls = new Pose2d(7.71, 7.32, Rotation2d.fromDegrees(0));
+    final static Pose2d leftOpponent = new Pose2d(14.71, 7.45, Rotation2d.fromDegrees(0));
 
-    final static Pose2d shootingBalls = new Pose2d(2.24, 5.05, Rotation2d.fromDegrees(0));
-    final static Pose2d climb = new Pose2d(1.56, 3.70, Rotation2d.fromDegrees(180));
+    final static Pose2d shootingBalls = new Pose2d(2.24, 3.73, Rotation2d.fromDegrees(0));
+    final static Pose2d climb = new Pose2d(1.32, 3.75, Rotation2d.fromDegrees(180));
+    final static Pose2d humanPlayer = new Pose2d(0.46,0.65, Rotation2d.fromDegrees(0));
 }

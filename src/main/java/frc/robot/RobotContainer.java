@@ -128,6 +128,20 @@ public class RobotContainer {
                 poseEstimationSubsystem,
                 StartPosish.RIGHT
         ));
+        autoChooser.addOption("Drive To Opponent", Autos.driveToOpponent(
+                drive,
+                hoodSubsystem,
+                shooterSubsystem,
+                poseEstimationSubsystem,
+                StartPosish.RIGHT
+        ));
+        autoChooser.addOption("Human Pickup", Autos.humanPickup(
+                drive,
+                hoodSubsystem,
+                shooterSubsystem,
+                climberSubsystem,
+                poseEstimationSubsystem
+        ));
         SmartDashboard.putData("Auto Mode", autoChooser);
     }
 
