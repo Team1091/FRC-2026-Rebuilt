@@ -18,21 +18,10 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.commands.Autos;
-import frc.robot.commands.ManualClimbCommand;
-import frc.robot.commands.DriveCommand;
-import frc.robot.commands.DriveWhilePointingAtCommand;
-import frc.robot.commands.PrepareShotCommand;
-import frc.robot.commands.RunIntakeCommand;
-import frc.robot.commands.ShooterCommand;
-import frc.robot.enums.IntakeState;
+import frc.robot.commands.*;
 import frc.robot.enums.ShooterState;
 import frc.robot.enums.StartPosish;
-import frc.robot.subsystems.ClimberSubsystem;
-import frc.robot.subsystems.HoodSubsystem;
-import frc.robot.subsystems.IntakeSubsystem;
-import frc.robot.subsystems.PoseEstimationSubsystem;
-import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.*;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.gyro.GyroIOPigeon2;
 import frc.robot.subsystems.drive.module.ModuleIOTalonFX;
@@ -56,6 +45,7 @@ public class RobotContainer {
     private final IntakeSubsystem intakeSubsystem;
     private final ShooterSubsystem shooterSubsystem;
     private final HoodSubsystem hoodSubsystem;
+    private final PivotSubsystem pivotSubsystem;
 
     // Replace with CommandPS4Controller or CommandJoystick if needed
     private final CommandXboxController driverController = new CommandXboxController(OperatorConstants.kDriverControllerPort);
@@ -84,6 +74,7 @@ public class RobotContainer {
         shooterSubsystem = new ShooterSubsystem();
         hoodSubsystem = new HoodSubsystem();
         climberSubsystem = new ClimberSubsystem();
+        pivotSubsystem = new PivotSubsystem();
 
 
         configureAutonomous();
@@ -108,10 +99,10 @@ public class RobotContainer {
     }
 
     public void robotEnabled() {
-        intakeSubsystem.resetEncoder();
         hoodSubsystem.resetEncoder();
         climberSubsystem.resetEncoders();
         drive.straightenWheels();
+        pivotSubsystem.resetEncoder();
     }
 
     private void configureAutonomous() {
@@ -123,7 +114,7 @@ public class RobotContainer {
                 drive,
                 hoodSubsystem,
                 shooterSubsystem,
-                intakeSubsystem,
+                pivotSubsystem,
                 climberSubsystem,
                 poseEstimationSubsystem,
                 StartPosish.RIGHT
@@ -199,7 +190,12 @@ public class RobotContainer {
         // TODO: add additional bindings
 
         // Intake
-        driverController.a().whileTrue(new RunIntakeCommand(intakeSubsystem, IntakeState.HARVEST));
+//        driverController.a().whileTrue(new RunIntakeCommand(intakeSubsystem, IntakeState.HARVEST));
+        driverController.x().whileTrue((new IntakeCommand(intakeSubsystem, Constants.Intake.intakeSpeed)));
+        driverController.a().whileTrue(new PivotCommand(pivotSubsystem, Constants.Pivot.pivotSpeedOut));
+        driverController.b().whileTrue(new PivotCommand(pivotSubsystem, Constants.Pivot.pivotSpeedIn));
+
+
     }
 
     /**

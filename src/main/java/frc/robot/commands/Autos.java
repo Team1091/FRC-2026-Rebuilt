@@ -12,14 +12,9 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import frc.robot.Constants;
-import frc.robot.enums.IntakeState;
 import frc.robot.enums.ShooterState;
 import frc.robot.enums.StartPosish;
-import frc.robot.subsystems.ClimberSubsystem;
-import frc.robot.subsystems.HoodSubsystem;
-import frc.robot.subsystems.IntakeSubsystem;
-import frc.robot.subsystems.PoseEstimationSubsystem;
-import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.*;
 import frc.robot.subsystems.drive.Drive;
 
 import java.time.Duration;
@@ -132,7 +127,7 @@ public final class Autos {
             Drive drive,
             HoodSubsystem hoodSubsystem,
             ShooterSubsystem shooterSubsystem,
-            IntakeSubsystem intakeSubsystem,
+            PivotSubsystem pivotSubsystem,
             ClimberSubsystem climberSubsystem,
             PoseEstimationSubsystem poseEstimationSubsystem,
             StartPosish startPosish
@@ -140,7 +135,7 @@ public final class Autos {
 
         return switch (startPosish) {
             case LEFT -> Commands.sequence(
-                    new RunIntakeCommand(intakeSubsystem, IntakeState.EXTENDED),
+                    new PivotCommand(pivotSubsystem, Constants.Pivot.pivotSpeedOut),
                     new DriveToPoseCommand(drive, leftLine),
                     new DriveToPoseCommand(drive, leftBalls),
 
