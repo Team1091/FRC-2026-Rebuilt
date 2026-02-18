@@ -14,7 +14,11 @@ import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import frc.robot.Constants;
 import frc.robot.enums.ShooterState;
 import frc.robot.enums.StartPosish;
-import frc.robot.subsystems.*;
+import frc.robot.subsystems.ClimberSubsystem;
+import frc.robot.subsystems.HoodSubsystem;
+import frc.robot.subsystems.PivotSubsystem;
+import frc.robot.subsystems.PoseEstimationSubsystem;
+import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.drive.Drive;
 
 import java.time.Duration;
@@ -58,7 +62,7 @@ public final class Autos {
                     ),
                     new ParallelDeadlineGroup(
                             new TimerCommand(Duration.ofSeconds(5)),
-                            new DriveWhilePointingAtCommand(drive, poseEstimationSubsystem, Constants.Locations.hubPose, ()->0.0, ()->0.0),
+                            new DriveWhilePointingAtCommand(drive, poseEstimationSubsystem, Constants.Locations.hubPose, () -> 0.0, () -> 0.0),
                             new ShooterCommand(shooterSubsystem, ShooterState.FIRE),
                             new PrepareShotCommand(hoodSubsystem, poseEstimationSubsystem::getCurrentPose)
                     ),
@@ -74,7 +78,7 @@ public final class Autos {
                     ),
                     new ParallelDeadlineGroup(
                             new TimerCommand(Duration.ofSeconds(5)),
-                            new DriveWhilePointingAtCommand(drive, poseEstimationSubsystem, Constants.Locations.hubPose, ()->0.0, ()->0.0),
+                            new DriveWhilePointingAtCommand(drive, poseEstimationSubsystem, Constants.Locations.hubPose, () -> 0.0, () -> 0.0),
                             new ShooterCommand(shooterSubsystem, ShooterState.FIRE),
                             new PrepareShotCommand(hoodSubsystem, poseEstimationSubsystem::getCurrentPose)
                     ),
@@ -101,7 +105,7 @@ public final class Autos {
                 ),
                 new ParallelDeadlineGroup(
                         new TimerCommand(Duration.ofSeconds(5)),
-                        new DriveWhilePointingAtCommand(drive, poseEstimationSubsystem, Constants.Locations.hubPose, ()->0.0, ()->0.0),
+                        new DriveWhilePointingAtCommand(drive, poseEstimationSubsystem, Constants.Locations.hubPose, () -> 0.0, () -> 0.0),
                         new ShooterCommand(shooterSubsystem, ShooterState.FIRE),
                         new PrepareShotCommand(hoodSubsystem, poseEstimationSubsystem::getCurrentPose)
                 ),
@@ -113,7 +117,7 @@ public final class Autos {
                 ),
                 new ParallelDeadlineGroup(
                         new TimerCommand(Duration.ofSeconds(5)),
-                        new DriveWhilePointingAtCommand(drive, poseEstimationSubsystem, Constants.Locations.hubPose, ()->0.0, ()->0.0),
+                        new DriveWhilePointingAtCommand(drive, poseEstimationSubsystem, Constants.Locations.hubPose, () -> 0.0, () -> 0.0),
                         new ShooterCommand(shooterSubsystem, ShooterState.FIRE),
                         new PrepareShotCommand(hoodSubsystem, poseEstimationSubsystem::getCurrentPose)
                 ),
@@ -123,7 +127,7 @@ public final class Autos {
         );
     }
 
-    public static Command win(
+    public static Command swoopThroughMiddleThenShoot(
             Drive drive,
             HoodSubsystem hoodSubsystem,
             ShooterSubsystem shooterSubsystem,
@@ -152,7 +156,7 @@ public final class Autos {
                     // spin up shooter, shoot
                     new ParallelDeadlineGroup(
                             new TimerCommand(Duration.ofSeconds(5)),
-                            new DriveWhilePointingAtCommand(drive, poseEstimationSubsystem, Constants.Locations.hubPose, ()->0.0, ()->0.0),
+                            new DriveWhilePointingAtCommand(drive, poseEstimationSubsystem, Constants.Locations.hubPose, () -> 0.0, () -> 0.0),
                             new ShooterCommand(shooterSubsystem, ShooterState.FIRE),
                             new PrepareShotCommand(hoodSubsystem, poseEstimationSubsystem::getCurrentPose)
                     ),
@@ -177,7 +181,7 @@ public final class Autos {
                     // spin up shooter, shoot
                     new ParallelDeadlineGroup(
                             new TimerCommand(Duration.ofSeconds(5)),
-                            new DriveWhilePointingAtCommand(drive, poseEstimationSubsystem, Constants.Locations.hubPose, ()->0.0, ()->0.0),
+                            new DriveWhilePointingAtCommand(drive, poseEstimationSubsystem, Constants.Locations.hubPose, () -> 0.0, () -> 0.0),
                             new ShooterCommand(shooterSubsystem, ShooterState.FIRE),
                             new PrepareShotCommand(hoodSubsystem, poseEstimationSubsystem::getCurrentPose)
                     ),
@@ -203,5 +207,5 @@ public final class Autos {
 
     final static Pose2d shootingBalls = new Pose2d(2.24, 3.73, Rotation2d.fromDegrees(0));
     final static Pose2d climb = new Pose2d(1.32, 3.75, Rotation2d.fromDegrees(180));
-    final static Pose2d humanPlayer = new Pose2d(0.46,0.65, Rotation2d.fromDegrees(0));
+    final static Pose2d humanPlayer = new Pose2d(0.46, 0.65, Rotation2d.fromDegrees(0));
 }

@@ -100,13 +100,13 @@ public final class Constants {
         public static final double intakeSpeed = 0.3;
     }
 
-    public static final class Pivot{
+    public static final class Pivot {
         public static final boolean disabled = false;
         public static final int pivotMotorChannel = 12;
         public static final double pivotSpeedOut = 0.25;
         public static final double pivotSpeedIn = -0.25;
-
-
+        // This should be the break-even point where it either tips down, or tips up.
+        public static final double halfExtendedEncoderPos = 0.3;
     }
 
     public static final class Climber {

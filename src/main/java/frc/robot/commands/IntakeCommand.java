@@ -7,6 +7,7 @@ public class IntakeCommand extends Command {
 
     private final IntakeSubsystem intakeSubsystem;
     private final double speed;
+
     public IntakeCommand(IntakeSubsystem intakeSubsystem, double speed) {
         this.intakeSubsystem = intakeSubsystem;
         this.speed = speed;

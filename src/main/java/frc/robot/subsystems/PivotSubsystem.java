@@ -32,19 +32,23 @@ public class PivotSubsystem extends SubsystemBase {
         if (Constants.Pivot.disabled) return;
         pivotEncoder.setPosition(0);
     }
-    public void setSpeed(double speed){
+
+    public void setSpeed(double speed) {
         this.speed = speed;
     }
+
     @Override
     public void periodic() {
         if (Constants.Pivot.disabled) return;
 
         // set motor speeds
-        if(pivotEncoder.getPosition() < 0.3 && speed > 0){
+        if (pivotEncoder.getPosition() <= Constants.Pivot.halfExtendedEncoderPos && speed > 0) {
+            // we are retracted and want to go out.  push out
             pivotMotor.set(speed);
-        }else if(pivotEncoder.getPosition() > 0.3 && speed < 0){
+        } else if (pivotEncoder.getPosition() > Constants.Pivot.halfExtendedEncoderPos && speed < 0) {
+            // We are extended and want to retract.
             pivotMotor.set(speed);
-        }else{
+        } else {
             pivotMotor.set(0.0);
         }
     }

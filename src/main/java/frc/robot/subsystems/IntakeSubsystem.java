@@ -1,9 +1,7 @@
 package frc.robot.subsystems;
 
-import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkLowLevel;
 import com.revrobotics.spark.SparkMax;
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -23,7 +21,8 @@ public class IntakeSubsystem extends SubsystemBase {
         intakeMotor = new SparkMax(Constants.Intake.intakeMotorChannel, SparkLowLevel.MotorType.kBrushless);
         speed = 0.0;
     }
-    public void setSpeed(double speed){
+
+    public void setSpeed(double speed) {
         this.speed = speed;
     }
 

@@ -18,10 +18,22 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.commands.*;
+import frc.robot.commands.Autos;
+import frc.robot.commands.DriveCommand;
+import frc.robot.commands.DriveWhilePointingAtCommand;
+import frc.robot.commands.IntakeCommand;
+import frc.robot.commands.ManualClimbCommand;
+import frc.robot.commands.PivotCommand;
+import frc.robot.commands.PrepareShotCommand;
+import frc.robot.commands.ShooterCommand;
 import frc.robot.enums.ShooterState;
 import frc.robot.enums.StartPosish;
-import frc.robot.subsystems.*;
+import frc.robot.subsystems.ClimberSubsystem;
+import frc.robot.subsystems.HoodSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.PivotSubsystem;
+import frc.robot.subsystems.PoseEstimationSubsystem;
+import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.gyro.GyroIOPigeon2;
 import frc.robot.subsystems.drive.module.ModuleIOTalonFX;
@@ -110,7 +122,7 @@ public class RobotContainer {
         autoChooser.setDefaultOption("Do Nothing", new WaitCommand(1.0));
         autoChooser.addOption("Spin Wildly", Autos.spinAuto(drive));
         autoChooser.addOption("Drive Forward", Autos.driveForward(drive));
-        autoChooser.addOption("Win", Autos.win(
+        autoChooser.addOption("Win", Autos.swoopThroughMiddleThenShoot(
                 drive,
                 hoodSubsystem,
                 shooterSubsystem,
