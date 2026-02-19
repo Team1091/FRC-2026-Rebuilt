@@ -203,7 +203,7 @@ public class RobotContainer {
 
         // Intake
 //        driverController.a().whileTrue(new RunIntakeCommand(intakeSubsystem, IntakeState.HARVEST));
-        driverController.x().whileTrue((new IntakeCommand(intakeSubsystem, Constants.Intake.intakeSpeed)));
+        driverController.x().whileTrue(new IntakeCommand(intakeSubsystem, Constants.Intake.intakeSpeed));
         driverController.a().whileTrue(new PivotCommand(pivotSubsystem, Constants.Pivot.pivotSpeedOut));
         driverController.b().whileTrue(new PivotCommand(pivotSubsystem, Constants.Pivot.pivotSpeedIn));
 
