@@ -1,34 +1,33 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.enums.IntakeState;
 import frc.robot.subsystems.IntakeSubsystem;
 
-public class RunIntakeCommand extends Command {
+public class IntakeCommand extends Command {
 
     private final IntakeSubsystem intakeSubsystem;
-    private final IntakeState intakeState;
+    private final double speed;
 
-    public RunIntakeCommand(IntakeSubsystem intakeSubsystem, IntakeState intakeState) {
+    public IntakeCommand(IntakeSubsystem intakeSubsystem, double speed) {
         this.intakeSubsystem = intakeSubsystem;
-        this.intakeState = intakeState;
+        this.speed = speed;
         addRequirements(intakeSubsystem);
     }
 
 
     @Override
     public void execute() {
-        intakeSubsystem.setState(intakeState);
+        intakeSubsystem.setSpeed(speed);
     }
 
 
     @Override
     public void end(boolean interrupted) {
-        intakeSubsystem.setState(IntakeState.EXTENDED);
+        intakeSubsystem.setSpeed(0.0);
     }
 
     @Override
     public boolean isFinished() {
-        return true;
+        return false;
     }
 }
