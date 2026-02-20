@@ -23,7 +23,7 @@ public class ShooterCommand extends Command {
 
     @Override
     public boolean isFinished() {
-        // TODO: This will need to be ended elsewhere?
+        // This doesn't end, needs to be stopped elsewhere
         return false;
     }
 

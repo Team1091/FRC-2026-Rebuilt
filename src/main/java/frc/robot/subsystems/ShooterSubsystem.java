@@ -42,8 +42,6 @@ public class ShooterSubsystem extends SubsystemBase {
         this.shooterState = shooterState;
     }
 
-    // TODO: we will need to add controls for the aiming hood, and probably calculate a shooting solution
-
     @Override
     public void periodic() {
         if (Constants.Shooter.disabled) return;

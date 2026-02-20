@@ -38,9 +38,9 @@ public final class Autos {
         // Make a spot 10 units in front, drive to there.
         // How much is a unit?  Good question. Don't stand near it when we find out.
         var currentPose = drive.getPose();
-        var newPos = currentPose.transformBy(new Transform2d(10.0, 0.0, Rotation2d.fromDegrees(0)));
+        var newPos = currentPose.transformBy(new Transform2d(1.0, 0.0, Rotation2d.fromDegrees(0)));
 
-        // TODO: While the 10 units in front of us wont be useful,
+        // TODO: While the specific forward movement isnt useful
         //  This will allow us to drive directly to a pose.
         // We could have a driveToClimb, driveToShootSpot, driveToHopperFillSpot, etc
         return new DriveToPoseCommand(drive, newPos);
