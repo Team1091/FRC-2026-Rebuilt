@@ -115,9 +115,9 @@ public class RobotContainer {
 
     private void configureStartingPositions() {
         startPosChooser = new SendableChooser<>();
+        startPosChooser.addOption("Left", StartPosish.LEFT);
         startPosChooser.setDefaultOption("Center", StartPosish.CENTER);
         startPosChooser.addOption("Right", StartPosish.RIGHT);
-        startPosChooser.addOption("Left", StartPosish.LEFT);
         SmartDashboard.putData("Start Position", startPosChooser);
 
         poseEstimationSubsystem.setCurrentPose(StartPosish.CENTER.startingPose);
