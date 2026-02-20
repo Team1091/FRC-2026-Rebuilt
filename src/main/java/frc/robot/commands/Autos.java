@@ -46,6 +46,10 @@ public final class Autos {
         return new DriveToPoseCommand(drive, newPos);
     }
 
+    public static Command manualAlign(Drive drive){
+        return new DriveToPoseCommand(drive, leftManualAlign);
+    }
+
     public static Command driveToOpponent(
             Drive drive,
             HoodSubsystem hoodSubsystem,
@@ -208,4 +212,11 @@ public final class Autos {
     final static Pose2d shootingBalls = new Pose2d(2.24, 3.73, Rotation2d.fromDegrees(0));
     final static Pose2d climb = new Pose2d(1.32, 3.75, Rotation2d.fromDegrees(180));
     final static Pose2d humanPlayer = new Pose2d(0.46, 0.65, Rotation2d.fromDegrees(0));
+
+    public final static Pose2d leftStartingPose = new Pose2d(3.71, 7.3, Rotation2d.fromDegrees(0));
+    public final static Pose2d centerStartingPose = new Pose2d(3.71, 4.05, Rotation2d.fromDegrees(0));
+    public final static Pose2d rightStartingPose = new Pose2d(3.71, 0.39, Rotation2d.fromDegrees(0));
+
+    public final static Pose2d leftManualAlign = new Pose2d(2.25, 7.32, Rotation2d.fromDegrees(0));
+
 }
