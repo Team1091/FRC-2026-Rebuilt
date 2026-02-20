@@ -5,9 +5,6 @@
 package frc.robot;
 
 import edu.wpi.first.cameraserver.CameraServer;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -64,6 +61,7 @@ public class RobotContainer {
 
     // This lets us select the command to run in autonomous
     private SendableChooser<Command> autoChooser;
+    private SendableChooser<StartPosish> startPosChooser;
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -88,7 +86,7 @@ public class RobotContainer {
         climberSubsystem = new ClimberSubsystem();
         pivotSubsystem = new PivotSubsystem();
 
-
+        configureStartingPositions();
         configureAutonomous();
         // Configure the trigger bindings
         configureBindings();
@@ -96,11 +94,9 @@ public class RobotContainer {
 
     // Set the defaults when powered on
     public void robotInit() {
-        // TODO: this sets the pose estimate to (0,0)
-        //  which seems like it would think its in the corner till it detects a target.
-        //  If we can start this off thinking its in a valid starting position (dropdown for starting position)
-        //  It would be a lot more accurate for autonomous
-        poseEstimationSubsystem.setCurrentPose(new Pose2d(new Translation2d(0, 0), new Rotation2d(0)));
+
+        // Initialize this to the center, we reset if it changes
+        poseEstimationSubsystem.setCurrentPose(StartPosish.CENTER.startingPose);
         drive.resetGyro();
         drive.setIsFieldOriented(true);
 
@@ -115,6 +111,19 @@ public class RobotContainer {
         climberSubsystem.resetEncoders();
         drive.straightenWheels();
         pivotSubsystem.resetEncoder();
+    }
+
+    private void configureStartingPositions() {
+        startPosChooser = new SendableChooser<>();
+        startPosChooser.setDefaultOption("Center", StartPosish.CENTER);
+        startPosChooser.addOption("Right", StartPosish.RIGHT);
+        startPosChooser.addOption("Left", StartPosish.LEFT);
+        SmartDashboard.putData("Start Position", startPosChooser);
+
+        poseEstimationSubsystem.setCurrentPose(StartPosish.CENTER.startingPose);
+        startPosChooser.onChange((startPosish) -> {
+            poseEstimationSubsystem.setCurrentPose(startPosish.startingPose);
+        });
     }
 
     private void configureAutonomous() {
