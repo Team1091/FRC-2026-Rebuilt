@@ -5,6 +5,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.wpilibj.DataLogManager;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -70,6 +71,19 @@ public class PoseEstimationSubsystem extends SubsystemBase {
 
     public void setCurrentPose(Pose2d newPose) {
         poseEstimator.resetPosition(rotationSupplier.get(), modulePositionSupplier.get(), newPose);
+    }
+
+    public boolean isOnRed() {
+        var alliance = DriverStation.getAlliance();
+        return alliance.filter(value -> value == DriverStation.Alliance.Red).isPresent();
+    }
+
+    public void resetDriveRotation() {
+        if (isOnRed()) {
+            poseEstimator.resetPosition(rotationSupplier.get(), modulePositionSupplier.get(), new Pose2d(getCurrentPose().getTranslation(), new Rotation2d(Math.PI)));
+        } else {
+            poseEstimator.resetPosition(rotationSupplier.get(), modulePositionSupplier.get(), new Pose2d(getCurrentPose().getTranslation(), new Rotation2d()));
+        }
     }
 
     public Rotation2d getHeadingToTarget(Pose2d targetPose) {
