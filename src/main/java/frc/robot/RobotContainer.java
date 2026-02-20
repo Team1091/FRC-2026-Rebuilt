@@ -203,6 +203,7 @@ public class RobotContainer {
         );
         // spin up while shooting
         driverController.leftTrigger().whileTrue(new ShooterCommand(shooterSubsystem, ShooterState.SPIN_UP));
+        driverController.y().whileTrue(new ShooterCommand(shooterSubsystem, ShooterState.SPIN_UP));
         driverController.rightTrigger().whileTrue(new ShooterCommand(shooterSubsystem, ShooterState.FIRE));
 
         // Climber uses bumpers
