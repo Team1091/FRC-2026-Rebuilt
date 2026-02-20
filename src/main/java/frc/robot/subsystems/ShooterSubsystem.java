@@ -1,7 +1,10 @@
 package frc.robot.subsystems;
 
+import com.revrobotics.PersistMode;
+import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel;
 import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.config.SparkFlexConfig;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.enums.ShooterState;
@@ -9,8 +12,8 @@ import frc.robot.enums.ShooterState;
 // spins up a flywheel to launch the balls, indexes them
 public class ShooterSubsystem extends SubsystemBase {
 
-    private final SparkMax leftShooterMotor;
-    private final SparkMax rightShooterMotor;
+    private final SparkFlex leftShooterMotor;
+    private final SparkFlex rightShooterMotor;
     private final SparkMax indexerMotor;
 
     private ShooterState shooterState = ShooterState.IDLE;
@@ -22,8 +25,15 @@ public class ShooterSubsystem extends SubsystemBase {
             indexerMotor = null;
             return;
         }
-        leftShooterMotor = new SparkMax(Constants.Shooter.leftMotorChannel, SparkLowLevel.MotorType.kBrushless);
-        rightShooterMotor = new SparkMax(Constants.Shooter.rightMotorChannel, SparkLowLevel.MotorType.kBrushless);
+
+        leftShooterMotor = new SparkFlex(Constants.Shooter.leftMotorChannel, SparkLowLevel.MotorType.kBrushless);
+        rightShooterMotor = new SparkFlex(Constants.Shooter.rightMotorChannel, SparkLowLevel.MotorType.kBrushless);
+
+        // Reverse the right motor
+        var rightConfig = new SparkFlexConfig();
+        rightConfig.inverted(true);
+        rightShooterMotor.configure(rightConfig, com.revrobotics.ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+
         indexerMotor = new SparkMax(Constants.Shooter.indexerMotorChannel, SparkLowLevel.MotorType.kBrushless);
     }
 

@@ -112,8 +112,9 @@ public class ModuleIOTalonFX implements ModuleIO {
         driveSparkMax.setCANTimeout(250);
         turnSparkMax.setCANTimeout(250);
 
-        driveSparkMax.setCANTimeout(0);
-        turnSparkMax.setCANTimeout(0);
+        // TODO: what?
+//        driveSparkMax.setCANTimeout(0);
+//        turnSparkMax.setCANTimeout(0);
 
         driveSparkMax.configure(driveConfig, com.revrobotics.ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
         turnSparkMax.configure(turnConfig, com.revrobotics.ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
