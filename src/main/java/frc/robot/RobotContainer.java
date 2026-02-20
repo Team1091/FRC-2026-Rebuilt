@@ -131,6 +131,7 @@ public class RobotContainer {
         autoChooser.setDefaultOption("Do Nothing", new WaitCommand(1.0));
         autoChooser.addOption("Spin Wildly", Autos.spinAuto(drive));
         autoChooser.addOption("Drive Forward", Autos.driveForward(drive));
+        autoChooser.addOption("Manual Align", Autos.manualAlign(drive));
         autoChooser.addOption("Win", Autos.swoopThroughMiddleThenShoot(
                 drive,
                 hoodSubsystem,
