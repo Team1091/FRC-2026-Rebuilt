@@ -26,6 +26,7 @@ public class ShooterSubsystem extends SubsystemBase {
             indexerMotor = null;
             loaderMotor = null;
             return;
+
         }
 
 //        leftShooterMotor = new SparkFlex(Constants.Shooter.leftMotorChannel, SparkLowLevel.MotorType.kBrushless);
@@ -36,7 +37,7 @@ public class ShooterSubsystem extends SubsystemBase {
         rightConfig.inverted(true);
 //        rightShooterMotor.configure(rightConfig, com.revrobotics.ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
-        indexerMotor = new SparkMax(Constants.Shooter.indexerMotorChannel, SparkLowLevel.MotorType.kBrushless);
+        indexerMotor = new SparkMax(Constants.Indexer.indexerMotorChannel, SparkLowLevel.MotorType.kBrushless);
         loaderMotor = new SparkMax(Constants.Shooter.loaderMotorChannel, SparkLowLevel.MotorType.kBrushless);
     }
 
