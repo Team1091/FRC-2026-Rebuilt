@@ -87,10 +87,11 @@ public final class Constants {
     }
 
     public static final class Shooter {
-        public static final boolean disabled = true;
+        public static final boolean disabled = false;
         public static final int leftMotorChannel = 13;
         public static final int rightMotorChannel = 14;
         public static final int indexerMotorChannel = 15;
+        public static final int loaderMotorChannel = 16;
         // TODO: we may want target RPMs here for the flywheel
     }
 

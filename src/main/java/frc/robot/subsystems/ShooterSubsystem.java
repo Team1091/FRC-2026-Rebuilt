@@ -12,29 +12,32 @@ import frc.robot.enums.ShooterState;
 // spins up a flywheel to launch the balls, indexes them
 public class ShooterSubsystem extends SubsystemBase {
 
-    private final SparkFlex leftShooterMotor;
-    private final SparkFlex rightShooterMotor;
+//    private final SparkFlex leftShooterMotor;
+//    private final SparkFlex rightShooterMotor;
     private final SparkMax indexerMotor;
+    private final SparkMax loaderMotor;
 
     private ShooterState shooterState = ShooterState.IDLE;
 
     public ShooterSubsystem() {
         if (Constants.Shooter.disabled) {
-            leftShooterMotor = null;
-            rightShooterMotor = null;
+//            leftShooterMotor = null;
+//            rightShooterMotor = null;
             indexerMotor = null;
+            loaderMotor = null;
             return;
         }
 
-        leftShooterMotor = new SparkFlex(Constants.Shooter.leftMotorChannel, SparkLowLevel.MotorType.kBrushless);
-        rightShooterMotor = new SparkFlex(Constants.Shooter.rightMotorChannel, SparkLowLevel.MotorType.kBrushless);
+//        leftShooterMotor = new SparkFlex(Constants.Shooter.leftMotorChannel, SparkLowLevel.MotorType.kBrushless);
+//        rightShooterMotor = new SparkFlex(Constants.Shooter.rightMotorChannel, SparkLowLevel.MotorType.kBrushless);
 
         // Reverse the right motor
         var rightConfig = new SparkFlexConfig();
         rightConfig.inverted(true);
-        rightShooterMotor.configure(rightConfig, com.revrobotics.ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+//        rightShooterMotor.configure(rightConfig, com.revrobotics.ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
         indexerMotor = new SparkMax(Constants.Shooter.indexerMotorChannel, SparkLowLevel.MotorType.kBrushless);
+        loaderMotor = new SparkMax(Constants.Shooter.loaderMotorChannel, SparkLowLevel.MotorType.kBrushless);
     }
 
 
@@ -46,9 +49,10 @@ public class ShooterSubsystem extends SubsystemBase {
     public void periodic() {
         if (Constants.Shooter.disabled) return;
 
-        leftShooterMotor.set(shooterState.flywheelSpeed);
-        rightShooterMotor.set(shooterState.flywheelSpeed);
+//        leftShooterMotor.set(shooterState.flywheelSpeed);
+//        rightShooterMotor.set(shooterState.flywheelSpeed);
         indexerMotor.set(shooterState.indexSpeed);
+        loaderMotor.set(shooterState.indexSpeed);
     }
 
 }
