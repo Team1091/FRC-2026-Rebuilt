@@ -7,48 +7,44 @@ import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkFlexConfig;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.enums.ShooterState;
 
-// spins up a flywheel to launch the balls, indexes them
-public class ShooterSubsystem extends SubsystemBase {
+// picks balls off the ground
+public class ManualShooterSubsystem extends SubsystemBase {
 
     private final SparkFlex leftShooterMotor;
     private final SparkFlex rightShooterMotor;
-    private final SparkMax indexerMotor;
+    private double speed;
 
-    private ShooterState shooterState = ShooterState.IDLE;
-
-    public ShooterSubsystem() {
-        if (Constants.Shooter.disabled) {
+    public ManualShooterSubsystem() {
+        if (Constants.Intake.disabled) {
             leftShooterMotor = null;
             rightShooterMotor = null;
-            indexerMotor = null;
+
             return;
         }
 
+        // set up motors
+
         leftShooterMotor = new SparkFlex(Constants.Shooter.leftMotorChannel, SparkLowLevel.MotorType.kBrushless);
         rightShooterMotor = new SparkFlex(Constants.Shooter.rightMotorChannel, SparkLowLevel.MotorType.kBrushless);
-
-        // Reverse the right motor
         var rightConfig = new SparkFlexConfig();
         rightConfig.inverted(true);
         rightShooterMotor.configure(rightConfig, com.revrobotics.ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-
-        indexerMotor = new SparkMax(Constants.Indexer.indexerMotorChannel, SparkLowLevel.MotorType.kBrushless);
+        speed = 0.0;
     }
 
-
-    public void setShooterState(ShooterState shooterState) {
-        this.shooterState = shooterState;
+    public void setSpeed(double speed) {
+        this.speed = speed;
     }
 
     @Override
     public void periodic() {
-        if (Constants.Shooter.disabled) return;
+        if (Constants.Intake.disabled) return;
 
-        leftShooterMotor.set(shooterState.flywheelSpeed);
-        rightShooterMotor.set(shooterState.flywheelSpeed);
-        indexerMotor.set(shooterState.indexSpeed);
+        // set motor speeds
+        leftShooterMotor.set(speed);
+        rightShooterMotor.set(speed);
+
+
     }
-
 }

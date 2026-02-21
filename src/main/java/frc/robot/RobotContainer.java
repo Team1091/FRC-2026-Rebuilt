@@ -16,22 +16,10 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.commands.Autos;
-import frc.robot.commands.DriveCommand;
-import frc.robot.commands.DriveWhilePointingAtCommand;
-import frc.robot.commands.IntakeCommand;
-import frc.robot.commands.ManualClimbCommand;
-import frc.robot.commands.PivotCommand;
-import frc.robot.commands.PrepareShotCommand;
-import frc.robot.commands.ShooterCommand;
+import frc.robot.commands.*;
 import frc.robot.enums.ShooterState;
 import frc.robot.enums.StartPosish;
-import frc.robot.subsystems.ClimberSubsystem;
-import frc.robot.subsystems.HoodSubsystem;
-import frc.robot.subsystems.IntakeSubsystem;
-import frc.robot.subsystems.PivotSubsystem;
-import frc.robot.subsystems.PoseEstimationSubsystem;
-import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.*;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.gyro.GyroIOPigeon2;
 import frc.robot.subsystems.drive.module.ModuleIOTalonFX;
@@ -56,6 +44,11 @@ public class RobotContainer {
     private final ShooterSubsystem shooterSubsystem;
     private final HoodSubsystem hoodSubsystem;
     private final PivotSubsystem pivotSubsystem;
+    private final ManualShooterSubsystem manualShooterSubsystem;
+    private final IndexerSubsystem indexerSubsystem;
+    private final LoaderSubsystem loaderSubsystem;
+
+
 
     // Replace with CommandPS4Controller or CommandJoystick if needed
     private final CommandXboxController driverController = new CommandXboxController(OperatorConstants.kDriverControllerPort);
@@ -86,6 +79,9 @@ public class RobotContainer {
         hoodSubsystem = new HoodSubsystem();
         climberSubsystem = new ClimberSubsystem();
         pivotSubsystem = new PivotSubsystem();
+        manualShooterSubsystem = new ManualShooterSubsystem();
+        indexerSubsystem = new IndexerSubsystem();
+        loaderSubsystem = new LoaderSubsystem();
 
         configureStartingPositions();
         configureAutonomous();
@@ -206,9 +202,12 @@ public class RobotContainer {
                 )
         );
         // spin up while shooting
-        driverController.leftTrigger().whileTrue(new ShooterCommand(shooterSubsystem, ShooterState.SPIN_UP));
-        driverController.y().whileTrue(new ShooterCommand(shooterSubsystem, ShooterState.SPIN_UP));
-        driverController.rightTrigger().whileTrue(new ShooterCommand(shooterSubsystem, ShooterState.FIRE));
+//        driverController.leftTrigger().whileTrue(new ShooterCommand(shooterSubsystem, ShooterState.SPIN_UP));
+//        driverController.y().whileTrue(new ShooterCommand(shooterSubsystem, ShooterState.SPIN_UP));
+//        driverController.rightTrigger().whileTrue(new ShooterCommand(shooterSubsystem, ShooterState.FIRE));
+        driverController.leftTrigger().whileTrue(new ManualShooterCommand(manualShooterSubsystem, Constants.Shooter.shooterSpeed));
+        driverController.rightTrigger().whileTrue(new IndexerCommand(indexerSubsystem, Constants.Indexer.indexerSpeed));
+        driverController.rightTrigger().whileTrue(new LoaderCommand(loaderSubsystem, Constants.Loader.loaderSpeed));
 
         // Climber uses bumpers
         driverController.leftBumper().whileTrue((new ManualClimbCommand(climberSubsystem, Constants.Climber.climbingSpeed)));

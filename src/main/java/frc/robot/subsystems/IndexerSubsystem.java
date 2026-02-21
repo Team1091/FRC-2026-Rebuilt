@@ -7,19 +7,19 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 // picks balls off the ground
-public class IntakeSubsystem extends SubsystemBase {
+public class IndexerSubsystem extends SubsystemBase {
 
-    private final SparkFlex intakeMotor;
+    private final SparkFlex indexerMotor;
     private double speed;
 
-    public IntakeSubsystem() {
+    public IndexerSubsystem() {
         if (Constants.Intake.disabled) {
-            intakeMotor = null;
+            indexerMotor = null;
             return;
         }
 
         // set up motors
-        intakeMotor = new SparkFlex(Constants.Intake.intakeMotorChannel, SparkLowLevel.MotorType.kBrushless);
+        indexerMotor = new SparkFlex(Constants.Indexer.indexerMotorChannel, SparkLowLevel.MotorType.kBrushless);
         speed = 0.0;
     }
 
@@ -32,7 +32,7 @@ public class IntakeSubsystem extends SubsystemBase {
         if (Constants.Intake.disabled) return;
 
         // set motor speeds
-        intakeMotor.set(speed);
+        indexerMotor.set(speed);
 
     }
 }
