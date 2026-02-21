@@ -19,7 +19,12 @@ public class ManualShooterCommand extends Command {
     }
 
     @Override
+    public void end(boolean interrupted) {
+        manualShooterSubsystem.setSpeed(0.0);
+    }
+
+    @Override
     public boolean isFinished() {
-        return true;
+        return false;
     }
 }

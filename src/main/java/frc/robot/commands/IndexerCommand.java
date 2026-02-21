@@ -20,7 +20,12 @@ public class IndexerCommand extends Command {
     }
 
     @Override
+    public void end(boolean interrupted) {
+        indexerSubsystem.setSpeed(0.0);
+    }
+
+    @Override
     public boolean isFinished() {
-        return true;
+        return false;
     }
 }

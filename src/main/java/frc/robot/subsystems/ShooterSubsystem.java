@@ -24,6 +24,7 @@ public class ShooterSubsystem extends SubsystemBase {
             rightShooterMotor = null;
             indexerMotor = null;
             return;
+
         }
 
         leftShooterMotor = new SparkFlex(Constants.Shooter.leftMotorChannel, SparkLowLevel.MotorType.kBrushless);

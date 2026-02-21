@@ -19,7 +19,12 @@ public class LoaderCommand extends Command {
     }
 
     @Override
+    public void end(boolean interrupted) {
+        loaderSubsystem.setSpeed(0.0);
+    }
+
+    @Override
     public boolean isFinished() {
-        return true;
+        return false;
     }
 }
