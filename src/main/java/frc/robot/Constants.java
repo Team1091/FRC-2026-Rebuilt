@@ -127,8 +127,8 @@ public final class Constants {
         public static final boolean disabled = false;
         public static final int leftMotorChannel = 9;
         public static final int rightMotorChannel = 10;
-        public static final double climbingSpeed = 0.25;
-        public static final int maxEncoderCount = 100;
+        public static final double climbingSpeed = .5;
+        public static final int maxEncoderCount = 1000;
     }
 
     public static final class Camera {

@@ -14,8 +14,8 @@ public class ShooterSubsystem extends SubsystemBase {
 
 //    private final SparkFlex leftShooterMotor;
 //    private final SparkFlex rightShooterMotor;
-    private final SparkMax indexerMotor;
-    private final SparkMax loaderMotor;
+//    private final SparkMax indexerMotor;
+//    private final SparkMax loaderMotor;
 
     private ShooterState shooterState = ShooterState.IDLE;
 
@@ -23,8 +23,8 @@ public class ShooterSubsystem extends SubsystemBase {
         if (Constants.Shooter.disabled) {
 //            leftShooterMotor = null;
 //            rightShooterMotor = null;
-            indexerMotor = null;
-            loaderMotor = null;
+//            indexerMotor = null;
+//            loaderMotor = null;
             return;
 
         }
@@ -37,8 +37,8 @@ public class ShooterSubsystem extends SubsystemBase {
         rightConfig.inverted(true);
 //        rightShooterMotor.configure(rightConfig, com.revrobotics.ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
-        indexerMotor = new SparkMax(Constants.Indexer.indexerMotorChannel, SparkLowLevel.MotorType.kBrushless);
-        loaderMotor = new SparkMax(Constants.Shooter.loaderMotorChannel, SparkLowLevel.MotorType.kBrushless);
+//        indexerMotor = new SparkMax(Constants.Indexer.fakeIndexerMotorChannel, SparkLowLevel.MotorType.kBrushless);
+//        loaderMotor = new SparkMax(Constants.Loader.loaderMotorChannel, SparkLowLevel.MotorType.kBrushless);
     }
 
 
@@ -52,8 +52,8 @@ public class ShooterSubsystem extends SubsystemBase {
 
 //        leftShooterMotor.set(shooterState.flywheelSpeed);
 //        rightShooterMotor.set(shooterState.flywheelSpeed);
-        indexerMotor.set(shooterState.indexSpeed);
-        loaderMotor.set(shooterState.indexSpeed);
+//        indexerMotor.set(shooterState.indexSpeed);
+//        loaderMotor.set(shooterState.indexSpeed);
     }
 
 }

@@ -179,28 +179,28 @@ public class RobotContainer {
                             return -driverController.getLeftX();
                         },
                         () -> { // z+ is rotating counterclockwise
-                            return -driverController.getRightX();
+                            return driverController.getRightX();
                         }
                 )
         );
 
         // Aim while driving
-        driverController.leftTrigger().whileTrue(
-                new ParallelCommandGroup(
-                        new DriveWhilePointingAtCommand(
-                                drive,
-                                poseEstimationSubsystem,
-                                Constants.Locations.hubPose,
-                                () -> { // y+ is to the left, y- is to the right
-                                    return -driverController.getLeftX();
-                                },
-                                () -> { // z+ is rotating counterclockwise
-                                    return -driverController.getRightX();
-                                }
-                        ),
-                        new PrepareShotCommand(hoodSubsystem, poseEstimationSubsystem::getCurrentPose)
-                )
-        );
+//        driverController.leftTrigger().whileTrue(
+//                new ParallelCommandGroup(
+//                        new DriveWhilePointingAtCommand(
+//                                drive,
+//                                poseEstimationSubsystem,
+//                                Constants.Locations.hubPose,
+//                                () -> { // y+ is to the left, y- is to the right
+//                                    return -driverController.getLeftX();
+//                                },
+//                                () -> { // z+ is rotating counterclockwise
+//                                    return -driverController.getRightX();
+//                                }
+//                        ),
+//                        new PrepareShotCommand(hoodSubsystem, poseEstimationSubsystem::getCurrentPose)
+//                )
+//        );
         // spin up while shooting
 //        driverController.leftTrigger().whileTrue(new ShooterCommand(shooterSubsystem, ShooterState.SPIN_UP));
 //        driverController.y().whileTrue(new ShooterCommand(shooterSubsystem, ShooterState.SPIN_UP));
