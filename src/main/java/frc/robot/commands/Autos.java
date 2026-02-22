@@ -46,6 +46,16 @@ public final class Autos {
         return new DriveToPoseCommand(drive, newPos);
     }
 
+    public static Command driveBack(
+            Drive drive,
+            PoseEstimationSubsystem poseEstimationSubsystem
+    ){
+        var currentPose = drive.getPose();
+        var newPos = currentPose.transformBy(new Transform2d(-0.3, 0.0, Rotation2d.fromDegrees(0)));
+
+        return new DriveToPoseCommand(drive, newPos);
+    }
+
     public static Command manualAlign(Drive drive){
         return new DriveToPoseCommand(drive, leftManualAlign);
     }
@@ -216,6 +226,10 @@ public final class Autos {
     public final static Pose2d leftStartingPose = new Pose2d(3.71, 7.3, Rotation2d.fromDegrees(0));
     public final static Pose2d centerStartingPose = new Pose2d(3.71, 4.05, Rotation2d.fromDegrees(0));
     public final static Pose2d rightStartingPose = new Pose2d(3.71, 0.39, Rotation2d.fromDegrees(0));
+
+    final static Pose2d leftReverse = new Pose2d(2, 7.3, Rotation2d.fromDegrees(0));
+    final static Pose2d centerReverse = new Pose2d(2, 4.05, Rotation2d.fromDegrees(0));
+    final static Pose2d rightReverse = new Pose2d(2, 0.39, Rotation2d.fromDegrees(0));
 
     public final static Pose2d leftManualAlign = new Pose2d(2.25, 7.32, Rotation2d.fromDegrees(0));
 

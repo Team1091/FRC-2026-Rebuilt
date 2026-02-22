@@ -52,6 +52,7 @@ public class RobotContainer {
 
     // Replace with CommandPS4Controller or CommandJoystick if needed
     private final CommandXboxController driverController = new CommandXboxController(OperatorConstants.kDriverControllerPort);
+    private final CommandXboxController buttonBoard = new CommandXboxController(2);
 
     // This lets us select the command to run in autonomous
     private SendableChooser<Command> autoChooser;
@@ -129,6 +130,10 @@ public class RobotContainer {
         autoChooser.addOption("Spin Wildly", Autos.spinAuto(drive));
         autoChooser.addOption("Drive Forward", Autos.driveForward(drive));
         autoChooser.addOption("Manual Align", Autos.manualAlign(drive));
+        autoChooser.addOption("Drive Back", Autos.driveBack(
+                drive,
+                poseEstimationSubsystem
+        ));
         autoChooser.addOption("Win", Autos.swoopThroughMiddleThenShoot(
                 drive,
                 hoodSubsystem,
@@ -220,6 +225,11 @@ public class RobotContainer {
         driverController.x().whileTrue(new IntakeCommand(intakeSubsystem, Constants.Intake.intakeSpeed));
         driverController.a().whileTrue(new PivotCommand(pivotSubsystem, Constants.Pivot.pivotSpeedOut));
         driverController.b().whileTrue(new PivotCommand(pivotSubsystem, Constants.Pivot.pivotSpeedIn));
+
+
+
+//        buttonBoard.a().whileTrue(up);
+//        buttonBoard.b().whileTrue(down);
 
 
     }
