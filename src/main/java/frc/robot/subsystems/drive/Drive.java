@@ -118,7 +118,7 @@ public class Drive extends SubsystemBase {
     public void runVelocity(Translation2d linearVelocity, double omega) {
         Rotation2d rotation;
 
-        int invert = 1;
+        int invert = -1;
 
         if (isOnRed() && isFieldOriented) {
             invert = -1;
