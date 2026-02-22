@@ -11,15 +11,28 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.commands.*;
-import frc.robot.enums.ShooterState;
+import frc.robot.commands.Autos;
+import frc.robot.commands.DriveCommand;
+import frc.robot.commands.IndexerCommand;
+import frc.robot.commands.IntakeCommand;
+import frc.robot.commands.LoaderCommand;
+import frc.robot.commands.ManualClimbCommand;
+import frc.robot.commands.ManualShooterCommand;
+import frc.robot.commands.PivotCommand;
 import frc.robot.enums.StartPosish;
-import frc.robot.subsystems.*;
+import frc.robot.subsystems.ClimberSubsystem;
+import frc.robot.subsystems.HoodSubsystem;
+import frc.robot.subsystems.IndexerSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.LoaderSubsystem;
+import frc.robot.subsystems.ManualShooterSubsystem;
+import frc.robot.subsystems.PivotSubsystem;
+import frc.robot.subsystems.PoseEstimationSubsystem;
+import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.gyro.GyroIOPigeon2;
 import frc.robot.subsystems.drive.module.ModuleIOTalonFX;
@@ -47,7 +60,6 @@ public class RobotContainer {
     private final ManualShooterSubsystem manualShooterSubsystem;
     private final IndexerSubsystem indexerSubsystem;
     private final LoaderSubsystem loaderSubsystem;
-
 
 
     // Replace with CommandPS4Controller or CommandJoystick if needed
@@ -225,7 +237,6 @@ public class RobotContainer {
         driverController.x().whileTrue(new IntakeCommand(intakeSubsystem, Constants.Intake.intakeSpeed));
         driverController.a().whileTrue(new PivotCommand(pivotSubsystem, Constants.Pivot.pivotSpeedOut));
         driverController.b().whileTrue(new PivotCommand(pivotSubsystem, Constants.Pivot.pivotSpeedIn));
-
 
 
 //        buttonBoard.a().whileTrue(up);

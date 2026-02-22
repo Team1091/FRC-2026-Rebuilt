@@ -49,14 +49,14 @@ public final class Autos {
     public static Command driveBack(
             Drive drive,
             PoseEstimationSubsystem poseEstimationSubsystem
-    ){
+    ) {
         var currentPose = drive.getPose();
         var newPos = currentPose.transformBy(new Transform2d(-0.3, 0.0, Rotation2d.fromDegrees(0)));
 
         return new DriveToPoseCommand(drive, newPos);
     }
 
-    public static Command manualAlign(Drive drive){
+    public static Command manualAlign(Drive drive) {
         return new DriveToPoseCommand(drive, leftManualAlign);
     }
 
