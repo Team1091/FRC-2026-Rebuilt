@@ -157,9 +157,15 @@ public final class Constants {
         public static final boolean disabled = true;
         public static final int hoodMotorChannel = 13;
         public static final double hoodMotorPower = 0.25;
-        public static final double angleCloseEnough = 0.1;
+        public static final double angleCloseEnough = 0.1; // deg
         public static final int hoodLimitSwitchLow = 0;
         public static final int hoodLimitSwitchHigh = 1;
+
+        public static final double minAngleDeg = 0.0;
+        public static final double maxAngleDeg = 100.0;
+
+        // 50 here means it will go from min to max in ~2 seconds
+        public static final double speedDegPerSec = 50.0;
     }
 
 }
