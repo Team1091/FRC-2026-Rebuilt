@@ -22,13 +22,20 @@ import java.util.function.Supplier;
 public class PoseEstimationSubsystem extends SubsystemBase {
     private final SwerveDrivePoseEstimator poseEstimator;
     private final Supplier<Rotation2d> rotationSupplier;
+    private final Supplier<Double> rotationRateSupplier;
     private final Supplier<SwerveModulePosition[]> modulePositionSupplier;
 
     private final Field2d field = new Field2d();
 
-    public PoseEstimationSubsystem(Supplier<Rotation2d> rotationSupplier, Supplier<SwerveModulePosition[]> modulePositionSupplier) {
+
+    public PoseEstimationSubsystem(
+            Supplier<Rotation2d> rotationSupplier,
+            Supplier<Double> rotationRateSupplier,
+            Supplier<SwerveModulePosition[]> modulePositionSupplier
+    ) {
         this.rotationSupplier = rotationSupplier;
         this.modulePositionSupplier = modulePositionSupplier;
+        this.rotationRateSupplier = rotationRateSupplier;
 
         poseEstimator = new SwerveDrivePoseEstimator(
                 Constants.Swerve.kinematics,
@@ -36,25 +43,36 @@ public class PoseEstimationSubsystem extends SubsystemBase {
                 modulePositionSupplier.get(),
                 new Pose2d(),
                 Constants.PoseEstimation.stateStdDevs,
-                Constants.PoseEstimation.visionMeasurementStdDevs);
+                Constants.PoseEstimation.visionMeasurementStdDevs
+        );
     }
 
     @Override
     public void periodic() {
         poseEstimator.update(rotationSupplier.get(), modulePositionSupplier.get());
 
+        boolean rejectedMeasurement = false;
         try {
             LimelightHelpers.SetRobotOrientation("limelight", getCurrentPose().getRotation().getDegrees(), 0.0, 0.0, 0.0, 0.0, 0.0);
 
             LimelightHelpers.PoseEstimate limelightMeasurement = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight");
 
-            if (limelightMeasurement.tagCount > 0) {
+
+            if (Math.abs(rotationRateSupplier.get()) > 720) {
+                // we shouldn't update if we are spinning too fast
+                rejectedMeasurement = true;
+            }
+            if (limelightMeasurement.tagCount <= 0) {
+                // we shouldn't update if we can't see the tag
+                rejectedMeasurement = true;
+            }
+            if (!rejectedMeasurement) {
+                poseEstimator.setVisionMeasurementStdDevs(Constants.PoseEstimation.visionMeasurementStdDevsUpdate);
                 poseEstimator.addVisionMeasurement(
                         limelightMeasurement.pose,
                         limelightMeasurement.timestampSeconds);
             }
         } catch (Exception e) {
-            // TODO: handle exception
             DataLogManager.log(e.getMessage());
         }
 

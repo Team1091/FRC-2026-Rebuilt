@@ -137,8 +137,9 @@ public final class Constants {
 
 
     public static final class PoseEstimation {
-        public final static Vector<N3> stateStdDevs = VecBuilder.fill(0.1, 0.1, 0.1);
-        public final static Vector<N3> visionMeasurementStdDevs = VecBuilder.fill(.7, .7, 9999999);
+        public final static Vector<N3> stateStdDevs = VecBuilder.fill(0.05, 0.05, 5);
+        public final static Vector<N3> visionMeasurementStdDevs = VecBuilder.fill(.5, .5, Units.degreesToRadians(30));
+        public final static Vector<N3> visionMeasurementStdDevsUpdate = VecBuilder.fill(.7, .7, 9999999);
     }
 
     public static final class Locations {
