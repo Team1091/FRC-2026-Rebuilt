@@ -58,7 +58,7 @@ public class PoseEstimationSubsystem extends SubsystemBase {
             LimelightHelpers.PoseEstimate limelightMeasurement = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight");
 
 
-            if (Math.abs(rotationRateSupplier.get()) > 720) {
+            if (Math.abs(rotationRateSupplier.get()) > 360) {
                 // we shouldn't update if we are spinning too fast
                 rejectedMeasurement = true;
             }
