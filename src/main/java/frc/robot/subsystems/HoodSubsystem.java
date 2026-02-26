@@ -26,7 +26,7 @@ public class HoodSubsystem extends SubsystemBase {
             return;
         }
 
-        hoodMotor = new VictorSP(Constants.Hood.hoodMotorChannel);
+        hoodMotor = new VictorSP(Constants.Hood.hoodMotorChannel2);
         limitSwitchLow = new DigitalInput(Constants.Hood.hoodLimitSwitchLow);
         limitSwitchHigh = new DigitalInput(Constants.Hood.hoodLimitSwitchHigh);
     }

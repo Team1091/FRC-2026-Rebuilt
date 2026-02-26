@@ -21,6 +21,7 @@ import frc.robot.commands.IndexerCommand;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.LoaderCommand;
 import frc.robot.commands.ManualClimbCommand;
+import frc.robot.commands.ManualHoodCommand;
 import frc.robot.commands.ManualShooterCommand;
 import frc.robot.commands.PivotCommand;
 import frc.robot.enums.StartPosish;
@@ -29,6 +30,7 @@ import frc.robot.subsystems.HoodSubsystem;
 import frc.robot.subsystems.IndexerSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.LoaderSubsystem;
+import frc.robot.subsystems.ManualHoodSubsystem;
 import frc.robot.subsystems.ManualShooterSubsystem;
 import frc.robot.subsystems.PivotSubsystem;
 import frc.robot.subsystems.PoseEstimationSubsystem;
@@ -60,11 +62,12 @@ public class RobotContainer {
     private final ManualShooterSubsystem manualShooterSubsystem;
     private final IndexerSubsystem indexerSubsystem;
     private final LoaderSubsystem loaderSubsystem;
+    private final ManualHoodSubsystem manualHoodSubsystem;
 
 
     // Replace with CommandPS4Controller or CommandJoystick if needed
     private final CommandXboxController driverController = new CommandXboxController(OperatorConstants.kDriverControllerPort);
-    private final CommandXboxController buttonBoard = new CommandXboxController(2);
+    private final CommandXboxController buttonBoard = new CommandXboxController(1);
 
     // This lets us select the command to run in autonomous
     private SendableChooser<Command> autoChooser;
@@ -95,6 +98,7 @@ public class RobotContainer {
         manualShooterSubsystem = new ManualShooterSubsystem();
         indexerSubsystem = new IndexerSubsystem();
         loaderSubsystem = new LoaderSubsystem();
+        manualHoodSubsystem = new ManualHoodSubsystem();
 
         configureStartingPositions();
         configureAutonomous();
@@ -237,6 +241,10 @@ public class RobotContainer {
         driverController.x().whileTrue(new IntakeCommand(intakeSubsystem, Constants.Intake.intakeSpeed));
         driverController.a().whileTrue(new PivotCommand(pivotSubsystem, Constants.Pivot.pivotSpeedOut));
         driverController.b().whileTrue(new PivotCommand(pivotSubsystem, Constants.Pivot.pivotSpeedIn));
+
+        buttonBoard.a().whileTrue(new ManualHoodCommand(manualHoodSubsystem, Constants.Hood.leftSpeed, Constants.Hood.rightSpeed ));
+        buttonBoard.b().whileTrue(new ManualHoodCommand(manualHoodSubsystem, -Constants.Hood.leftSpeed, -Constants.Hood.rightSpeed));
+
 
 
 //        buttonBoard.a().whileTrue(up);
