@@ -90,7 +90,8 @@ public final class Constants {
         public static final boolean disabled = false;
         public static final int leftMotorChannel = 13;
         public static final int rightMotorChannel = 14;
-        public static final double shooterSpeed = 0.6;
+        public static final double shooterSpeedScore = 0.6;
+        public static final double shooterSpeedPass = 1.0;
         // TODO: we may want target RPMs here for the flywheel
     }
 
@@ -155,10 +156,8 @@ public final class Constants {
 
     public static final class Hood {
         public static final boolean disabled = false;
-        public static final double leftSpeed = 0.40;
-        public static final double rightSpeed = 1.0;
-        public static final int leftHoodMotorChannel = 17;
-        public static final int rightHoodMotorChannel = 18;
+        public static final double hoodSpeed = 0.60;
+        public static final int hoodMotorChannel = 18;
         public static final int hoodMotorChannel2 = 19;
         public static final double hoodMotorPower = 0.25;
         public static final double angleCloseEnough = 0.1; // deg

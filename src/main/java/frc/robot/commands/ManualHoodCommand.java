@@ -4,25 +4,23 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ManualHoodSubsystem;
 
 public class ManualHoodCommand extends Command {
-    private final double leftSpeed;
-    private final double rightSpeed;
+    private final double hoodSpeed;
     private final ManualHoodSubsystem manualHoodSubsystem;
 
-    public ManualHoodCommand(ManualHoodSubsystem manualHoodSubsystem, double leftSpeed, double rightSpeed){
+    public ManualHoodCommand(ManualHoodSubsystem manualHoodSubsystem, double hoodSpeed){
         this.manualHoodSubsystem = manualHoodSubsystem;
-        this.leftSpeed = leftSpeed;
-        this.rightSpeed = rightSpeed;
+        this.hoodSpeed = hoodSpeed;
 
         addRequirements(manualHoodSubsystem);
     }
     @Override
     public void execute() {
-        manualHoodSubsystem.setSpeed(leftSpeed, rightSpeed);
+        manualHoodSubsystem.setSpeed(hoodSpeed);
     }
 
     @Override
     public void end(boolean interrupted) {
-        manualHoodSubsystem.setSpeed(0.0, 0.0);
+        manualHoodSubsystem.setSpeed(0.0);
     }
 
     @Override

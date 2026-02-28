@@ -11,12 +11,14 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
 import frc.robot.commands.DriveCommand;
+import frc.robot.commands.DriveWhilePointingAtCommand;
 import frc.robot.commands.IndexerCommand;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.LoaderCommand;
@@ -24,6 +26,7 @@ import frc.robot.commands.ManualClimbCommand;
 import frc.robot.commands.ManualHoodCommand;
 import frc.robot.commands.ManualShooterCommand;
 import frc.robot.commands.PivotCommand;
+import frc.robot.commands.PrepareShotCommand;
 import frc.robot.enums.StartPosish;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.HoodSubsystem;
@@ -206,27 +209,27 @@ public class RobotContainer {
         );
 
         // Aim while driving
-//        driverController.leftTrigger().whileTrue(
-//                new ParallelCommandGroup(
-//                        new DriveWhilePointingAtCommand(
-//                                drive,
-//                                poseEstimationSubsystem,
-//                                Constants.Locations.hubPose,
-//                                () -> { // y+ is to the left, y- is to the right
-//                                    return -driverController.getLeftX();
-//                                },
-//                                () -> { // z+ is rotating counterclockwise
-//                                    return -driverController.getRightX();
-//                                }
-//                        ),
-//                        new PrepareShotCommand(hoodSubsystem, poseEstimationSubsystem::getCurrentPose)
-//                )
-//        );
+        driverController.leftTrigger().whileTrue(
+                new ParallelCommandGroup(
+                        new DriveWhilePointingAtCommand(
+                                drive,
+                                poseEstimationSubsystem,
+                                Constants.Locations.hubPose,
+                                () -> { // y+ is to the left, y- is to the right
+                                    return -driverController.getLeftX();
+                                },
+                                () -> { // z+ is rotating counterclockwise
+                                    return -driverController.getRightX();
+                                }
+                        ),
+                        new PrepareShotCommand(hoodSubsystem, poseEstimationSubsystem::getCurrentPose)
+                )
+        );
         // spin up while shooting
 //        driverController.leftTrigger().whileTrue(new ShooterCommand(shooterSubsystem, ShooterState.SPIN_UP));
 //        driverController.y().whileTrue(new ShooterCommand(shooterSubsystem, ShooterState.SPIN_UP));
 //        driverController.rightTrigger().whileTrue(new ShooterCommand(shooterSubsystem, ShooterState.FIRE));
-        driverController.leftTrigger().whileTrue(new ManualShooterCommand(manualShooterSubsystem, Constants.Shooter.shooterSpeed));
+        driverController.rightTrigger().whileTrue(new ManualShooterCommand(manualShooterSubsystem, Constants.Shooter.shooterSpeedScore));
         driverController.rightTrigger().whileTrue(new IndexerCommand(indexerSubsystem, Constants.Indexer.indexerSpeed));
         driverController.rightTrigger().whileTrue(new LoaderCommand(loaderSubsystem, Constants.Loader.loaderSpeed));
 
@@ -239,11 +242,11 @@ public class RobotContainer {
         // Intake
 //        driverController.a().whileTrue(new RunIntakeCommand(intakeSubsystem, IntakeState.HARVEST));
         driverController.x().whileTrue(new IntakeCommand(intakeSubsystem, Constants.Intake.intakeSpeed));
-        driverController.a().whileTrue(new PivotCommand(pivotSubsystem, Constants.Pivot.pivotSpeedOut));
-        driverController.b().whileTrue(new PivotCommand(pivotSubsystem, Constants.Pivot.pivotSpeedIn));
+        driverController.b().whileTrue(new PivotCommand(pivotSubsystem, Constants.Pivot.pivotSpeedOut));
+        driverController.a().whileTrue(new PivotCommand(pivotSubsystem, Constants.Pivot.pivotSpeedIn));
 
-        buttonBoard.a().whileTrue(new ManualHoodCommand(manualHoodSubsystem, Constants.Hood.leftSpeed, Constants.Hood.rightSpeed ));
-        buttonBoard.b().whileTrue(new ManualHoodCommand(manualHoodSubsystem, -Constants.Hood.leftSpeed, -Constants.Hood.rightSpeed));
+        buttonBoard.a().whileTrue(new ManualHoodCommand(manualHoodSubsystem, Constants.Hood.hoodSpeed));
+        buttonBoard.b().whileTrue(new ManualHoodCommand(manualHoodSubsystem, -Constants.Hood.hoodSpeed));
 
 
 

@@ -9,37 +9,29 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class ManualHoodSubsystem extends SubsystemBase {
-    private final VictorSPX leftHoodMotor;
-    private final VictorSPX rightHoodMotor;
+    private final VictorSPX hoodMotor;
 
-    private double leftSpeed;
-    private double rightSpeed;
-
+    private double hoodSpeed;
 
     public ManualHoodSubsystem() {
         if(Constants.Hood.disabled){
-            leftHoodMotor = null;
-            rightHoodMotor = null;
+            hoodMotor = null;
             return;
         }
-        leftHoodMotor = new VictorSPX(Constants.Hood.leftHoodMotorChannel);
-        rightHoodMotor = new VictorSPX(Constants.Hood.rightHoodMotorChannel);
+        hoodMotor = new VictorSPX(Constants.Hood.hoodMotorChannel);
 
-        leftSpeed = 0.0;
-        rightSpeed = 0.0;
+        hoodSpeed = 0.0;
 
     }
-    public void setSpeed(double leftSpeed, double rightSpeed) {
-        this.leftSpeed = leftSpeed;
-        this.rightSpeed = rightSpeed;
+    public void setSpeed(double hoodSpeed) {
+        this.hoodSpeed = hoodSpeed;
 
     }
 
     @Override
     public void periodic() {
         if (Constants.Hood.disabled) return;
-        leftHoodMotor.set(ControlMode.PercentOutput, leftSpeed);
-        rightHoodMotor.set(ControlMode.PercentOutput, rightSpeed);
+        hoodMotor.set(ControlMode.PercentOutput, hoodSpeed);
 
     }
 }
