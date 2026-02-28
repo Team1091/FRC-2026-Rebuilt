@@ -209,27 +209,27 @@ public class RobotContainer {
         );
 
         // Aim while driving
-        driverController.leftTrigger().whileTrue(
-                new ParallelCommandGroup(
-                        new DriveWhilePointingAtCommand(
-                                drive,
-                                poseEstimationSubsystem,
-                                Constants.Locations.hubPose,
-                                () -> { // y+ is to the left, y- is to the right
-                                    return -driverController.getLeftX();
-                                },
-                                () -> { // z+ is rotating counterclockwise
-                                    return -driverController.getRightX();
-                                }
-                        ),
-                        new PrepareShotCommand(hoodSubsystem, poseEstimationSubsystem::getCurrentPose)
-                )
-        );
+//        driverController.leftTrigger().whileTrue(
+//                new ParallelCommandGroup(
+//                        new DriveWhilePointingAtCommand(
+//                                drive,
+//                                poseEstimationSubsystem,
+//                                Constants.Locations.hubPose,
+//                                () -> { // y+ is to the left, y- is to the right
+//                                    return -driverController.getLeftX();
+//                                },
+//                                () -> { // z+ is rotating counterclockwise
+//                                    return -driverController.getRightX();
+//                                }
+//                        ),
+//                        new PrepareShotCommand(hoodSubsystem, poseEstimationSubsystem::getCurrentPose)
+//                )
+//        );
         // spin up while shooting
 //        driverController.leftTrigger().whileTrue(new ShooterCommand(shooterSubsystem, ShooterState.SPIN_UP));
 //        driverController.y().whileTrue(new ShooterCommand(shooterSubsystem, ShooterState.SPIN_UP));
 //        driverController.rightTrigger().whileTrue(new ShooterCommand(shooterSubsystem, ShooterState.FIRE));
-        driverController.rightTrigger().whileTrue(new ManualShooterCommand(manualShooterSubsystem, Constants.Shooter.shooterSpeedScore));
+        driverController.leftTrigger().whileTrue(new ManualShooterCommand(manualShooterSubsystem, Constants.Shooter.shooterSpeedScore));
         driverController.rightTrigger().whileTrue(new IndexerCommand(indexerSubsystem, Constants.Indexer.indexerSpeed));
         driverController.rightTrigger().whileTrue(new LoaderCommand(loaderSubsystem, Constants.Loader.loaderSpeed));
 
