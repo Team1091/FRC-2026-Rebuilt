@@ -6,6 +6,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants;
+import frc.robot.RobotContainer;
 import frc.robot.subsystems.drive.Drive;
 
 import java.util.function.DoubleSupplier;
@@ -23,9 +24,10 @@ public class DriveCommand {
             DoubleSupplier ySupplier,
             DoubleSupplier omegaSupplier
     ) {
+        var redReverse = RobotContainer.isOnRed() && drive.getIsFieldOriented() ? -1 : 1;
         return Commands.run(
                 () -> {
-                    double x = xSupplier.getAsDouble();
+                    double x = xSupplier.getAsDouble() * redReverse;
                     double y = ySupplier.getAsDouble();
                     double omega = MathUtil.applyDeadband(omegaSupplier.getAsDouble(), Constants.Swerve.rotationalDeadband);
 

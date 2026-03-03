@@ -117,21 +117,14 @@ public class Drive extends SubsystemBase {
      */
     public void runVelocity(Translation2d linearVelocity, double omega) {
         Rotation2d rotation;
-
-        int invert = -1;
-
-        if (isOnRed() && isFieldOriented) {
-            invert = -1;
-        }
-
         if (isFieldOriented) {
             rotation = getPose().getRotation();
         } else {
             rotation = new Rotation2d(0);
         }
         ChassisSpeeds chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
-                linearVelocity.getX() * maxLinearSpeed * invert,
-                linearVelocity.getY() * maxLinearSpeed * invert,
+                linearVelocity.getX() * maxLinearSpeed,
+                linearVelocity.getY() * maxLinearSpeed,
                 omega * maxAngularSpeed,
                 rotation
         );
@@ -183,6 +176,10 @@ public class Drive extends SubsystemBase {
 
     public void setIsFieldOriented(boolean bool) {
         isFieldOriented = bool;
+    }
+
+    public boolean getIsFieldOriented() {
+        return isFieldOriented;
     }
 
     public void toggleIsFieldOriented() {
@@ -243,11 +240,6 @@ public class Drive extends SubsystemBase {
 
     public void resetGyro() {
         gyroIO.resetGyro();
-    }
-
-    public boolean isOnRed() {
-        var alliance = DriverStation.getAlliance();
-        return alliance.filter(value -> value == DriverStation.Alliance.Red).isPresent();
     }
 
     public void toggleDefenseMode() {

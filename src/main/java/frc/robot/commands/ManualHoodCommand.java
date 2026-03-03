@@ -7,12 +7,13 @@ public class ManualHoodCommand extends Command {
     private final double hoodSpeed;
     private final ManualHoodSubsystem manualHoodSubsystem;
 
-    public ManualHoodCommand(ManualHoodSubsystem manualHoodSubsystem, double hoodSpeed){
+    public ManualHoodCommand(ManualHoodSubsystem manualHoodSubsystem, double hoodSpeed) {
         this.manualHoodSubsystem = manualHoodSubsystem;
         this.hoodSpeed = hoodSpeed;
 
         addRequirements(manualHoodSubsystem);
     }
+
     @Override
     public void execute() {
         manualHoodSubsystem.setSpeed(hoodSpeed);
