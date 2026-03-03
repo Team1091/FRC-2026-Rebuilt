@@ -11,6 +11,7 @@ import edu.wpi.first.math.util.Units;
 import frc.robot.subsystems.drive.config.FeedForwardParams;
 import frc.robot.subsystems.drive.config.ModulePidConfig;
 import frc.robot.subsystems.drive.config.PidConfig;
+import frc.robot.utils.FlipPose2d;
 
 public final class Constants {
 
@@ -146,12 +147,17 @@ public final class Constants {
     public static final class Locations {
 
         // This is the target position
-        public static Pose2d hubPose = new Pose2d(
+        public static FlipPose2d hubPose = new FlipPose2d(new Pose2d(
                 new Translation2d(
                         Units.inchesToMeters(158.6),
                         Units.inchesToMeters(317.7 / 2.0)
                 ),
                 Rotation2d.k180deg
+        ));
+
+        public static Translation2d center = new Translation2d(
+                Units.inchesToMeters(324.5),
+                Units.inchesToMeters(317.7 / 2.0)
         );
     }
 

@@ -5,6 +5,8 @@
 package frc.robot;
 
 import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -112,7 +114,7 @@ public class RobotContainer {
     public void robotInit() {
 
         // Initialize this to the center, we reset if it changes
-        poseEstimationSubsystem.setCurrentPose(StartPosish.CENTER.startingPose);
+        poseEstimationSubsystem.setCurrentPose(StartPosish.CENTER.startingPose.get());
         drive.resetGyro();
         drive.setIsFieldOriented(true);
 
@@ -136,9 +138,9 @@ public class RobotContainer {
         startPosChooser.addOption("Right", StartPosish.RIGHT);
         SmartDashboard.putData("Start Position", startPosChooser);
 
-        poseEstimationSubsystem.setCurrentPose(StartPosish.CENTER.startingPose);
+        poseEstimationSubsystem.setCurrentPose(StartPosish.CENTER.startingPose.get());
         startPosChooser.onChange((startPosish) -> {
-            poseEstimationSubsystem.setCurrentPose(startPosish.startingPose);
+            poseEstimationSubsystem.setCurrentPose(startPosish.startingPose.get());
         });
     }
 

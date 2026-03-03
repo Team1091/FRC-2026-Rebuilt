@@ -28,7 +28,7 @@ public class DriveCommand {
         return Commands.run(
                 () -> {
                     double x = xSupplier.getAsDouble() * redReverse;
-                    double y = ySupplier.getAsDouble();
+                    double y = ySupplier.getAsDouble() * -1;
                     double omega = MathUtil.applyDeadband(omegaSupplier.getAsDouble(), Constants.Swerve.rotationalDeadband);
 
                     // Apply deadband

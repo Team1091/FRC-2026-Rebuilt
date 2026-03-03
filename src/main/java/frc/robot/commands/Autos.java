@@ -20,6 +20,7 @@ import frc.robot.subsystems.PivotSubsystem;
 import frc.robot.subsystems.PoseEstimationSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.drive.Drive;
+import frc.robot.utils.FlipPose2d;
 
 import java.time.Duration;
 
@@ -212,25 +213,25 @@ public final class Autos {
         throw new UnsupportedOperationException("This is a utility class!");
     }
 
-    final static Pose2d rightLine = new Pose2d(3.67, 0.68, Rotation2d.fromDegrees(0));
-    final static Pose2d rightBalls = new Pose2d(7.71, 0.68, Rotation2d.fromDegrees(0));
-    final static Pose2d rightOpponent = new Pose2d(14.71, 0.64, Rotation2d.fromDegrees(0));
-    final static Pose2d leftLine = new Pose2d(3.67, 7.32, Rotation2d.fromDegrees(0));
-    final static Pose2d leftBalls = new Pose2d(7.71, 7.32, Rotation2d.fromDegrees(0));
-    final static Pose2d leftOpponent = new Pose2d(14.71, 7.45, Rotation2d.fromDegrees(0));
+    final static FlipPose2d rightLine = new FlipPose2d(3.67, 0.68, Rotation2d.fromDegrees(0));
+    final static FlipPose2d rightBalls = new FlipPose2d(7.71, 0.68, Rotation2d.fromDegrees(0));
+    final static FlipPose2d rightOpponent = new FlipPose2d(14.71, 0.64, Rotation2d.fromDegrees(0));
+    final static FlipPose2d leftLine = new FlipPose2d(3.67, 7.32, Rotation2d.fromDegrees(0));
+    final static FlipPose2d leftBalls = new FlipPose2d(7.71, 7.32, Rotation2d.fromDegrees(0));
+    final static FlipPose2d leftOpponent = new FlipPose2d(14.71, 7.45, Rotation2d.fromDegrees(0));
 
-    final static Pose2d shootingBalls = new Pose2d(2.24, 3.73, Rotation2d.fromDegrees(0));
-    final static Pose2d climb = new Pose2d(1.32, 3.75, Rotation2d.fromDegrees(180));
-    final static Pose2d humanPlayer = new Pose2d(0.46, 0.65, Rotation2d.fromDegrees(0));
+    final static FlipPose2d shootingBalls = new FlipPose2d(2.24, 3.73, Rotation2d.fromDegrees(0));
+    final static FlipPose2d climb = new FlipPose2d(1.32, 3.75, Rotation2d.fromDegrees(180));
+    final static FlipPose2d humanPlayer = new FlipPose2d(0.46, 0.65, Rotation2d.fromDegrees(0));
 
-    public final static Pose2d leftStartingPose = new Pose2d(3.71, 7.3, Rotation2d.fromDegrees(0));
-    public final static Pose2d centerStartingPose = new Pose2d(3.71, 4.05, Rotation2d.fromDegrees(0));
-    public final static Pose2d rightStartingPose = new Pose2d(3.71, 0.39, Rotation2d.fromDegrees(0));
+    public final static FlipPose2d leftStartingPose = new FlipPose2d(3.71, 7.3, Rotation2d.fromDegrees(0));
+    public final static FlipPose2d centerStartingPose = new FlipPose2d(3.71, 4.05, Rotation2d.fromDegrees(0));
+    public final static FlipPose2d rightStartingPose = new FlipPose2d(3.71, 0.39, Rotation2d.fromDegrees(0));
 
-    final static Pose2d leftReverse = new Pose2d(2, 7.3, Rotation2d.fromDegrees(0));
-    final static Pose2d centerReverse = new Pose2d(2, 4.05, Rotation2d.fromDegrees(0));
-    final static Pose2d rightReverse = new Pose2d(2, 0.39, Rotation2d.fromDegrees(0));
+    final static FlipPose2d leftReverse = new FlipPose2d(2, 7.3, Rotation2d.fromDegrees(0));
+    final static FlipPose2d centerReverse = new FlipPose2d(2, 4.05, Rotation2d.fromDegrees(0));
+    final static FlipPose2d rightReverse = new FlipPose2d(2, 0.39, Rotation2d.fromDegrees(0));
 
-    public final static Pose2d leftManualAlign = new Pose2d(2.25, 7.32, Rotation2d.fromDegrees(0));
+    public final static FlipPose2d leftManualAlign = new FlipPose2d(2.25, 7.32, Rotation2d.fromDegrees(0));
 
 }
