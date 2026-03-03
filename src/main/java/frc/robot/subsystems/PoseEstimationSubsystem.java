@@ -5,7 +5,6 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.wpilibj.DataLogManager;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -13,6 +12,8 @@ import frc.robot.Constants;
 import frc.robot.LimelightHelpers;
 
 import java.util.function.Supplier;
+
+import static frc.robot.RobotContainer.isOnRed;
 
 /**
  * The purpose of this subsystem is to estimate the robot's pose based on vision measurements and estimated drive speeds.
@@ -91,10 +92,6 @@ public class PoseEstimationSubsystem extends SubsystemBase {
         poseEstimator.resetPosition(rotationSupplier.get(), modulePositionSupplier.get(), newPose);
     }
 
-    public boolean isOnRed() {
-        var alliance = DriverStation.getAlliance();
-        return alliance.filter(value -> value == DriverStation.Alliance.Red).isPresent();
-    }
 
     public void resetDriveRotation() {
         if (isOnRed()) {

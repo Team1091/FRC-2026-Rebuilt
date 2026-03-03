@@ -34,7 +34,7 @@ public class PrepareShotCommand extends Command {
     @Override
     public void execute() {
         var ourPose = pose2dSupplier.get();
-        var distanceToTargetMeters = ourPose.getTranslation().getDistance(Constants.Locations.hubPose.getTranslation());
+        var distanceToTargetMeters = ourPose.getTranslation().getDistance(Constants.Locations.hubPose.get().getTranslation());
 
         double hoodAngle = shooterMap.get(distanceToTargetMeters);
         hoodSubsystem.setTargetAngle(hoodAngle);

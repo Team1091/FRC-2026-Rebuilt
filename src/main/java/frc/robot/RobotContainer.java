@@ -5,20 +5,21 @@
 package frc.robot;
 
 import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
 import frc.robot.commands.DriveCommand;
-import frc.robot.commands.DriveWhilePointingAtCommand;
 import frc.robot.commands.IndexerCommand;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.LoaderCommand;
@@ -26,7 +27,6 @@ import frc.robot.commands.ManualClimbCommand;
 import frc.robot.commands.ManualHoodCommand;
 import frc.robot.commands.ManualShooterCommand;
 import frc.robot.commands.PivotCommand;
-import frc.robot.commands.PrepareShotCommand;
 import frc.robot.enums.StartPosish;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.HoodSubsystem;
@@ -114,7 +114,7 @@ public class RobotContainer {
     public void robotInit() {
 
         // Initialize this to the center, we reset if it changes
-        poseEstimationSubsystem.setCurrentPose(StartPosish.CENTER.startingPose);
+        poseEstimationSubsystem.setCurrentPose(StartPosish.CENTER.startingPose.get());
         drive.resetGyro();
         drive.setIsFieldOriented(true);
 
@@ -138,9 +138,9 @@ public class RobotContainer {
         startPosChooser.addOption("Right", StartPosish.RIGHT);
         SmartDashboard.putData("Start Position", startPosChooser);
 
-        poseEstimationSubsystem.setCurrentPose(StartPosish.CENTER.startingPose);
+        poseEstimationSubsystem.setCurrentPose(StartPosish.CENTER.startingPose.get());
         startPosChooser.onChange((startPosish) -> {
-            poseEstimationSubsystem.setCurrentPose(startPosish.startingPose);
+            poseEstimationSubsystem.setCurrentPose(startPosish.startingPose.get());
         });
     }
 
@@ -250,7 +250,6 @@ public class RobotContainer {
         buttonBoard.b().whileTrue(new ManualHoodCommand(manualHoodSubsystem, -Constants.Hood.hoodSpeed));
 
 
-
 //        buttonBoard.a().whileTrue(up);
 //        buttonBoard.b().whileTrue(down);
 
@@ -265,5 +264,10 @@ public class RobotContainer {
     public Command getAutonomousCommand() {
         // An example command will be run in autonomous
         return autoChooser.getSelected();
+    }
+
+    public static boolean isOnRed() {
+        var alliance = DriverStation.getAlliance();
+        return alliance.filter(value -> value == DriverStation.Alliance.Red).isPresent();
     }
 }

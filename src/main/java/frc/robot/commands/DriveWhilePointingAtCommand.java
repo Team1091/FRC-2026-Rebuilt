@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.PoseEstimationSubsystem;
 import frc.robot.subsystems.drive.Drive;
+import frc.robot.utils.FlipPose2d;
 
 import java.util.function.DoubleSupplier;
 
@@ -41,6 +42,16 @@ public class DriveWhilePointingAtCommand extends Command {
 
         thetaController.enableContinuousInput(-Math.PI, Math.PI);
         addRequirements(drive);
+    }
+
+    public DriveWhilePointingAtCommand(
+            Drive drive,
+            PoseEstimationSubsystem poseEstimationSubsystem,
+            FlipPose2d targetPose,
+            DoubleSupplier xSupplier,
+            DoubleSupplier ySupplier1
+    ) {
+        this(drive, poseEstimationSubsystem, targetPose.get(), xSupplier, ySupplier1);
     }
 
     @Override

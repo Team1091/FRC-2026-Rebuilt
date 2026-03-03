@@ -1,6 +1,7 @@
 package frc.robot.enums;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import frc.robot.utils.FlipPose2d;
 
 import static frc.robot.commands.Autos.centerStartingPose;
 import static frc.robot.commands.Autos.leftStartingPose;
@@ -11,9 +12,9 @@ public enum StartPosish {
     RIGHT(rightStartingPose),
     CENTER(centerStartingPose);
 
-    StartPosish(Pose2d startingPose) {
+    StartPosish(FlipPose2d startingPose) {
         this.startingPose = startingPose;
     }
 
-    public Pose2d startingPose;
+    public final FlipPose2d startingPose;
 }
