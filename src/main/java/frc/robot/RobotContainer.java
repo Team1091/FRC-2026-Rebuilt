@@ -201,7 +201,7 @@ public class RobotContainer {
                         driverController::getLeftY,
 //                        () -> 0.5,
                         () -> { // y+ is to the left, y- is to the right
-                            return -driverController.getLeftX();
+                            return driverController.getLeftX();
                         },
                         () -> { // z+ is rotating counterclockwise
                             return driverController.getRightX();
