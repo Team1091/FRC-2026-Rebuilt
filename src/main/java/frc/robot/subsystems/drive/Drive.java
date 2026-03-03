@@ -229,6 +229,10 @@ public class Drive extends SubsystemBase {
         return gyroInputs.yawPosition;
     }
 
+    public double getGyroRotationRateRadPerSec() {
+        return gyroInputs.yawVelocityRadPerSec;
+    }
+
     public Pose2d getPose() {
         return poseEstimationSubsystem.getCurrentPose();
     }
