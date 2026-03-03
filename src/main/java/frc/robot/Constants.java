@@ -90,14 +90,15 @@ public final class Constants {
         public static final boolean disabled = false;
         public static final int leftMotorChannel = 13;
         public static final int rightMotorChannel = 14;
-        public static final double shooterSpeed = 0.6;
+        public static final double shooterSpeedScore = 1.0;
+        public static final double shooterSpeedPass = 1.0;
         // TODO: we may want target RPMs here for the flywheel
     }
 
     public static final class Indexer {
         public static final boolean disabled = false;
         public static final int indexerMotorChannel = 15;
-        public static final double indexerSpeed = 0.7;
+        public static final double indexerSpeed = 1.0;
     }
 
     public static final class Loader {
@@ -154,10 +155,20 @@ public final class Constants {
     }
 
     public static final class Hood {
-        public static final boolean disabled = true;
-        public static final int hoodMotorChannel = 13;
+        public static final boolean disabled = false;
+        public static final double hoodSpeed = 0.60;
+        public static final int hoodMotorChannel = 18;
+        public static final int hoodMotorChannel2 = 19;
         public static final double hoodMotorPower = 0.25;
-        public static final double angleCloseEnough = 0.1;
+        public static final double angleCloseEnough = 0.1; // deg
+        public static final int hoodLimitSwitchLow = 0;
+        public static final int hoodLimitSwitchHigh = 1;
+
+        public static final double minAngleDeg = 0.0;
+        public static final double maxAngleDeg = 100.0;
+
+        // 50 here means it will go from min to max in ~2 seconds
+        public static final double speedDegPerSec = 50.0;
     }
 
 }
