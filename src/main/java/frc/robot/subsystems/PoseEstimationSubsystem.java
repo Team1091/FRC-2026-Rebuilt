@@ -1,9 +1,13 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
+import edu.wpi.first.math.numbers.N1;
+import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -56,22 +60,29 @@ public class PoseEstimationSubsystem extends SubsystemBase {
         try {
             LimelightHelpers.SetRobotOrientation("limelight", getCurrentPose().getRotation().getDegrees(), rotationRateSupplier.get(), 0.0, 0.0, 0.0, 0.0);
 
-            LimelightHelpers.PoseEstimate limelightMeasurement = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight");
+            final LimelightHelpers.PoseEstimate poseEstimate_MegaTag1 = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight");
+            final LimelightHelpers.PoseEstimate poseEstimate_MegaTag2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight");
 
-
-            if (Math.abs(rotationRateSupplier.get()) > 360) {
-                // we shouldn't update if we are spinning too fast
+            if (poseEstimate_MegaTag1 == null
+                    || poseEstimate_MegaTag2 == null
+                    || poseEstimate_MegaTag1.tagCount <= 0
+                    || poseEstimate_MegaTag2.tagCount <= 0
+                    || Math.abs(rotationRateSupplier.get()) > 360
+            ) {
                 rejectedMeasurement = true;
             }
-            if (limelightMeasurement.tagCount <= 0) {
-                // we shouldn't update if we can't see the tag
-                rejectedMeasurement = true;
-            }
+
             if (!rejectedMeasurement) {
-                poseEstimator.setVisionMeasurementStdDevs(Constants.PoseEstimation.visionMeasurementStdDevsUpdate);
+                poseEstimate_MegaTag2.pose = new Pose2d(
+                        poseEstimate_MegaTag2.pose.getTranslation(),
+                        poseEstimate_MegaTag1.pose.getRotation()
+                );
+                final Matrix<N3, N1> standardDeviations = VecBuilder.fill(0.1, 0.1, 10.0);
+
+                poseEstimator.setVisionMeasurementStdDevs(standardDeviations);
                 poseEstimator.addVisionMeasurement(
-                        limelightMeasurement.pose,
-                        limelightMeasurement.timestampSeconds);
+                        poseEstimate_MegaTag2.pose,
+                        poseEstimate_MegaTag2.timestampSeconds);
             }
         } catch (Exception e) {
             DataLogManager.log(e.getMessage());

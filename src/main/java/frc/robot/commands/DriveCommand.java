@@ -27,8 +27,8 @@ public class DriveCommand {
         var redReverse = RobotContainer.isOnRed() && drive.getIsFieldOriented() ? -1 : 1;
         return Commands.run(
                 () -> {
-                    double x = xSupplier.getAsDouble() * redReverse;
-                    double y = ySupplier.getAsDouble() * -1;
+                    double x = xSupplier.getAsDouble() * redReverse * -1;
+                    double y = ySupplier.getAsDouble() * redReverse;
                     double omega = MathUtil.applyDeadband(omegaSupplier.getAsDouble(), Constants.Swerve.rotationalDeadband);
 
                     // Apply deadband

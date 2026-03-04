@@ -2,7 +2,6 @@ package frc.robot;
 
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.Vector;
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -40,10 +39,14 @@ public final class Constants {
         public static final double trackWidthX = Units.inchesToMeters(20.375);
         public static final double trackWidthY = Units.inchesToMeters(22.25);
         public static final double driveBaseRadius = Math.hypot(trackWidthX / 2.0, trackWidthY / 2.0);
+
+        // Manual Drive
         public static final double maxLinearSpeed = Units.feetToMeters(14.5);
-        public static final double maxLinearAcceleration = Units.feetToMeters(10);
         public static final double maxAngularSpeed = maxLinearSpeed / driveBaseRadius;
-        public static final double maxAngularAcceleration = maxLinearAcceleration / driveBaseRadius;
+        // Auto
+        public static final double autoMaxLinearSpeed = Units.feetToMeters(3.0);
+        public static final double autoMaxAngularSpeed = autoMaxLinearSpeed / driveBaseRadius;
+
         public static final double linearDeadband = 0.1;
         public static final double rotationalDeadband = 0.1;
 
@@ -91,8 +94,8 @@ public final class Constants {
         public static final boolean disabled = false;
         public static final int leftMotorChannel = 13;
         public static final int rightMotorChannel = 14;
-        public static final double shooterSpeedScore = 1.0;
-        public static final double shooterSpeedPass = 1.0;
+        public static final double shooterSpeedScore = 0.5;
+        public static final double shooterSpeedAuto = 1.0;
         // TODO: we may want target RPMs here for the flywheel
     }
 
@@ -147,15 +150,14 @@ public final class Constants {
     public static final class Locations {
 
         // This is the target position
-        public static FlipPose2d hubPose = new FlipPose2d(new Pose2d(
-                new Translation2d(
-                        Units.inchesToMeters(158.6),
-                        Units.inchesToMeters(317.7 / 2.0)
-                ),
+        public static final FlipPose2d hubPose = new FlipPose2d(
+                Units.inchesToMeters(158.6),
+                Units.inchesToMeters(317.7 / 2.0)
+                ,
                 Rotation2d.k180deg
-        ));
+        );
 
-        public static Translation2d center = new Translation2d(
+        public static final Translation2d center = new Translation2d(
                 Units.inchesToMeters(324.5),
                 Units.inchesToMeters(317.7 / 2.0)
         );

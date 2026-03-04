@@ -25,7 +25,7 @@ public class DriveToPoseCommand extends Command {
     public DriveToPoseCommand(
             Drive drive,
             FlipPose2d targetPose
-    ){
+    ) {
         this(drive, targetPose.get());
     }
 
@@ -55,12 +55,13 @@ public class DriveToPoseCommand extends Command {
         double thetaVelocity = thetaController.calculate(currentPose.getRotation().getRadians(), targetPose.getRotation().getRadians());
 
         // Clamp to max swerve speeds
-        xVelocity = MathUtil.clamp(xVelocity, -Constants.Swerve.maxLinearSpeed, Constants.Swerve.maxLinearSpeed);
-        yVelocity = MathUtil.clamp(yVelocity, -Constants.Swerve.maxLinearSpeed, Constants.Swerve.maxLinearSpeed);
-        thetaVelocity = MathUtil.clamp(thetaVelocity, -Constants.Swerve.maxAngularSpeed, Constants.Swerve.maxAngularSpeed);
+        xVelocity = MathUtil.clamp(xVelocity, -Constants.Swerve.autoMaxLinearSpeed, Constants.Swerve.autoMaxLinearSpeed);
+        yVelocity = MathUtil.clamp(yVelocity, -Constants.Swerve.autoMaxLinearSpeed, Constants.Swerve.autoMaxLinearSpeed);
+        thetaVelocity = MathUtil.clamp(thetaVelocity, -Constants.Swerve.autoMaxAngularSpeed, Constants.Swerve.autoMaxAngularSpeed);
 
         // Send Velocity to the drive
         drive.runVelocity(new Translation2d(xVelocity, yVelocity), thetaVelocity);
+//        drive.runVelocity(ChassisSpeeds.fromFieldRelativeSpeeds(xVelocity, yVelocity, thetaVelocity, currentPose.getRotation()));
     }
 
     @Override
