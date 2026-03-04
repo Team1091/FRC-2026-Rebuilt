@@ -3,7 +3,7 @@ package frc.robot.commands;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.drive.Drive;
@@ -25,7 +25,7 @@ public class DriveToPoseCommand extends Command {
     public DriveToPoseCommand(
             Drive drive,
             FlipPose2d targetPose
-    ){
+    ) {
         this(drive, targetPose.get());
     }
 
@@ -60,7 +60,7 @@ public class DriveToPoseCommand extends Command {
         thetaVelocity = MathUtil.clamp(thetaVelocity, -Constants.Swerve.maxAngularSpeed, Constants.Swerve.maxAngularSpeed);
 
         // Send Velocity to the drive
-        drive.runVelocity(new Translation2d(xVelocity, yVelocity), thetaVelocity);
+        drive.runVelocity(ChassisSpeeds.fromFieldRelativeSpeeds(xVelocity, yVelocity, thetaVelocity, currentPose.getRotation()));
     }
 
     @Override
