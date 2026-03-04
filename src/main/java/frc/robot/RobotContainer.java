@@ -146,9 +146,15 @@ public class RobotContainer {
     private void configureAutonomous() {
         autoChooser = new SendableChooser<>();
         autoChooser.setDefaultOption("Do Nothing", new WaitCommand(1.0));
-        autoChooser.addOption("Spin Wildly", Autos.spinAuto(drive));
         autoChooser.addOption("Drive Forward", Autos.driveForward(drive));
         autoChooser.addOption("Manual Align", Autos.manualAlign(drive));
+        autoChooser.addOption("Bare Minimum", Autos.driveBackAndScore(
+                drive,
+                manualShooterSubsystem,
+                poseEstimationSubsystem,
+                indexerSubsystem,
+                loaderSubsystem
+        ));
         autoChooser.addOption("Drive Back", Autos.driveBack(
                 drive,
                 poseEstimationSubsystem

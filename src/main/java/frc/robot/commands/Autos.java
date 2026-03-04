@@ -6,22 +6,17 @@ package frc.robot.commands;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
+import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj2.command.*;
 import frc.robot.Constants;
 import frc.robot.enums.ShooterState;
 import frc.robot.enums.StartPosish;
-import frc.robot.subsystems.ClimberSubsystem;
-import frc.robot.subsystems.HoodSubsystem;
-import frc.robot.subsystems.PivotSubsystem;
-import frc.robot.subsystems.PoseEstimationSubsystem;
-import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.*;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.utils.FlipPose2d;
 
 import java.time.Duration;
+import java.util.Timer;
 
 public final class Autos {
 
@@ -51,13 +46,38 @@ public final class Autos {
             PoseEstimationSubsystem poseEstimationSubsystem
     ) {
         var currentPose = drive.getPose();
-        var newPos = currentPose.transformBy(new Transform2d(-0.3, 0.0, Rotation2d.fromDegrees(0)));
+        var newPos = currentPose.transformBy(new Transform2d(Units.feetToMeters(-6.0), 0.0, Rotation2d.fromDegrees(0)));
 
         return new DriveToPoseCommand(drive, newPos);
     }
 
     public static Command manualAlign(Drive drive) {
         return new DriveToPoseCommand(drive, shootingBalls);
+    }
+
+    public static Command driveBackAndScore(
+            Drive drive,
+            ManualShooterSubsystem manualShooterSubsystem,
+            PoseEstimationSubsystem poseEstimationSubsystem,
+            IndexerSubsystem indexerSubsystem,
+            LoaderSubsystem loaderSubsystem
+    ){
+        return Commands.sequence(
+                new ParallelDeadlineGroup(
+                        new TimerCommand(Duration.ofSeconds(2)),
+                        driveBack(drive, poseEstimationSubsystem)
+                ),
+                new ParallelRaceGroup(
+                        new TimerCommand(Duration.ofSeconds(2)),
+                        new ManualShooterCommand(manualShooterSubsystem, Constants.Shooter.shooterSpeedAuto)
+                ),
+                new ParallelDeadlineGroup(
+                        new TimerCommand(Duration.ofSeconds(8)),
+                        new IndexerCommand(indexerSubsystem, Constants.Indexer.indexerSpeed),
+                        new ManualShooterCommand(manualShooterSubsystem, Constants.Shooter.shooterSpeedAuto),
+                        new LoaderCommand(loaderSubsystem, Constants.Loader.loaderSpeed)
+                        )
+        );
     }
 
     public static Command driveToOpponent(
