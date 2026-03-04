@@ -2,7 +2,6 @@ package frc.robot;
 
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.Vector;
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -152,8 +151,8 @@ public final class Constants {
 
         // This is the target position
         public static final FlipPose2d hubPose = new FlipPose2d(
-                        Units.inchesToMeters(158.6),
-                        Units.inchesToMeters(317.7 / 2.0)
+                Units.inchesToMeters(158.6),
+                Units.inchesToMeters(317.7 / 2.0)
                 ,
                 Rotation2d.k180deg
         );

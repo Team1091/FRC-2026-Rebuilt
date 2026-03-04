@@ -5,8 +5,6 @@
 package frc.robot;
 
 import edu.wpi.first.cameraserver.CameraServer;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -138,11 +136,11 @@ public class RobotContainer {
         startPosChooser.addOption("Right", StartPosish.RIGHT);
         SmartDashboard.putData("Start Position", startPosChooser);
 
-//        poseEstimationSubsystem.setCurrentPose(StartPosish.CENTER.startingPose.get());
-//        startPosChooser.onChange((startPosish) -> {
-//
-//            poseEstimationSubsystem.setCurrentPose(startPosish.startingPose.get());
-//        });
+        poseEstimationSubsystem.setCurrentPose(StartPosish.CENTER.startingPose.get());
+        startPosChooser.onChange((startPosish) -> {
+
+            poseEstimationSubsystem.setCurrentPose(startPosish.startingPose.get());
+        });
     }
 
     private void configureAutonomous() {
