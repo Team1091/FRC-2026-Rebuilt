@@ -40,8 +40,8 @@ public final class Constants {
         public static final double trackWidthX = Units.inchesToMeters(20.375);
         public static final double trackWidthY = Units.inchesToMeters(22.25);
         public static final double driveBaseRadius = Math.hypot(trackWidthX / 2.0, trackWidthY / 2.0);
-        public static final double maxLinearSpeed = Units.feetToMeters(0.5); // TODO: 14.5
-        public static final double maxLinearAcceleration = Units.feetToMeters(0.25); // 10
+        public static final double maxLinearSpeed = Units.feetToMeters(14.5);
+        public static final double maxLinearAcceleration = Units.feetToMeters(10);
         public static final double maxAngularSpeed = maxLinearSpeed / driveBaseRadius;
         public static final double maxAngularAcceleration = maxLinearAcceleration / driveBaseRadius;
         public static final double linearDeadband = 0.1;
@@ -91,8 +91,8 @@ public final class Constants {
         public static final boolean disabled = false;
         public static final int leftMotorChannel = 13;
         public static final int rightMotorChannel = 14;
-        public static final double shooterSpeedScore = 1.0;
-        public static final double shooterSpeedPass = 1.0;
+        public static final double shooterSpeedScore = 0.5;
+        public static final double shooterSpeedAuto = 1.0;
         // TODO: we may want target RPMs here for the flywheel
     }
 
