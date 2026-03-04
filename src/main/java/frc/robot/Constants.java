@@ -147,15 +147,14 @@ public final class Constants {
     public static final class Locations {
 
         // This is the target position
-        public static FlipPose2d hubPose = new FlipPose2d(new Pose2d(
-                new Translation2d(
+        public static final FlipPose2d hubPose = new FlipPose2d(
                         Units.inchesToMeters(158.6),
                         Units.inchesToMeters(317.7 / 2.0)
-                ),
+                ,
                 Rotation2d.k180deg
-        ));
+        );
 
-        public static Translation2d center = new Translation2d(
+        public static final Translation2d center = new Translation2d(
                 Units.inchesToMeters(324.5),
                 Units.inchesToMeters(317.7 / 2.0)
         );

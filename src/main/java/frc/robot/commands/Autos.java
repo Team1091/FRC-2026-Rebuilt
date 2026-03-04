@@ -58,7 +58,7 @@ public final class Autos {
     }
 
     public static Command manualAlign(Drive drive) {
-        return new DriveToPoseCommand(drive, leftManualAlign);
+        return new DriveToPoseCommand(drive, shootingBalls);
     }
 
     public static Command driveToOpponent(

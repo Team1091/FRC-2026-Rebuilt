@@ -138,10 +138,11 @@ public class RobotContainer {
         startPosChooser.addOption("Right", StartPosish.RIGHT);
         SmartDashboard.putData("Start Position", startPosChooser);
 
-        poseEstimationSubsystem.setCurrentPose(StartPosish.CENTER.startingPose.get());
-        startPosChooser.onChange((startPosish) -> {
-            poseEstimationSubsystem.setCurrentPose(startPosish.startingPose.get());
-        });
+//        poseEstimationSubsystem.setCurrentPose(StartPosish.CENTER.startingPose.get());
+//        startPosChooser.onChange((startPosish) -> {
+//
+//            poseEstimationSubsystem.setCurrentPose(startPosish.startingPose.get());
+//        });
     }
 
     private void configureAutonomous() {
