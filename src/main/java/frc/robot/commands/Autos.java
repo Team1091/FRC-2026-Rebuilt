@@ -58,7 +58,7 @@ public final class Autos {
             PoseEstimationSubsystem poseEstimationSubsystem
     ) {
         var currentPose = drive.getPose();
-        var newPos = currentPose.transformBy(new Transform2d(Units.feetToMeters(isOnRed() ? 6 : -6.0), 0.0, Rotation2d.fromDegrees(0)));
+        var newPos = currentPose.transformBy(new Transform2d(Units.feetToMeters(isOnRed() ? -6.0 : 6.0), 0.0, Rotation2d.fromDegrees(90)));
 
         return new DriveToPoseCommand(drive, newPos);
     }
@@ -76,7 +76,7 @@ public final class Autos {
     ) {
         return Commands.sequence(
                 new ParallelDeadlineGroup(
-                        new TimerCommand(Duration.ofSeconds(2)),
+                        new TimerCommand(Duration.ofSeconds(7)),
                         driveBack(drive, poseEstimationSubsystem)
                 ),
                 new ParallelRaceGroup(

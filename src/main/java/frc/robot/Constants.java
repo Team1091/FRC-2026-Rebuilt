@@ -41,7 +41,7 @@ public final class Constants {
         public static final double driveBaseRadius = Math.hypot(trackWidthX / 2.0, trackWidthY / 2.0);
 
         // Manual Drive
-        public static final double maxLinearSpeed = Units.feetToMeters(14.5);
+        public static final double maxLinearSpeed = Units.feetToMeters(2);
         public static final double maxAngularSpeed = maxLinearSpeed / driveBaseRadius;
         // Auto
         public static final double autoMaxLinearSpeed = Units.feetToMeters(3.0);
@@ -60,8 +60,8 @@ public final class Constants {
 
         // Per-module hardware configuration (IDs, offsets, titles, inversion)
         public static final ModuleConfig[] moduleHardware = new ModuleConfig[]{
-                new ModuleConfig(6, 5, 4, Rotation2d.fromDegrees(42 + 180), "FL", true, false),
-                new ModuleConfig(8, 7, 2, Rotation2d.fromDegrees(37 + 180), "FR", true, false),
+                new ModuleConfig(6, 5, 4, Rotation2d.fromDegrees(42 + 180 - 10), "FL", true, false),
+                new ModuleConfig(8, 7, 2, Rotation2d.fromDegrees(37 + 180 + 5), "FR", true, false),
                 new ModuleConfig(1, 2, 1, Rotation2d.fromDegrees(-195 + 180), "BL", true, false),
                 new ModuleConfig(3, 4, 3, Rotation2d.fromDegrees(174 + 180), "BR", true, false)
         };
@@ -94,7 +94,7 @@ public final class Constants {
         public static final boolean disabled = false;
         public static final int leftMotorChannel = 13;
         public static final int rightMotorChannel = 14;
-        public static final double shooterSpeedScore = 1.0;
+        public static final double shooterSpeedScore = 0.5;
         public static final double shooterSpeedAuto = 0.5;
         // TODO: we may want target RPMs here for the flywheel
     }
@@ -165,10 +165,10 @@ public final class Constants {
 
     public static final class Hood {
         public static final boolean disabled = false;
-        public static final double hoodSpeed = 0.60;
+        public static final double hoodSpeed = 0.8;
         public static final int hoodMotorChannel = 18;
         public static final int hoodMotorChannel2 = 19;
-        public static final double hoodMotorPower = 0.25;
+        public static final double hoodMotorPower = 0.75;
         public static final double angleCloseEnough = 0.1; // deg
         public static final int hoodLimitSwitchLow = 0;
         public static final int hoodLimitSwitchHigh = 1;
