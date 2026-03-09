@@ -155,7 +155,7 @@ public class RobotContainer {
                 indexerSubsystem,
                 loaderSubsystem
         ));
-        autoChooser.addOption("Drive Back", Autos.driveBack(
+        autoChooser.addOption("Drive Back", Autos.driveBackBareMinimum(
                 drive,
                 poseEstimationSubsystem
         ));
@@ -235,7 +235,7 @@ public class RobotContainer {
 //        driverController.leftTrigger().whileTrue(new ShooterCommand(shooterSubsystem, ShooterState.SPIN_UP));
 //        driverController.y().whileTrue(new ShooterCommand(shooterSubsystem, ShooterState.SPIN_UP));
 //        driverController.rightTrigger().whileTrue(new ShooterCommand(shooterSubsystem, ShooterState.FIRE));
-        driverController.leftTrigger().whileTrue(new ManualShooterCommand(manualShooterSubsystem, Constants.Shooter.shooterSpeedScore));
+        driverController.leftTrigger().whileTrue(new ManualShooterCommand(manualShooterSubsystem, Constants.Shooter.shooterSpeedPass)); //shooterSpeedScore
         driverController.rightTrigger().whileTrue(new IndexerCommand(indexerSubsystem, Constants.Indexer.indexerSpeed));
         driverController.rightTrigger().whileTrue(new LoaderCommand(loaderSubsystem, Constants.Loader.loaderSpeed));
 
@@ -250,9 +250,11 @@ public class RobotContainer {
         driverController.x().whileTrue(new IntakeCommand(intakeSubsystem, Constants.Intake.intakeSpeed));
         driverController.b().whileTrue(new PivotCommand(pivotSubsystem, Constants.Pivot.pivotSpeedOut));
         driverController.a().whileTrue(new PivotCommand(pivotSubsystem, Constants.Pivot.pivotSpeedIn));
+        driverController.povUp().whileTrue(new ManualHoodCommand(manualHoodSubsystem, Constants.Hood.hoodSpeed));
+        driverController.povDown().whileTrue(new ManualHoodCommand(manualHoodSubsystem, -Constants.Hood.hoodSpeed));
 
-        buttonBoard.a().whileTrue(new ManualHoodCommand(manualHoodSubsystem, Constants.Hood.hoodSpeed));
-        buttonBoard.b().whileTrue(new ManualHoodCommand(manualHoodSubsystem, -Constants.Hood.hoodSpeed));
+//        buttonBoard.a().whileTrue(new ManualHoodCommand(manualHoodSubsystem, Constants.Hood.hoodSpeed));
+//        buttonBoard.b().whileTrue(new ManualHoodCommand(manualHoodSubsystem, -Constants.Hood.hoodSpeed));
 
 
 //        buttonBoard.a().whileTrue(up);

@@ -4,6 +4,7 @@ import com.revrobotics.PersistMode;
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel;
 import com.revrobotics.spark.config.SparkFlexConfig;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -11,13 +12,13 @@ import frc.robot.Constants;
 public class ManualShooterSubsystem extends SubsystemBase {
 
     private final SparkFlex leftShooterMotor;
-    private final SparkFlex rightShooterMotor;
+//    private final SparkFlex rightShooterMotor;
     private double speed;
 
     public ManualShooterSubsystem() {
         if (Constants.Intake.disabled) {
             leftShooterMotor = null;
-            rightShooterMotor = null;
+//            rightShooterMotor = null;
 
             return;
         }
@@ -25,11 +26,12 @@ public class ManualShooterSubsystem extends SubsystemBase {
         // set up motors
 
         leftShooterMotor = new SparkFlex(Constants.Shooter.leftMotorChannel, SparkLowLevel.MotorType.kBrushless);
-        rightShooterMotor = new SparkFlex(Constants.Shooter.rightMotorChannel, SparkLowLevel.MotorType.kBrushless);
+//        rightShooterMotor = new SparkFlex(Constants.Shooter.rightMotorChannel, SparkLowLevel.MotorType.kBrushless);
         var rightConfig = new SparkFlexConfig();
         rightConfig.inverted(true);
-        rightShooterMotor.configure(rightConfig, com.revrobotics.ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+//        rightShooterMotor.configure(rightConfig, com.revrobotics.ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
         speed = 0.0;
+
     }
 
     public void setSpeed(double speed) {
@@ -42,7 +44,7 @@ public class ManualShooterSubsystem extends SubsystemBase {
 
         // set motor speeds
         leftShooterMotor.set(speed);
-        rightShooterMotor.set(speed);
+//        rightShooterMotor.set(speed);
 
 
     }

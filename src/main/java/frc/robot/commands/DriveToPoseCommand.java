@@ -28,7 +28,6 @@ public class DriveToPoseCommand extends Command {
     ) {
         this(drive, targetPose.get());
     }
-
     public DriveToPoseCommand(
             Drive drive,
             Pose2d targetPose

@@ -41,10 +41,10 @@ public final class Constants {
         public static final double driveBaseRadius = Math.hypot(trackWidthX / 2.0, trackWidthY / 2.0);
 
         // Manual Drive
-        public static final double maxLinearSpeed = Units.feetToMeters(2);
+        public static final double maxLinearSpeed = Units.feetToMeters(14.5);
         public static final double maxAngularSpeed = maxLinearSpeed / driveBaseRadius;
         // Auto
-        public static final double autoMaxLinearSpeed = Units.feetToMeters(3.0);
+        public static final double autoMaxLinearSpeed = Units.feetToMeters(14.5);
         public static final double autoMaxAngularSpeed = autoMaxLinearSpeed / driveBaseRadius;
 
         public static final double linearDeadband = 0.1;
@@ -93,9 +93,9 @@ public final class Constants {
     public static final class Shooter {
         public static final boolean disabled = false;
         public static final int leftMotorChannel = 13;
-        public static final int rightMotorChannel = 14;
+//        public static final int rightMotorChannel = 14;
+        public static final double shooterSpeedPass = 1.0;
         public static final double shooterSpeedScore = 0.5;
-        public static final double shooterSpeedAuto = 0.5;
         // TODO: we may want target RPMs here for the flywheel
     }
 
@@ -132,8 +132,8 @@ public final class Constants {
         public static final boolean disabled = false;
         public static final int leftMotorChannel = 9;
         public static final int rightMotorChannel = 10;
-        public static final double climbingSpeed = .5;
-        public static final int maxEncoderCount = 1000;
+        public static final double climbingSpeed = 1.0;
+        public static final int maxEncoderCount = 250;
     }
 
     public static final class Camera {

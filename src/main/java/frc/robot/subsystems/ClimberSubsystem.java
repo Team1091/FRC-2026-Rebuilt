@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkLowLevel;
 import com.revrobotics.spark.SparkMax;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -29,6 +30,7 @@ public class ClimberSubsystem extends SubsystemBase {
         rightClimberEncoder = rightClimberMotor.getEncoder();
         leftClimberEncoder.setPosition(0.0);
         rightClimberEncoder.setPosition(0.0);
+
     }
 
     public void resetEncoders() {
@@ -44,6 +46,7 @@ public class ClimberSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         if (Constants.Climber.disabled) return;
+        SmartDashboard.putNumber("Climber Encoder", leftClimberMotor.getEncoder().getPosition());
         if ((leftClimberEncoder.getPosition() >= Constants.Climber.maxEncoderCount && speed > 0)
                 || (leftClimberEncoder.getPosition() <= 0 && speed < 0)
         ) {
