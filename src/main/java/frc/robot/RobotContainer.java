@@ -155,7 +155,7 @@ public class RobotContainer {
                 indexerSubsystem,
                 loaderSubsystem
         ));
-        autoChooser.addOption("Drive Back", Autos.driveBackBareMinimum(
+        autoChooser.addOption("Drive Back", Autos.driveBackScore(
                 drive,
                 poseEstimationSubsystem
         ));

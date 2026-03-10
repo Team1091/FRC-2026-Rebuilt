@@ -32,15 +32,6 @@ import static frc.robot.RobotContainer.isOnRed;
 
 public final class Autos {
 
-
-    // Spin wildly for a second.
-    public static Command spinAuto(Drive drive) {
-        return Commands.race(
-                DriveCommand.joystickDrive(drive, () -> 0.0, () -> 0.0, () -> 1.0),
-                new TimerCommand(Duration.ofSeconds(2))
-        );
-    }
-
     public static Command driveForward(Drive drive) {
         // Make a spot 10 units in front, drive to there.
         // How much is a unit?  Good question. Don't stand near it when we find out.
@@ -53,7 +44,7 @@ public final class Autos {
         return new DriveToPoseCommand(drive, newPos);
     }
 
-    public static Command driveBackBareMinimum(
+    public static Command driveBackScore(
             Drive drive,
             PoseEstimationSubsystem poseEstimationSubsystem
     ) {
@@ -89,8 +80,19 @@ public final class Autos {
 //            ManualClimbCommand manualClimbCommand){
 //        return Commands.sequence(
 //                new ParallelDeadlineGroup(
-//                        driveBackClimb(drive, poseEstimationSubsystem)
-//                )
+//                        driveBackScore(drive, poseEstimationSubsystem)
+//                ),
+//                new ParallelRaceGroup(
+//                        new TimerCommand(Duration.ofSeconds(2)),
+//                        new ManualShooterCommand(manualShooterSubsystem, Constants.Shooter.shooterSpeedScore)
+//                ),
+//                new ParallelDeadlineGroup(
+//                        new TimerCommand(Duration.ofSeconds(8)),
+//                        new IndexerCommand(indexerSubsystem, Constants.Indexer.indexerSpeed),
+//                        new ManualShooterCommand(manualShooterSubsystem, Constants.Shooter.shooterSpeedScore),
+//                        new LoaderCommand(loaderSubsystem, Constants.Loader.loaderSpeed)
+//                ),
+//              new
 //        )
 //    }
 
@@ -103,7 +105,7 @@ public final class Autos {
     ) {
         return Commands.sequence(
                 new ParallelDeadlineGroup(
-                        driveBackBareMinimum(drive, poseEstimationSubsystem)
+                        driveBackScore(drive, poseEstimationSubsystem)
                 ),
                 new ParallelRaceGroup(
                         new TimerCommand(Duration.ofSeconds(2)),
