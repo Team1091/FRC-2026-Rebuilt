@@ -63,6 +63,13 @@ public final class Autos {
 
         return new DriveToPoseCommand(drive, newPos);
     }
+
+    public static Command driveBackTillWeVibe(
+            Drive drive
+    ) {
+        return new DriveToOffsetCommand(drive, Units.feetToMeters(isOnRed() ? -5.0 : 5.0), 0.0);
+    }
+
     public static Command driveBackClimb(
             Drive drive,
             PoseEstimationSubsystem poseEstimationSubsystem

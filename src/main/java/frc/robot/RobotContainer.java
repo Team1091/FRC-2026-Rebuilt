@@ -159,6 +159,7 @@ public class RobotContainer {
                 drive,
                 poseEstimationSubsystem
         ));
+        autoChooser.addOption("Drive Back Till We Vibe", Autos.driveBackTillWeVibe(drive));
         autoChooser.addOption("Win", Autos.swoopThroughMiddleThenShoot(
                 drive,
                 hoodSubsystem,
