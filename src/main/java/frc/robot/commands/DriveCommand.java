@@ -42,7 +42,14 @@ public class DriveCommand {
                     // Calculate new linear velocity
                     Translation2d linearVelocity = new Translation2d(linearMagnitude, linearDirection);
 
-                    drive.runVelocity(linearVelocity, omega);
+                    Rotation2d rotation;
+                    if (drive.getIsFieldOriented()) {
+                        rotation = drive.getPose().getRotation();
+                    } else {
+                        rotation = new Rotation2d(0);
+                    }
+
+                    drive.runVelocity(linearVelocity, omega, rotation);
                 },
                 drive
         );

@@ -83,7 +83,7 @@ public class DriveWhilePointingAtCommand extends Command {
         // Calculate new linear velocity
         Translation2d linearVelocity = new Translation2d(linearMagnitude, linearDirection);
 
-        drive.runVelocity(linearVelocity, omega);
+        drive.runVelocity(linearVelocity, omega, Rotation2d.kZero);
     }
 
     @Override
