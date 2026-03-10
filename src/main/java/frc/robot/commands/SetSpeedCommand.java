@@ -17,6 +17,6 @@ public class SetSpeedCommand extends Command {
     }
 
     public boolean isFinished() {
-        return false;
+        return true;
     }
 }

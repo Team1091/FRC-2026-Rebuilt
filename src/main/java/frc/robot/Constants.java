@@ -44,7 +44,7 @@ public final class Constants {
         public static final double maxLinearSpeed = Units.feetToMeters(14.5);
         public static final double maxAngularSpeed = maxLinearSpeed / driveBaseRadius;
         // Auto
-        public static final double autoMaxLinearSpeed = Units.feetToMeters(14.5);
+        public static final double autoMaxLinearSpeed = Units.feetToMeters(2);
         public static final double autoMaxAngularSpeed = autoMaxLinearSpeed / driveBaseRadius;
 
         public static final double linearDeadband = 0.1;
