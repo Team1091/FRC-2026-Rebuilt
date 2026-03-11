@@ -15,7 +15,9 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.LimelightHelpers;
 
+import java.util.ArrayList;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 import static frc.robot.RobotContainer.isOnRed;
 
@@ -58,34 +60,62 @@ public class PoseEstimationSubsystem extends SubsystemBase {
 
         try {
             LimelightHelpers.SetRobotOrientation("limelight", getCurrentPose().getRotation().getDegrees(), rotationRateSupplier.get(), 0.0, 0.0, 0.0, 0.0);
+            final Matrix<N3, N1> standardDeviations = VecBuilder.fill(0.1, 0.1, 10.0);
+            poseEstimator.setVisionMeasurementStdDevs(standardDeviations);
+
 
             final LimelightHelpers.PoseEstimate poseEstimate_MegaTag1 = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight");
             final LimelightHelpers.PoseEstimate poseEstimate_MegaTag2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight");
 
-            boolean rejectedMeasurement = false;
-            if (poseEstimate_MegaTag1 == null
-                    || poseEstimate_MegaTag2 == null
-                    || poseEstimate_MegaTag1.tagCount <= 0
-                    || poseEstimate_MegaTag2.tagCount <= 0
-                    || Math.abs(rotationRateSupplier.get()) > 360
-            ) {
-                SmartDashboard.putString("Vision", "cannot see");
-                rejectedMeasurement = true;
+            var visionComplaints = new ArrayList<String>();
+
+            boolean rejectedMeasurementMt1 = false;
+            if (poseEstimate_MegaTag1 == null) {
+                visionComplaints.add("mega tag 1 null");
+                rejectedMeasurementMt1 = true;
+            } else if (poseEstimate_MegaTag1.tagCount <= 0) {
+                visionComplaints.add("mega tag 1 no tags seen");
+                rejectedMeasurementMt1 = true;
             }
 
-            if (!rejectedMeasurement) {
-                poseEstimate_MegaTag2.pose = new Pose2d(
-                        poseEstimate_MegaTag2.pose.getTranslation(),
-                        poseEstimate_MegaTag1.pose.getRotation()
-                );
-                final Matrix<N3, N1> standardDeviations = VecBuilder.fill(0.1, 0.1, 10.0);
-
-                SmartDashboard.putString("Vision", "can see : " + poseEstimate_MegaTag2.pose.toString());
-                poseEstimator.setVisionMeasurementStdDevs(standardDeviations);
-                poseEstimator.addVisionMeasurement(
-                        poseEstimate_MegaTag2.pose,
-                        poseEstimate_MegaTag2.timestampSeconds);
+            boolean rejectedMeasurementMt2 = false;
+            if (poseEstimate_MegaTag2 == null) {
+                visionComplaints.add("mega tag 2 null");
+                rejectedMeasurementMt2 = true;
+            } else if (poseEstimate_MegaTag2.tagCount <= 0) {
+                visionComplaints.add("mega tag 2 no tags seen");
+                rejectedMeasurementMt2 = true;
             }
+
+            // If we are rotating too fast, we can't see the tags
+            if (Math.abs(rotationRateSupplier.get()) > 360) {
+                visionComplaints.add("Rotating too fast to see");
+            } else {
+                // if we have both mt1 + mt2, we should use them both
+                if (!rejectedMeasurementMt1 && !rejectedMeasurementMt2) {
+                    poseEstimate_MegaTag2.pose = new Pose2d(
+                            poseEstimate_MegaTag2.pose.getTranslation(),
+                            poseEstimate_MegaTag1.pose.getRotation()
+                    );
+                    poseEstimator.addVisionMeasurement(
+                            poseEstimate_MegaTag2.pose,
+                            poseEstimate_MegaTag2.timestampSeconds);
+                } else if (!rejectedMeasurementMt2) {
+                    // We have a mt2 tag, let's just use that
+                    poseEstimator.addVisionMeasurement(
+                            poseEstimate_MegaTag2.pose,
+                            poseEstimate_MegaTag2.timestampSeconds);
+                } else if (!rejectedMeasurementMt1) {
+                    // We have a mt1 tag, let's just use that
+                    poseEstimator.addVisionMeasurement(
+                            poseEstimate_MegaTag1.pose,
+                            poseEstimate_MegaTag1.timestampSeconds);
+                } else {
+                    visionComplaints.add("No vision possible");
+                }
+            }
+
+            SmartDashboard.putString("Vision", visionComplaints.stream().collect(Collectors.joining()));
         } catch (Exception e) {
             DataLogManager.log(e.getMessage());
         }
