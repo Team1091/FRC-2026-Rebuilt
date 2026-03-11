@@ -48,53 +48,42 @@ public final class Autos {
             Drive drive,
             PoseEstimationSubsystem poseEstimationSubsystem
     ) {
-//        drive.setIsFieldOriented(false);
         var currentPose = drive.getPose();
         var newPos = currentPose.transformBy(new Transform2d(Units.feetToMeters(isOnRed() ? -5.0 : 5.0), 0.0, drive.getGyroRotation()));
 
         return new DriveToPoseCommand(drive, newPos);
     }
-    public static Command driveBackClimb(
-            Drive drive,
-            PoseEstimationSubsystem poseEstimationSubsystem
-    ) {
-//        drive.setIsFieldOriented(false);
-        var currentPose = drive.getPose();
-        var newPos = currentPose.transformBy(new Transform2d(Units.feetToMeters(isOnRed() ? -9.0 : 9.0), 0.0, drive.getGyroRotation()));
-
-        return new DriveToPoseCommand(drive, newPos);
-    }
-
 
     public static Command manualAlign(Drive drive) {
         return new DriveToPoseCommand(drive, shootingBalls);
     }
 
     //Hard code climb
-//    public static Command shootAndScore(
-//            Drive drive,
-//            PoseEstimationSubsystem poseEstimationSubsystem,
-//            ManualShooterSubsystem manualShooterSubsystem,
-//            IndexerSubsystem indexerSubsystem,
-//            LoaderSubsystem loaderSubsystem,
-//            ManualClimbCommand manualClimbCommand){
-//        return Commands.sequence(
-//                new ParallelDeadlineGroup(
-//                        driveBackScore(drive, poseEstimationSubsystem)
-//                ),
-//                new ParallelRaceGroup(
-//                        new TimerCommand(Duration.ofSeconds(2)),
-//                        new ManualShooterCommand(manualShooterSubsystem, Constants.Shooter.shooterSpeedScore)
-//                ),
-//                new ParallelDeadlineGroup(
-//                        new TimerCommand(Duration.ofSeconds(8)),
-//                        new IndexerCommand(indexerSubsystem, Constants.Indexer.indexerSpeed),
-//                        new ManualShooterCommand(manualShooterSubsystem, Constants.Shooter.shooterSpeedScore),
-//                        new LoaderCommand(loaderSubsystem, Constants.Loader.loaderSpeed)
-//                ),
-//              new
-//        )
-//    }
+    public static Command scoreAndClimb(
+            Drive drive,
+            PoseEstimationSubsystem poseEstimationSubsystem,
+            ManualShooterSubsystem manualShooterSubsystem,
+            IndexerSubsystem indexerSubsystem,
+            LoaderSubsystem loaderSubsystem,
+            ManualClimbCommand manualClimbCommand){
+
+        var currentPose = drive.getPose();
+        var shootPos = currentPose.transformBy(new Transform2d(Units.feetToMeters(isOnRed() ? -5.0 : 5.0), 0.0, drive.getGyroRotation()));
+        var rotatedPos = shootPos.rotateAround(shootPos.getTranslation(), Rotation2d.k180deg);
+
+        return Commands.sequence(
+                new ParallelDeadlineGroup(
+                        driveBackAndScore(drive,
+                                manualShooterSubsystem,
+                                poseEstimationSubsystem,
+                                indexerSubsystem,
+                                loaderSubsystem)
+                ),
+                new ParallelDeadlineGroup(
+                        new DriveToPoseCommand(drive, rotatedPos)
+                )
+        );
+    }
 
     public static Command driveBackAndScore(
             Drive drive,
@@ -108,7 +97,7 @@ public final class Autos {
                         driveBackScore(drive, poseEstimationSubsystem)
                 ),
                 new ParallelRaceGroup(
-                        new TimerCommand(Duration.ofSeconds(2)),
+                        new TimerCommand(Duration.ofSeconds(1)),
                         new ManualShooterCommand(manualShooterSubsystem, Constants.Shooter.shooterSpeedScore)
                 ),
                 new ParallelDeadlineGroup(
