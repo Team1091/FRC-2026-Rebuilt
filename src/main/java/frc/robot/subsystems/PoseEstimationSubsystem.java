@@ -56,19 +56,20 @@ public class PoseEstimationSubsystem extends SubsystemBase {
     public void periodic() {
         poseEstimator.update(rotationSupplier.get(), modulePositionSupplier.get());
 
-        boolean rejectedMeasurement = false;
         try {
             LimelightHelpers.SetRobotOrientation("limelight", getCurrentPose().getRotation().getDegrees(), rotationRateSupplier.get(), 0.0, 0.0, 0.0, 0.0);
 
             final LimelightHelpers.PoseEstimate poseEstimate_MegaTag1 = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight");
             final LimelightHelpers.PoseEstimate poseEstimate_MegaTag2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight");
 
+            boolean rejectedMeasurement = false;
             if (poseEstimate_MegaTag1 == null
                     || poseEstimate_MegaTag2 == null
                     || poseEstimate_MegaTag1.tagCount <= 0
                     || poseEstimate_MegaTag2.tagCount <= 0
                     || Math.abs(rotationRateSupplier.get()) > 360
             ) {
+                SmartDashboard.putString("Vision", "cannot see");
                 rejectedMeasurement = true;
             }
 
@@ -79,6 +80,7 @@ public class PoseEstimationSubsystem extends SubsystemBase {
                 );
                 final Matrix<N3, N1> standardDeviations = VecBuilder.fill(0.1, 0.1, 10.0);
 
+                SmartDashboard.putString("Vision", "can see : " + poseEstimate_MegaTag2.pose.toString());
                 poseEstimator.setVisionMeasurementStdDevs(standardDeviations);
                 poseEstimator.addVisionMeasurement(
                         poseEstimate_MegaTag2.pose,
