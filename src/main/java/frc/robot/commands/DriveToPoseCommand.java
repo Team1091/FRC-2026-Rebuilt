@@ -20,7 +20,7 @@ public class DriveToPoseCommand extends Command {
     // TODO: these probably will need to be configured, or will go out of control all over the place
     private final PIDController xController = new PIDController(1.0, 0, 0);
     private final PIDController yController = new PIDController(1.0, 0, 0);
-    private final PIDController thetaController = new PIDController(1.0, 0, 0);
+    private final PIDController thetaController = new PIDController(1.0, 0.5, 0);
 
     public DriveToPoseCommand(
             Drive drive,
@@ -54,12 +54,12 @@ public class DriveToPoseCommand extends Command {
         double thetaVelocity = thetaController.calculate(currentPose.getRotation().getRadians(), targetPose.getRotation().getRadians());
 
         // Clamp to max swerve speeds
-        xVelocity = MathUtil.clamp(xVelocity, -Constants.Swerve.autoMaxLinearSpeed, Constants.Swerve.autoMaxLinearSpeed);
-        yVelocity = MathUtil.clamp(yVelocity, -Constants.Swerve.autoMaxLinearSpeed, Constants.Swerve.autoMaxLinearSpeed);
-        thetaVelocity = MathUtil.clamp(thetaVelocity, -Constants.Swerve.autoMaxAngularSpeed, Constants.Swerve.autoMaxAngularSpeed);
+        xVelocity = MathUtil.clamp(xVelocity, -Constants.Swerve.autoMaxLinearSpeedPct, Constants.Swerve.autoMaxLinearSpeedPct);
+        yVelocity = MathUtil.clamp(yVelocity, -Constants.Swerve.autoMaxLinearSpeedPct, Constants.Swerve.autoMaxLinearSpeedPct);
+        thetaVelocity = MathUtil.clamp(thetaVelocity, -Constants.Swerve.autoMaxAngularSpeedPct, Constants.Swerve.autoMaxAngularSpeedPct);
 
         // Send Velocity to the drive
-        drive.runVelocity(new Translation2d(xVelocity, yVelocity), thetaVelocity);
+        drive.runVelocity(new Translation2d(xVelocity, yVelocity), -thetaVelocity);
 //        drive.runVelocity(ChassisSpeeds.fromFieldRelativeSpeeds(xVelocity, yVelocity, thetaVelocity, currentPose.getRotation()));
     }
 
@@ -73,8 +73,8 @@ public class DriveToPoseCommand extends Command {
     public boolean isFinished() {
         Pose2d currentPose = drive.getPose();
         double distanceError = currentPose.getTranslation().getDistance(targetPose.getTranslation());
-        double angleError = Math.abs(currentPose.getRotation().minus(targetPose.getRotation()).getRadians());
+        double angleError = Math.abs(currentPose.getRotation().minus(targetPose.getRotation()).getDegrees());
 
-        return distanceError < 0.05 && angleError < Math.toDegrees(10);
+        return distanceError < 0.05 && angleError < 5;
     }
 }
