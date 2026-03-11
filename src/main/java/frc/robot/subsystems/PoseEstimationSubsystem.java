@@ -115,7 +115,7 @@ public class PoseEstimationSubsystem extends SubsystemBase {
                 }
             }
 
-            SmartDashboard.putString("Vision", visionComplaints.stream().collect(Collectors.joining()));
+            SmartDashboard.putString("Vision", String.join(", ", visionComplaints));
         } catch (Exception e) {
             DataLogManager.log(e.getMessage());
         }
