@@ -18,6 +18,7 @@ import frc.robot.enums.StartPosish;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.HoodSubsystem;
 import frc.robot.subsystems.IndexerSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.LoaderSubsystem;
 import frc.robot.subsystems.ManualShooterSubsystem;
 import frc.robot.subsystems.PivotSubsystem;
@@ -27,6 +28,7 @@ import frc.robot.subsystems.drive.Drive;
 import frc.robot.utils.FlipPose2d;
 
 import java.time.Duration;
+import java.util.Timer;
 
 import static frc.robot.RobotContainer.isOnRed;
 
@@ -65,11 +67,13 @@ public final class Autos {
             ManualShooterSubsystem manualShooterSubsystem,
             IndexerSubsystem indexerSubsystem,
             LoaderSubsystem loaderSubsystem,
-            ManualClimbCommand manualClimbCommand){
+            ClimberSubsystem climberSubsystem,
+            IntakeSubsystem intakeSubsystem){
 
         var currentPose = drive.getPose();
         var shootPos = currentPose.transformBy(new Transform2d(Units.feetToMeters(isOnRed() ? -5.0 : 5.0), 0.0, drive.getGyroRotation()));
-        var rotatedPos = shootPos.rotateAround(shootPos.getTranslation(), Rotation2d.k180deg);
+        var rotatedPos = shootPos.rotateAround(shootPos.getTranslation(), Rotation2d.fromDegrees(180));
+        var climbPos = rotatedPos.transformBy(new Transform2d(Units.feetToMeters(isOnRed() ? 5.0 : -5.0), 0.0, drive.getGyroRotation()));
 
         return Commands.sequence(
                 new ParallelDeadlineGroup(
@@ -77,11 +81,23 @@ public final class Autos {
                                 manualShooterSubsystem,
                                 poseEstimationSubsystem,
                                 indexerSubsystem,
-                                loaderSubsystem)
+                                loaderSubsystem,
+                                intakeSubsystem)
                 ),
                 new ParallelDeadlineGroup(
                         new DriveToPoseCommand(drive, rotatedPos)
-                )
+                ),
+                new ParallelDeadlineGroup(
+                        new TimerCommand(Duration.ofSeconds(3)),
+                        new ManualClimbCommand(climberSubsystem, Constants.Climber.climbingSpeed)
+                ),
+                new ParallelDeadlineGroup(
+                        new DriveToPoseCommand(drive, climbPos)
+                ),
+                new ParallelDeadlineGroup(
+                        new TimerCommand(Duration.ofSeconds(3)),
+                        new ManualClimbCommand(climberSubsystem, -Constants.Climber.climbingSpeed)                )
+
         );
     }
 
@@ -90,7 +106,8 @@ public final class Autos {
             ManualShooterSubsystem manualShooterSubsystem,
             PoseEstimationSubsystem poseEstimationSubsystem,
             IndexerSubsystem indexerSubsystem,
-            LoaderSubsystem loaderSubsystem
+            LoaderSubsystem loaderSubsystem,
+            IntakeSubsystem intakeSubsystem
     ) {
         return Commands.sequence(
                 new ParallelDeadlineGroup(
@@ -102,6 +119,7 @@ public final class Autos {
                 ),
                 new ParallelDeadlineGroup(
                         new TimerCommand(Duration.ofSeconds(8)),
+                        new IntakeCommand(intakeSubsystem, Constants.Intake.intakeSpeed),
                         new IndexerCommand(indexerSubsystem, Constants.Indexer.indexerSpeed),
                         new ManualShooterCommand(manualShooterSubsystem, Constants.Shooter.shooterSpeedScore),
                         new LoaderCommand(loaderSubsystem, Constants.Loader.loaderSpeed)

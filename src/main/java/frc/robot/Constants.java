@@ -41,7 +41,7 @@ public final class Constants {
         public static final double driveBaseRadius = Math.hypot(trackWidthX / 2.0, trackWidthY / 2.0);
 
         // Manual Drive
-        public static final double maxLinearSpeed = Units.feetToMeters(14.5);
+        public static final double maxLinearSpeed = Units.feetToMeters(3.0);
         public static final double maxAngularSpeed = maxLinearSpeed / driveBaseRadius;
         // Auto
         public static final double autoMaxLinearSpeedPct = 0.3;

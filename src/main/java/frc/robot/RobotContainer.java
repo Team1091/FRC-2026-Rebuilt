@@ -152,7 +152,8 @@ public class RobotContainer {
                 manualShooterSubsystem,
                 indexerSubsystem,
                 loaderSubsystem,
-                new ManualClimbCommand(climberSubsystem, Constants.Climber.climbingSpeed)
+                climberSubsystem,
+                intakeSubsystem
                 ));
         autoChooser.addOption("Drive Forward", Autos.driveForward(drive));
         autoChooser.addOption("Manual Align", Autos.manualAlign(drive));
@@ -161,7 +162,8 @@ public class RobotContainer {
                 manualShooterSubsystem,
                 poseEstimationSubsystem,
                 indexerSubsystem,
-                loaderSubsystem
+                loaderSubsystem,
+                intakeSubsystem
         ));
         autoChooser.addOption("Drive Back", Autos.driveBackScore(
                 drive,
