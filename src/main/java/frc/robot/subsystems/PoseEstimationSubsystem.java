@@ -1,13 +1,9 @@
 package frc.robot.subsystems;
 
-import edu.wpi.first.math.Matrix;
-import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
-import edu.wpi.first.math.numbers.N1;
-import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -16,9 +12,10 @@ import frc.robot.Constants;
 import frc.robot.LimelightHelpers;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 
+import static edu.wpi.first.units.Units.Meters;
 import static frc.robot.RobotContainer.isOnRed;
 
 /**
@@ -60,9 +57,6 @@ public class PoseEstimationSubsystem extends SubsystemBase {
 
         try {
             LimelightHelpers.SetRobotOrientation("limelight", getCurrentPose().getRotation().getDegrees(), rotationRateSupplier.get(), 0.0, 0.0, 0.0, 0.0);
-            final Matrix<N3, N1> standardDeviations = VecBuilder.fill(0.1, 0.1, 10.0);
-            poseEstimator.setVisionMeasurementStdDevs(standardDeviations);
-
 
             final LimelightHelpers.PoseEstimate poseEstimate_MegaTag1 = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight");
             final LimelightHelpers.PoseEstimate poseEstimate_MegaTag2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight");
@@ -73,7 +67,7 @@ public class PoseEstimationSubsystem extends SubsystemBase {
             if (poseEstimate_MegaTag1 == null) {
                 visionComplaints.add("mega tag 1 null");
                 rejectedMeasurementMt1 = true;
-            } else if (poseEstimate_MegaTag1.tagCount <= 0) {
+            } else if (poseEstimate_MegaTag1.tagCount <= 0 || !hasGoodTags(poseEstimate_MegaTag1.rawFiducials)) {
                 visionComplaints.add("mega tag 1 no tags seen");
                 rejectedMeasurementMt1 = true;
             }
@@ -82,7 +76,7 @@ public class PoseEstimationSubsystem extends SubsystemBase {
             if (poseEstimate_MegaTag2 == null) {
                 visionComplaints.add("mega tag 2 null");
                 rejectedMeasurementMt2 = true;
-            } else if (poseEstimate_MegaTag2.tagCount <= 0) {
+            } else if (poseEstimate_MegaTag2.tagCount <= 0 || !hasGoodTags(poseEstimate_MegaTag2.rawFiducials)) {
                 visionComplaints.add("mega tag 2 no tags seen");
                 rejectedMeasurementMt2 = true;
             }
@@ -126,6 +120,12 @@ public class PoseEstimationSubsystem extends SubsystemBase {
         SmartDashboard.putString("You Poser", getCurrentPose().toString());
         SmartDashboard.putNumber("X pos", getCurrentPose().getX());
         SmartDashboard.putNumber("Y pos", getCurrentPose().getY());
+    }
+
+    // Filters out tags that are too far away or too ambiguous
+    private boolean hasGoodTags(LimelightHelpers.RawFiducial[] rawFiducials) {
+        return Arrays.stream(rawFiducials).anyMatch(it ->
+                it.ambiguity < Constants.PoseEstimation.MAX_AMBIGUITY && it.distToCamera < Constants.PoseEstimation.MAX_VISIBLE_DISTANCE.in(Meters));
     }
 
     public Pose2d getCurrentPose() {
