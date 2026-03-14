@@ -4,8 +4,10 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -50,8 +52,7 @@ public final class Autos {
             Drive drive,
             PoseEstimationSubsystem poseEstimationSubsystem
     ) {
-        var currentPose = drive.getPose();
-        var newPos = currentPose.transformBy(new Transform2d(Units.feetToMeters(isOnRed() ? -5.0 : 5.0), 0.0, drive.getGyroRotation()));
+        var newPos = new Pose2d(new Translation2d(1.94, 3.72), new Rotation2d(Units.degreesToRadians(8.1)));
 
         return new DriveToPoseCommand(drive, newPos);
     }
@@ -70,11 +71,9 @@ public final class Autos {
             ClimberSubsystem climberSubsystem,
             IntakeSubsystem intakeSubsystem){
 
-        var currentPose = drive.getPose();
-        var shootPos = currentPose.transformBy(new Transform2d(Units.feetToMeters(isOnRed() ? -5.0 : 5.0), 0.0, drive.getGyroRotation()));
-        var readyPos = shootPos.transformBy(new Transform2d(Units.feetToMeters(isOnRed() ? 5.0 : -5.0), 0.0, drive.getGyroRotation()));
-        var backPos = readyPos.transformBy(new Transform2d(Units.feetToMeters(isOnRed() ? 3.5 : -3.5), 0.0, drive.getGyroRotation()));
-        var climbPos = backPos.transformBy(new Transform2d(Units.feetToMeters(isOnRed() ? 3.5 : -3.5), 0.0, drive.getGyroRotation()));
+        var readyPos = new Pose2d(new Translation2d(1.55, 3.72), new Rotation2d(Units.degreesToRadians(-1.5)));
+        var backPos = new Pose2d(new Translation2d(0.57, 3.72), new Rotation2d(Units.degreesToRadians(-1.5)));
+        var climbPos = new Pose2d(new Translation2d(1.02, 3.72), new Rotation2d(Units.degreesToRadians(-1.5)));
 
 
         return Commands.sequence(
@@ -123,7 +122,7 @@ public final class Autos {
                         new ManualShooterCommand(manualShooterSubsystem, Constants.Shooter.shooterSpeedScore)
                 ),
                 new ParallelDeadlineGroup(
-                        new TimerCommand(Duration.ofSeconds(8)),
+                        new TimerCommand(Duration.ofSeconds(5)),
                         new IntakeCommand(intakeSubsystem, Constants.Intake.intakeSpeed),
                         new IndexerCommand(indexerSubsystem, Constants.Indexer.indexerSpeed),
                         new ManualShooterCommand(manualShooterSubsystem, Constants.Shooter.shooterSpeedScore),
