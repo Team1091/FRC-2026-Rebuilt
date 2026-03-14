@@ -123,6 +123,7 @@ public class PoseEstimationSubsystem extends SubsystemBase {
         // Set the field pose to show the dashboard where we think we are.
         field.setRobotPose(getCurrentPose());
         SmartDashboard.putData("Field", field);
+        SmartDashboard.putString("You Poser", getCurrentPose().toString());
         SmartDashboard.putNumber("X pos", getCurrentPose().getX());
         SmartDashboard.putNumber("Y pos", getCurrentPose().getY());
     }
