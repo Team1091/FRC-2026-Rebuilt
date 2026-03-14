@@ -9,6 +9,8 @@ import frc.robot.Constants;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.utils.FlipPose2d;
 
+import java.time.Duration;
+
 /**
  * Given a starting pose, drive to a target pose.
  * This will drive in a straight line, but will try to ease up and down in speed.
@@ -16,6 +18,7 @@ import frc.robot.utils.FlipPose2d;
 public class DriveToPoseCommand extends Command {
     private final Drive drive;
     private final Pose2d targetPose;
+    private final Duration hold;
 
     // TODO: these probably will need to be configured, or will go out of control all over the place
     private final PIDController xController = new PIDController(1.0, 0, 0);
@@ -26,14 +29,32 @@ public class DriveToPoseCommand extends Command {
             Drive drive,
             FlipPose2d targetPose
     ) {
-        this(drive, targetPose.get());
+        this(drive, targetPose.get(), Duration.ofMillis(100));
     }
+
     public DriveToPoseCommand(
             Drive drive,
             Pose2d targetPose
     ) {
+        this(drive, targetPose, Duration.ofMillis(100));
+    }
+
+    public DriveToPoseCommand(
+            Drive drive,
+            FlipPose2d targetPose,
+            Duration hold
+    ) {
+        this(drive, targetPose.get(), hold);
+    }
+
+    public DriveToPoseCommand(
+            Drive drive,
+            Pose2d targetPose,
+            Duration hold
+    ) {
         this.drive = drive;
         this.targetPose = targetPose;
+        this.hold = hold;
 
         thetaController.enableContinuousInput(-Math.PI, Math.PI);
 
@@ -69,12 +90,28 @@ public class DriveToPoseCommand extends Command {
         drive.stop();
     }
 
+    private Long startTime = null;
+
     @Override
     public boolean isFinished() {
+        //
+
         Pose2d currentPose = drive.getPose();
         double distanceError = currentPose.getTranslation().getDistance(targetPose.getTranslation());
         double angleError = Math.abs(currentPose.getRotation().minus(targetPose.getRotation()).getDegrees());
 
-        return distanceError < 0.05 && angleError < 5;
+        boolean isCloseEnough = distanceError < 0.05 && angleError < 5;
+
+        if (isCloseEnough) {
+            var now = System.currentTimeMillis();
+            if (startTime == null) {
+                startTime = now;
+            }
+            return now - startTime >= hold.toMillis();
+
+        } else {
+            startTime = null;
+            return false;
+        }
     }
 }
