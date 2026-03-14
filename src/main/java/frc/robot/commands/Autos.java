@@ -72,8 +72,10 @@ public final class Autos {
 
         var currentPose = drive.getPose();
         var shootPos = currentPose.transformBy(new Transform2d(Units.feetToMeters(isOnRed() ? -5.0 : 5.0), 0.0, drive.getGyroRotation()));
-        var rotatedPos = shootPos.rotateAround(shootPos.getTranslation(), Rotation2d.fromDegrees(180));
-        var climbPos = rotatedPos.transformBy(new Transform2d(Units.feetToMeters(isOnRed() ? 5.0 : -5.0), 0.0, drive.getGyroRotation()));
+        var readyPos = shootPos.transformBy(new Transform2d(Units.feetToMeters(isOnRed() ? 5.0 : -5.0), 0.0, drive.getGyroRotation()));
+        var backPos = readyPos.transformBy(new Transform2d(Units.feetToMeters(isOnRed() ? 3.5 : -3.5), 0.0, drive.getGyroRotation()));
+        var climbPos = backPos.transformBy(new Transform2d(Units.feetToMeters(isOnRed() ? 3.5 : -3.5), 0.0, drive.getGyroRotation()));
+
 
         return Commands.sequence(
                 new ParallelDeadlineGroup(
@@ -85,7 +87,10 @@ public final class Autos {
                                 intakeSubsystem)
                 ),
                 new ParallelDeadlineGroup(
-                        new DriveToPoseCommand(drive, rotatedPos)
+                        new DriveToPoseCommand(drive, readyPos)
+                ),
+                new ParallelDeadlineGroup(
+                        new DriveToPoseCommand(drive, backPos)
                 ),
                 new ParallelDeadlineGroup(
                         new TimerCommand(Duration.ofSeconds(3)),
