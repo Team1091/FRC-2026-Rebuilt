@@ -52,7 +52,7 @@ public final class Autos {
             Drive drive,
             PoseEstimationSubsystem poseEstimationSubsystem
     ) {
-        var newPos = new Pose2d(new Translation2d(1.94, 3.72), new Rotation2d(Units.degreesToRadians(8.1)));
+        var newPos = new FlipPose2d(new Translation2d(1.94, 3.72), new Rotation2d(Units.degreesToRadians(8.1)));
 
         return new DriveToPoseCommand(drive, newPos);
     }
@@ -71,10 +71,9 @@ public final class Autos {
             ClimberSubsystem climberSubsystem,
             IntakeSubsystem intakeSubsystem){
 
-        var readyPos = new Pose2d(new Translation2d(1.55, 3.72), new Rotation2d(Units.degreesToRadians(-1.5)));
-        var backPos = new Pose2d(new Translation2d(0.57, 3.72), new Rotation2d(Units.degreesToRadians(-1.5)));
-        var climbPos = new Pose2d(new Translation2d(1.02, 3.72), new Rotation2d(Units.degreesToRadians(-1.5)));
-
+        var readyPos = new FlipPose2d(new Translation2d(1.55, 3.72), new Rotation2d(Units.degreesToRadians(-1.5)));
+        var backPos = new FlipPose2d(new Translation2d(0.57, 3.72), new Rotation2d(Units.degreesToRadians(-1.5)));
+        var climbPos = new FlipPose2d(new Translation2d(1.02, 3.72), new Rotation2d(Units.degreesToRadians(-1.5)));
 
         return Commands.sequence(
                 new ParallelDeadlineGroup(
