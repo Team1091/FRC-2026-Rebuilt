@@ -7,10 +7,13 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.units.measure.Distance;
 import frc.robot.subsystems.drive.config.FeedForwardParams;
 import frc.robot.subsystems.drive.config.ModulePidConfig;
 import frc.robot.subsystems.drive.config.PidConfig;
 import frc.robot.utils.FlipPose2d;
+
+import static edu.wpi.first.units.Units.Feet;
 
 public final class Constants {
 
@@ -93,7 +96,7 @@ public final class Constants {
     public static final class Shooter {
         public static final boolean disabled = false;
         public static final int leftMotorChannel = 13;
-//        public static final int rightMotorChannel = 14;
+        //        public static final int rightMotorChannel = 14;
         public static final double shooterSpeedPass = 0.5;
         public static final double shooterSpeedScore = 0.5;
         // TODO: we may want target RPMs here for the flywheel
@@ -142,9 +145,17 @@ public final class Constants {
 
 
     public static final class PoseEstimation {
+        // https://docs.wpilib.org/en/stable/docs/software/advanced-controls/state-space/state-space-pose-estimators.html
         public final static Vector<N3> stateStdDevs = VecBuilder.fill(0.05, 0.05, 5);
         public final static Vector<N3> visionMeasurementStdDevs = VecBuilder.fill(.5, .5, Units.degreesToRadians(30));
-        public final static Vector<N3> visionMeasurementStdDevsUpdate = VecBuilder.fill(.7, .7, 9999999);
+//        public final static Vector<N3> visionMeasurementStdDevsUpdate = VecBuilder.fill(.7, .7, 9999999);
+        // TODO: this was what we were setting each loop before
+        // poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(0.1, 0.1, 10.0));
+        // TODO: we may want to make the std deviation higher as it gets further away
+
+        // Any beyond this distance are sus
+        public final static Distance MAX_VISIBLE_DISTANCE = Distance.ofBaseUnits(8, Feet);
+        public final static double MAX_AMBIGUITY = 0.5; // THis may have to be lower, if its high the facing may be backwards
     }
 
     public static final class Locations {
