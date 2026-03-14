@@ -149,12 +149,13 @@ public final class Constants {
         public final static Vector<N3> stateStdDevs = VecBuilder.fill(0.05, 0.05, 5);
         public final static Vector<N3> visionMeasurementStdDevs = VecBuilder.fill(.5, .5, Units.degreesToRadians(30));
 //        public final static Vector<N3> visionMeasurementStdDevsUpdate = VecBuilder.fill(.7, .7, 9999999);
-        // TODO: this different than the values in constants
-//            poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(0.1, 0.1, 10.0));
+        // TODO: this was what we were setting each loop before
+        // poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(0.1, 0.1, 10.0));
+        // TODO: we may want to make the std deviation higher as it gets further away
 
         // Any beyond this distance are sus
         public final static Distance MAX_VISIBLE_DISTANCE = Distance.ofBaseUnits(8, Feet);
-        public final static double MAX_AMBIGUITY = 0.5;
+        public final static double MAX_AMBIGUITY = 0.5; // THis may have to be lower, if its high the facing may be backwards
     }
 
     public static final class Locations {
