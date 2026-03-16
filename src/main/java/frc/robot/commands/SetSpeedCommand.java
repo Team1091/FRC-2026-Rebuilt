@@ -12,6 +12,7 @@ public class SetSpeedCommand extends Command {
         this.manualShooterSubsystem = manualShooterSubsystem;
         addRequirements(manualShooterSubsystem);
     }
+
     public void execute() {
         manualShooterSubsystem.setSpeed(newSpeed);
     }

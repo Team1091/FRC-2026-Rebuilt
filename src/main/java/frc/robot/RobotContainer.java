@@ -155,7 +155,7 @@ public class RobotContainer {
                 loaderSubsystem,
                 climberSubsystem,
                 intakeSubsystem
-                ));
+        ));
         autoChooser.addOption("Drive Forward", Autos.driveForward(drive));
         autoChooser.addOption("Manual Align", Autos.manualAlign(drive));
         autoChooser.addOption("Bare Minimum", Autos.driveBackAndScore(

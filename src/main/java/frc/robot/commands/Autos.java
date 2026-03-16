@@ -4,7 +4,6 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -30,9 +29,6 @@ import frc.robot.subsystems.drive.Drive;
 import frc.robot.utils.FlipPose2d;
 
 import java.time.Duration;
-import java.util.Timer;
-
-import static frc.robot.RobotContainer.isOnRed;
 
 public final class Autos {
 
@@ -69,7 +65,7 @@ public final class Autos {
             IndexerSubsystem indexerSubsystem,
             LoaderSubsystem loaderSubsystem,
             ClimberSubsystem climberSubsystem,
-            IntakeSubsystem intakeSubsystem){
+            IntakeSubsystem intakeSubsystem) {
 
         var readyPos = new FlipPose2d(new Translation2d(1.55, 3.72), new Rotation2d(Units.degreesToRadians(-1.5)));
         var backPos = new FlipPose2d(new Translation2d(0.57, 3.72), new Rotation2d(Units.degreesToRadians(-1.5)));
@@ -99,7 +95,7 @@ public final class Autos {
                 ),
                 new ParallelDeadlineGroup(
                         new TimerCommand(Duration.ofSeconds(3)),
-                        new ManualClimbCommand(climberSubsystem, -Constants.Climber.climbingSpeed)                )
+                        new ManualClimbCommand(climberSubsystem, -Constants.Climber.climbingSpeed))
 
         );
     }
