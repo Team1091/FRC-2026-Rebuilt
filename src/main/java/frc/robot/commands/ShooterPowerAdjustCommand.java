@@ -16,7 +16,7 @@ public class ShooterPowerAdjustCommand extends Command {
     static {
         // we have a set of data on how far we can shoot
         shooterMap.put(4.0, 0.4); // meters, to shooter power
-        shooterMap.put(5.0, 0.6);
+        shooterMap.put(5.0, 0.5);
         shooterMap.put(8.0, 0.8);
     }
 
