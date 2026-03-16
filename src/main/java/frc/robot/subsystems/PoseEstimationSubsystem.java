@@ -149,8 +149,11 @@ public class PoseEstimationSubsystem extends SubsystemBase {
         var speed = 1.0 + distance(chassisSpeeds.vxMetersPerSecond, chassisSpeeds.vyMetersPerSecond);
         var rotation = 1.0 + abs(rotationRateRadsSecSupplier.get());
 
-        var translationError = methodError * speed * rotation * ambiguity * distanceToTarget;
-        var rotationError = methodError * speed * rotation * ambiguity * distanceToTarget * 2.0;
+        // When incorporating AprilTag poses, make the vision heading standard deviation very large,
+        // make the gyro heading standard deviation small,
+        // and scale the vision x and y standard deviation by distance from the tag.
+        var translationError = methodError * ambiguity * speed * rotation * rotation * distanceToTarget * distanceToTarget;
+        var rotationError = methodError * ambiguity * speed * rotation * rotation * distanceToTarget * distanceToTarget * 20.0;
 
         poseEstimator.setVisionMeasurementStdDevs(
                 VecBuilder.fill(translationError, translationError, rotationError)
