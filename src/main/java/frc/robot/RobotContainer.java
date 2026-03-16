@@ -155,6 +155,15 @@ public class RobotContainer {
                 climberSubsystem,
                 intakeSubsystem
                 ));
+
+        autoChooser.addOption("\uD83D\uDE0E", Autos.yoloSwaggins(drive,
+                poseEstimationSubsystem,
+                manualShooterSubsystem,
+                indexerSubsystem,
+                loaderSubsystem,
+                climberSubsystem,
+                intakeSubsystem));
+
         autoChooser.addOption("Drive Forward", Autos.driveForward(drive));
         autoChooser.addOption("Manual Align", Autos.manualAlign(drive));
         autoChooser.addOption("Bare Minimum", Autos.driveBackAndScore(
