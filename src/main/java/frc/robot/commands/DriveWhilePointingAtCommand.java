@@ -49,9 +49,9 @@ public class DriveWhilePointingAtCommand extends Command {
             PoseEstimationSubsystem poseEstimationSubsystem,
             FlipPose2d targetPose,
             DoubleSupplier xSupplier,
-            DoubleSupplier ySupplier1
+            DoubleSupplier ySupplier
     ) {
-        this(drive, poseEstimationSubsystem, targetPose.get(), xSupplier, ySupplier1);
+        this(drive, poseEstimationSubsystem, targetPose.get(), xSupplier, ySupplier);
     }
 
     @Override
@@ -64,6 +64,8 @@ public class DriveWhilePointingAtCommand extends Command {
                 currentPoseHeading.getRadians(),
                 headingToTarget.getRadians()
         );
+
+        // The below code should be the same as in DriveCommand
 
         // Calculate the velocity to drive at using the left stick
         double xVelocity = xSupplier.getAsDouble();
@@ -79,11 +81,10 @@ public class DriveWhilePointingAtCommand extends Command {
         linearMagnitude = linearMagnitude * linearMagnitude;
         omega = Math.copySign(omega * omega, omega);
 
-
         // Calculate new linear velocity
         Translation2d linearVelocity = new Translation2d(linearMagnitude, linearDirection);
 
-        drive.runVelocity(linearVelocity, omega);
+        drive.runVelocity(linearVelocity, omega, Constants.Swerve.manualMaxLinearSpeed);
     }
 
     @Override
