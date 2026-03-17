@@ -35,7 +35,6 @@ import frc.robot.subsystems.ManualHoodSubsystem;
 import frc.robot.subsystems.ManualShooterSubsystem;
 import frc.robot.subsystems.PivotSubsystem;
 import frc.robot.subsystems.PoseEstimationSubsystem;
-import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.gyro.GyroIOPigeon2;
 import frc.robot.subsystems.drive.module.ModuleIOTalonFX;
@@ -57,7 +56,6 @@ public class RobotContainer {
     private final PoseEstimationSubsystem poseEstimationSubsystem;
     private final ClimberSubsystem climberSubsystem;
     private final IntakeSubsystem intakeSubsystem;
-    private final ShooterSubsystem shooterSubsystem;
     private final HoodSubsystem hoodSubsystem;
     private final PivotSubsystem pivotSubsystem;
     private final ManualShooterSubsystem manualShooterSubsystem;
@@ -94,7 +92,6 @@ public class RobotContainer {
         drive.setPoseEstimationSubSystem(poseEstimationSubsystem);
 
         intakeSubsystem = new IntakeSubsystem();
-        shooterSubsystem = new ShooterSubsystem();
         hoodSubsystem = new HoodSubsystem();
         climberSubsystem = new ClimberSubsystem();
         pivotSubsystem = new PivotSubsystem();
@@ -157,8 +154,6 @@ public class RobotContainer {
                 intakeSubsystem
         ));
 
-                ));
-
         autoChooser.addOption("\uD83D\uDE0E", Autos.yoloSwaggins(drive,
                 poseEstimationSubsystem,
                 manualShooterSubsystem,
@@ -179,29 +174,6 @@ public class RobotContainer {
         ));
         autoChooser.addOption("Drive Back", Autos.driveBackScore(
                 drive,
-                poseEstimationSubsystem
-        ));
-        autoChooser.addOption("Win", Autos.swoopThroughMiddleThenShoot(
-                drive,
-                hoodSubsystem,
-                shooterSubsystem,
-                pivotSubsystem,
-                climberSubsystem,
-                poseEstimationSubsystem,
-                StartPosish.RIGHT
-        ));
-        autoChooser.addOption("Drive To Opponent", Autos.driveToOpponent(
-                drive,
-                hoodSubsystem,
-                shooterSubsystem,
-                poseEstimationSubsystem,
-                StartPosish.RIGHT
-        ));
-        autoChooser.addOption("Human Pickup", Autos.humanPickup(
-                drive,
-                hoodSubsystem,
-                shooterSubsystem,
-                climberSubsystem,
                 poseEstimationSubsystem
         ));
         SmartDashboard.putData("Auto Mode", autoChooser);
