@@ -1,6 +1,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ManualShooterSubsystem;
 import frc.robot.subsystems.PoseEstimationSubsystem;
@@ -15,9 +16,9 @@ public class ShooterPowerAdjustCommand extends Command {
 
     static {
         // we have a set of data on how far we can shoot
-        shooterMap.put(4.0, 0.4); // meters, to shooter power
-        shooterMap.put(5.0, 0.5);
-        shooterMap.put(8.0, 0.8);
+        shooterMap.put(Units.feetToMeters(4.0), 0.4); // meters, to shooter power
+        shooterMap.put(Units.feetToMeters(5.0), 0.5);
+        shooterMap.put(Units.feetToMeters(8.0), 0.8);
     }
 
     private final ManualShooterSubsystem manualShooterSubsystem;
