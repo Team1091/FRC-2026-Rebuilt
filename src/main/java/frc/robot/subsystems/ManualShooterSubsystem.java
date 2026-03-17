@@ -1,10 +1,8 @@
 package frc.robot.subsystems;
 
-import com.revrobotics.PersistMode;
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel;
 import com.revrobotics.spark.config.SparkFlexConfig;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -12,7 +10,7 @@ import frc.robot.Constants;
 public class ManualShooterSubsystem extends SubsystemBase {
 
     private final SparkFlex leftShooterMotor;
-//    private final SparkFlex rightShooterMotor;
+    //    private final SparkFlex rightShooterMotor;
     private double speed;
 
     public ManualShooterSubsystem() {

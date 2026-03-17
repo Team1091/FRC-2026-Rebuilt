@@ -88,6 +88,7 @@ public class RobotContainer {
         poseEstimationSubsystem = new PoseEstimationSubsystem(
                 drive::getGyroRotation,
                 () -> Math.toDegrees(drive.getGyroRotationRateRadPerSec()),
+                () -> drive.getRobotRelativeSpeeds(),
                 drive::getModulePositions
         );
         drive.setPoseEstimationSubSystem(poseEstimationSubsystem);
@@ -154,6 +155,8 @@ public class RobotContainer {
                 loaderSubsystem,
                 climberSubsystem,
                 intakeSubsystem
+        ));
+
                 ));
 
         autoChooser.addOption("\uD83D\uDE0E", Autos.yoloSwaggins(drive,

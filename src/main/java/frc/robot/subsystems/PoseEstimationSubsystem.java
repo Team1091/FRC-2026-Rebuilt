@@ -1,13 +1,11 @@
 package frc.robot.subsystems;
 
-import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
-import edu.wpi.first.math.numbers.N1;
-import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -16,10 +14,12 @@ import frc.robot.Constants;
 import frc.robot.LimelightHelpers;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 
 import static frc.robot.RobotContainer.isOnRed;
+import static frc.robot.utils.Maths.distance;
+import static java.lang.Math.abs;
 
 /**
  * The purpose of this subsystem is to estimate the robot's pose based on vision measurements and estimated drive speeds.
@@ -29,7 +29,8 @@ import static frc.robot.RobotContainer.isOnRed;
 public class PoseEstimationSubsystem extends SubsystemBase {
     private final SwerveDrivePoseEstimator poseEstimator;
     private final Supplier<Rotation2d> rotationSupplier;
-    private final Supplier<Double> rotationRateSupplier;
+    private final Supplier<Double> rotationRateRadsSecSupplier;
+    private final Supplier<ChassisSpeeds> speedsSupplier;
     private final Supplier<SwerveModulePosition[]> modulePositionSupplier;
 
     private final Field2d field = new Field2d();
@@ -37,12 +38,14 @@ public class PoseEstimationSubsystem extends SubsystemBase {
 
     public PoseEstimationSubsystem(
             Supplier<Rotation2d> rotationSupplier,
-            Supplier<Double> rotationRateSupplier,
+            Supplier<Double> rotationRateRadsSecSupplier,
+            Supplier<ChassisSpeeds> speedsSupplier,
             Supplier<SwerveModulePosition[]> modulePositionSupplier
     ) {
         this.rotationSupplier = rotationSupplier;
         this.modulePositionSupplier = modulePositionSupplier;
-        this.rotationRateSupplier = rotationRateSupplier;
+        this.speedsSupplier = speedsSupplier;
+        this.rotationRateRadsSecSupplier = rotationRateRadsSecSupplier;
 
         poseEstimator = new SwerveDrivePoseEstimator(
                 Constants.Swerve.kinematics,
@@ -59,10 +62,7 @@ public class PoseEstimationSubsystem extends SubsystemBase {
         poseEstimator.update(rotationSupplier.get(), modulePositionSupplier.get());
 
         try {
-            LimelightHelpers.SetRobotOrientation("limelight", getCurrentPose().getRotation().getDegrees(), rotationRateSupplier.get(), 0.0, 0.0, 0.0, 0.0);
-            final Matrix<N3, N1> standardDeviations = VecBuilder.fill(0.1, 0.1, 10.0);
-            poseEstimator.setVisionMeasurementStdDevs(standardDeviations);
-
+            LimelightHelpers.SetRobotOrientation("limelight", getCurrentPose().getRotation().getDegrees(), rotationRateRadsSecSupplier.get(), 0.0, 0.0, 0.0, 0.0);
 
             final LimelightHelpers.PoseEstimate poseEstimate_MegaTag1 = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight");
             final LimelightHelpers.PoseEstimate poseEstimate_MegaTag2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight");
@@ -88,7 +88,7 @@ public class PoseEstimationSubsystem extends SubsystemBase {
             }
 
             // If we are rotating too fast, we can't see the tags
-            if (Math.abs(rotationRateSupplier.get()) > 360) {
+            if (abs(rotationRateRadsSecSupplier.get()) > 360) {
                 visionComplaints.add("Rotating too fast to see");
             } else {
                 // if we have both mt1 + mt2, we should use them both
@@ -97,16 +97,19 @@ public class PoseEstimationSubsystem extends SubsystemBase {
                             poseEstimate_MegaTag2.pose.getTranslation(),
                             poseEstimate_MegaTag1.pose.getRotation()
                     );
+                    setVisionMeasurementStdDevs(poseEstimate_MegaTag2.rawFiducials, 0.0);
                     poseEstimator.addVisionMeasurement(
                             poseEstimate_MegaTag2.pose,
                             poseEstimate_MegaTag2.timestampSeconds);
                 } else if (!rejectedMeasurementMt2) {
                     // We have a mt2 tag, let's just use that
+                    setVisionMeasurementStdDevs(poseEstimate_MegaTag2.rawFiducials, 1.0);
                     poseEstimator.addVisionMeasurement(
                             poseEstimate_MegaTag2.pose,
                             poseEstimate_MegaTag2.timestampSeconds);
                 } else if (!rejectedMeasurementMt1) {
                     // We have a mt1 tag, let's just use that
+                    setVisionMeasurementStdDevs(poseEstimate_MegaTag2.rawFiducials, 2.0);
                     poseEstimator.addVisionMeasurement(
                             poseEstimate_MegaTag1.pose,
                             poseEstimate_MegaTag1.timestampSeconds);
@@ -134,6 +137,27 @@ public class PoseEstimationSubsystem extends SubsystemBase {
 
     public void setCurrentPose(Pose2d newPose) {
         poseEstimator.resetPosition(rotationSupplier.get(), modulePositionSupplier.get(), newPose);
+    }
+
+    // This calculates how bad our vision input is.  The worse the input, the higher the std dev
+    private void setVisionMeasurementStdDevs(LimelightHelpers.RawFiducial[] rawFiducials, double methodError) {
+        var chassisSpeeds = speedsSupplier.get();
+
+        // These things will throw off our vision input, so we should use them to calculate our std dev
+        double distanceToTarget = 1.0 + Arrays.stream(rawFiducials).map((f) -> f.distToCamera).min(Double::compareTo).get();
+        double ambiguity = 1.0 + Arrays.stream(rawFiducials).map((f) -> f.ambiguity).min(Double::compareTo).get();
+        var speed = 1.0 + distance(chassisSpeeds.vxMetersPerSecond, chassisSpeeds.vyMetersPerSecond);
+        var rotation = 1.0 + abs(rotationRateRadsSecSupplier.get());
+
+        // When incorporating AprilTag poses, make the vision heading standard deviation very large,
+        // make the gyro heading standard deviation small,
+        // and scale the vision x and y standard deviation by distance from the tag.
+        var translationError = methodError * ambiguity * speed * rotation * rotation * distanceToTarget * distanceToTarget;
+        var rotationError = methodError * ambiguity * speed * rotation * rotation * distanceToTarget * distanceToTarget * 20.0;
+
+        poseEstimator.setVisionMeasurementStdDevs(
+                VecBuilder.fill(translationError, translationError, rotationError)
+        );
     }
 
 

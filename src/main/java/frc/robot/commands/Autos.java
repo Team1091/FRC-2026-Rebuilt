@@ -31,6 +31,7 @@ import frc.robot.utils.FlipPose2d;
 
 import java.time.Duration;
 
+
 import static edu.wpi.first.units.Units.Feet;
 import static edu.wpi.first.units.Units.Meter;
 import static frc.robot.Constants.Locations.hubPose;
@@ -72,6 +73,10 @@ public final class Autos {
             ClimberSubsystem climberSubsystem,
             IntakeSubsystem intakeSubsystem) {
 
+        var readyPos = new FlipPose2d(new Translation2d(1.55, 3.72), new Rotation2d(Units.degreesToRadians(-1.5)));
+        var backPos = new FlipPose2d(new Translation2d(0.57, 3.72), new Rotation2d(Units.degreesToRadians(-1.5)));
+        var climbPos = new FlipPose2d(new Translation2d(1.02, 3.72), new Rotation2d(Units.degreesToRadians(-1.5)));
+
         return Commands.sequence(
                 new ParallelDeadlineGroup(
                         driveBackAndScore(drive,
@@ -96,6 +101,8 @@ public final class Autos {
                 ),
                 new ParallelDeadlineGroup(
                         new TimerCommand(Duration.ofSeconds(3)),
+                        new ManualClimbCommand(climberSubsystem, -Constants.Climber.climbingSpeed))
+
                         new ManualClimbCommand(climberSubsystem, -Constants.Climber.climbingSpeed)
                 )
         );
