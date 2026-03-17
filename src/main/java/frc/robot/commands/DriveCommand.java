@@ -11,6 +11,8 @@ import frc.robot.subsystems.drive.Drive;
 
 import java.util.function.DoubleSupplier;
 
+import static frc.robot.Constants.Swerve.manualMaxLinearSpeed;
+
 public class DriveCommand {
     private DriveCommand() {
     }
@@ -42,7 +44,7 @@ public class DriveCommand {
                     // Calculate new linear velocity
                     Translation2d linearVelocity = new Translation2d(linearMagnitude, linearDirection);
 
-                    drive.runVelocity(linearVelocity, omega);
+                    drive.runVelocity(linearVelocity, omega, manualMaxLinearSpeed);
                 },
                 drive
         );

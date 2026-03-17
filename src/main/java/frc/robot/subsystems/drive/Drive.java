@@ -22,9 +22,8 @@ import static frc.robot.Constants.Swerve.BACK_LEFT;
 import static frc.robot.Constants.Swerve.BACK_RIGHT;
 import static frc.robot.Constants.Swerve.FRONT_LEFT;
 import static frc.robot.Constants.Swerve.FRONT_RIGHT;
+import static frc.robot.Constants.Swerve.driveBaseRadius;
 import static frc.robot.Constants.Swerve.kinematics;
-import static frc.robot.Constants.Swerve.maxAngularSpeed;
-import static frc.robot.Constants.Swerve.maxLinearSpeed;
 import static frc.robot.Constants.Swerve.moduleTranslations;
 
 public class Drive extends SubsystemBase {
@@ -35,7 +34,7 @@ public class Drive extends SubsystemBase {
     private boolean isFieldOriented = true;
     private boolean defenseMode = false;
     private ChassisSpeeds chassisSpeeds;
-    //    private Translation2d middle;
+
     private final SwerveModulePosition[] modulePositions = new SwerveModulePosition[4];
     private PoseEstimationSubsystem poseEstimationSubsystem;
     private final StructArrayPublisher<SwerveModuleState> statePublisher;
@@ -113,25 +112,27 @@ public class Drive extends SubsystemBase {
 //    }
 
     /**
-     * Runs the drive at the desired velocity.
+     * Runs the drive at the desired velocity for a human
      */
-    public void runVelocity(Translation2d linearVelocity, double omega) {
+    public void runVelocity(Translation2d linearVelocity, double omega, double maxLinearSpeed) {
         Rotation2d rotation;
         if (isFieldOriented) {
             rotation = getPose().getRotation();
         } else {
             rotation = new Rotation2d(0);
         }
+
+        var maxAngularSpeed = maxLinearSpeed / driveBaseRadius;
         ChassisSpeeds chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
                 linearVelocity.getX() * maxLinearSpeed,
                 linearVelocity.getY() * maxLinearSpeed,
                 omega * maxAngularSpeed,
                 rotation
         );
-        runVelocity(chassisSpeeds);
+        runVelocity(chassisSpeeds, maxLinearSpeed);
     }
 
-    public void runVelocity(ChassisSpeeds chassisSpeeds) {
+    public void runVelocity(ChassisSpeeds chassisSpeeds, Double maxLinearSpeed) {
         this.chassisSpeeds = chassisSpeeds;
         // Calculate module setpoints
         ChassisSpeeds discreteSpeeds = ChassisSpeeds.discretize(chassisSpeeds, 0.02);
@@ -149,7 +150,7 @@ public class Drive extends SubsystemBase {
      * Stops the drive.
      */
     public void stop() {
-        runVelocity(new ChassisSpeeds());
+        runVelocity(new ChassisSpeeds(), Constants.Swerve.manualMaxLinearSpeed);
     }
 
     /**

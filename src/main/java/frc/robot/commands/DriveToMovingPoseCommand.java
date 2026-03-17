@@ -11,50 +11,38 @@ import frc.robot.utils.FlipPose2d;
 
 import java.time.Duration;
 
-/**
- * Given a starting pose, drive to a target pose.
- * This will drive in a straight line, but will try to ease up and down in speed.
- */
-public class DriveToPoseCommand extends Command {
+public class DriveToMovingPoseCommand extends Command {
     private final Drive drive;
-    private final Pose2d targetPose;
-    private final Duration hold;
+
+    private final Pose2d startPose;
+    private final Pose2d endPose;
+    private final Duration timeToComplete;
+    private Long startTime = null;
 
     // TODO: these probably will need to be configured, or will go out of control all over the place
     private final PIDController xController = new PIDController(0.1, 0, 1.0);
     private final PIDController yController = new PIDController(0.1, 0, 1.0);
     private final PIDController thetaController = new PIDController(1.0, 0.5, 0);
 
-    public DriveToPoseCommand(
+    public DriveToMovingPoseCommand(
             Drive drive,
-            FlipPose2d targetPose
+            FlipPose2d startPose,
+            FlipPose2d endPose,
+            Duration timeToComplete
     ) {
-        this(drive, targetPose.get(), Duration.ofMillis(100));
+        this(drive, startPose.get(), endPose.get(), timeToComplete);
     }
 
-    public DriveToPoseCommand(
+    public DriveToMovingPoseCommand(
             Drive drive,
-            Pose2d targetPose
-    ) {
-        this(drive, targetPose, Duration.ofMillis(100));
-    }
-
-    public DriveToPoseCommand(
-            Drive drive,
-            FlipPose2d targetPose,
-            Duration hold
-    ) {
-        this(drive, targetPose.get(), hold);
-    }
-
-    public DriveToPoseCommand(
-            Drive drive,
-            Pose2d targetPose,
-            Duration hold
+            Pose2d startPose,
+            Pose2d endPose,
+            Duration timeToComplete
     ) {
         this.drive = drive;
-        this.targetPose = targetPose;
-        this.hold = hold;
+        this.startPose = startPose;
+        this.endPose = endPose;
+        this.timeToComplete = timeToComplete;
 
         thetaController.enableContinuousInput(-Math.PI, Math.PI);
 
@@ -63,11 +51,14 @@ public class DriveToPoseCommand extends Command {
 
     @Override
     public void initialize() {
+        startTime = System.currentTimeMillis();
     }
 
     @Override
     public void execute() {
+
         Pose2d currentPose = drive.getPose();
+       var targetPose = startPose.interpolate(endPose, timeToComplete.toSeconds());
 
         // Calculate the velocity to drive at using PID
         double xVelocity = xController.calculate(currentPose.getX(), targetPose.getX());
@@ -89,28 +80,12 @@ public class DriveToPoseCommand extends Command {
         drive.stop();
     }
 
-    private Long startTime = null;
-
     @Override
     public boolean isFinished() {
-        //
-
-        Pose2d currentPose = drive.getPose();
-        double distanceError = currentPose.getTranslation().getDistance(targetPose.getTranslation());
-        double angleError = Math.abs(currentPose.getRotation().minus(targetPose.getRotation()).getDegrees());
-
-        boolean isCloseEnough = distanceError < 0.05 && angleError < 5;
-
-        if (isCloseEnough) {
-            var now = System.currentTimeMillis();
-            if (startTime == null) {
-                startTime = now;
-            }
-            return now - startTime >= hold.toMillis();
-
-        } else {
-            startTime = null;
-            return false;
+        var now = System.currentTimeMillis();
+        if (startTime == null) {
+            startTime = now;
         }
+        return now - startTime >= timeToComplete.toMillis();
     }
 }
