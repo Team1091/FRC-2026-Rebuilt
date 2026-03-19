@@ -43,7 +43,7 @@ public final class Constants {
         // Manual Drive
         public static final double manualMaxLinearSpeed = Units.feetToMeters(14.5);
         // Auto
-        public static final double autoMaxLinearSpeed = Units.feetToMeters(4.0);
+        public static final double autoMaxLinearSpeed = Units.feetToMeters(2.0);
 
         public static final double linearDeadband = 0.1;
         public static final double rotationalDeadband = 0.1;
@@ -58,10 +58,10 @@ public final class Constants {
 
         // Per-module hardware configuration (IDs, offsets, titles, inversion)
         public static final ModuleConfig[] moduleHardware = new ModuleConfig[]{
-                new ModuleConfig(6, 5, 4, Rotation2d.fromDegrees(42 + 180 - 10), "FL", true, false),
-                new ModuleConfig(8, 7, 2, Rotation2d.fromDegrees(37 + 180 + 5), "FR", true, false),
-                new ModuleConfig(1, 2, 1, Rotation2d.fromDegrees(-195 + 180), "BL", true, false),
-                new ModuleConfig(3, 4, 3, Rotation2d.fromDegrees(174 + 180), "BR", true, false)
+                new ModuleConfig(6, 5, 4, Rotation2d.fromDegrees(42 - 10), "FL", true, true),
+                new ModuleConfig(8, 7, 2, Rotation2d.fromDegrees(37 + 5), "FR", true, true),
+                new ModuleConfig(1, 2, 1, Rotation2d.fromDegrees(-195), "BL", true, true),
+                new ModuleConfig(3, 4, 3, Rotation2d.fromDegrees(174), "BR", true, true)
         };
 
         public static final ModulePidConfig[] moduleConfigs = {

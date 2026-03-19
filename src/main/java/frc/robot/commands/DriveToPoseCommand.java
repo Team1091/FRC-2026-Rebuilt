@@ -75,9 +75,9 @@ public class DriveToPoseCommand extends Command {
         double thetaVelocity = thetaController.calculate(currentPose.getRotation().getRadians(), targetPose.getRotation().getRadians());
 
         // Clamp to max swerve speeds
-        xVelocity = MathUtil.clamp(xVelocity, -1, 1);
-        yVelocity = MathUtil.clamp(yVelocity, -1, 1);
-        thetaVelocity = MathUtil.clamp(thetaVelocity, -1, 1);
+        xVelocity = MathUtil.clamp(xVelocity, -0.25, 0.25);
+        yVelocity = MathUtil.clamp(yVelocity, -0.25, 0.25);
+        thetaVelocity = MathUtil.clamp(thetaVelocity, -0.25, 0.25);
 
         // Send Velocity to the drive
         drive.runVelocity(new Translation2d(-xVelocity, -yVelocity), -thetaVelocity, Constants.Swerve.autoMaxLinearSpeed);
