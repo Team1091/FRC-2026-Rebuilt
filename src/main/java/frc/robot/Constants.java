@@ -43,7 +43,7 @@ public final class Constants {
         // Manual Drive
         public static final double manualMaxLinearSpeed = Units.feetToMeters(14.5);
         // Auto
-        public static final double autoMaxLinearSpeed = Units.feetToMeters(2.0);
+        public static final double autoMaxLinearSpeed = Units.feetToMeters(3.0);
 
         public static final double linearDeadband = 0.1;
         public static final double rotationalDeadband = 0.1;

@@ -156,7 +156,7 @@ public class PoseEstimationSubsystem extends SubsystemBase {
         var rotationError = methodError * ambiguity * speed * rotation * rotation * distanceToTarget * distanceToTarget * 20.0;
 
         poseEstimator.setVisionMeasurementStdDevs(
-                VecBuilder.fill(20 + translationError, 20 + translationError, 20 + rotationError)
+                VecBuilder.fill(5 + translationError, 5 + translationError, 5 + rotationError)
         );
     }
 
