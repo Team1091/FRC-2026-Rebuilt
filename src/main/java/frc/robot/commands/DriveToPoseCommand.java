@@ -21,9 +21,9 @@ public class DriveToPoseCommand extends Command {
     private final Duration hold;
 
     // TODO: these probably will need to be configured, or will go out of control all over the place
-    private final PIDController xController = new PIDController(0.1, 0, 1.0);
-    private final PIDController yController = new PIDController(0.1, 0, 1.0);
-    private final PIDController thetaController = new PIDController(1.0, 0.5, 0);
+    private final PIDController xController = new PIDController(0.3, 0.0, 0);
+    private final PIDController yController = new PIDController(0.3, 0.0, 0);
+    private final PIDController thetaController = new PIDController(1.0, 0.0, 0);
 
     public DriveToPoseCommand(
             Drive drive,
@@ -75,9 +75,9 @@ public class DriveToPoseCommand extends Command {
         double thetaVelocity = thetaController.calculate(currentPose.getRotation().getRadians(), targetPose.getRotation().getRadians());
 
         // Clamp to max swerve speeds
-        xVelocity = MathUtil.clamp(xVelocity, -1, 1);
-        yVelocity = MathUtil.clamp(yVelocity, -1, 1);
-        thetaVelocity = MathUtil.clamp(thetaVelocity, -1, 1);
+        xVelocity = MathUtil.clamp(xVelocity, -1.0, 1.0);
+        yVelocity = MathUtil.clamp(yVelocity, -1.0, 1.0);
+        thetaVelocity = MathUtil.clamp(thetaVelocity, -1.0, 1.0);
 
         // Send Velocity to the drive
         drive.runVelocity(new Translation2d(-xVelocity, -yVelocity), -thetaVelocity, Constants.Swerve.autoMaxLinearSpeed);
@@ -99,7 +99,7 @@ public class DriveToPoseCommand extends Command {
         double distanceError = currentPose.getTranslation().getDistance(targetPose.getTranslation());
         double angleError = Math.abs(currentPose.getRotation().minus(targetPose.getRotation()).getDegrees());
 
-        boolean isCloseEnough = distanceError < 0.05 && angleError < 5;
+        boolean isCloseEnough = distanceError < 0.05 && angleError < 0.5;
 
         if (isCloseEnough) {
             var now = System.currentTimeMillis();

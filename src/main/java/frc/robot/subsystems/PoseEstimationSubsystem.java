@@ -59,7 +59,7 @@ public class PoseEstimationSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        poseEstimator.update(rotationSupplier.get().plus( Rotation2d.k180deg), modulePositionSupplier.get());
+        poseEstimator.update(rotationSupplier.get(), modulePositionSupplier.get());
 
         try {
             LimelightHelpers.SetRobotOrientation("limelight", getCurrentPose().getRotation().getDegrees(), rotationRateRadsSecSupplier.get(), 0.0, 0.0, 0.0, 0.0);
@@ -156,7 +156,7 @@ public class PoseEstimationSubsystem extends SubsystemBase {
         var rotationError = methodError * ambiguity * speed * rotation * rotation * distanceToTarget * distanceToTarget * 20.0;
 
         poseEstimator.setVisionMeasurementStdDevs(
-                VecBuilder.fill(10 + translationError, 10 + translationError, 10 + rotationError)
+                VecBuilder.fill(0.05 + translationError, 0.05 + translationError, 0.05 + rotationError)
         );
     }
 

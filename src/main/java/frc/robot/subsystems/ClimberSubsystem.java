@@ -28,8 +28,8 @@ public class ClimberSubsystem extends SubsystemBase {
         rightClimberMotor = new SparkMax(Constants.Climber.rightMotorChannel, SparkLowLevel.MotorType.kBrushless);
         leftClimberEncoder = leftClimberMotor.getEncoder();
         rightClimberEncoder = rightClimberMotor.getEncoder();
-        leftClimberEncoder.setPosition(0.0);
-        rightClimberEncoder.setPosition(0.0);
+        leftClimberEncoder.setPosition(-2.0);
+        rightClimberEncoder.setPosition(-2.0);
 
     }
 
