@@ -15,12 +15,7 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import frc.robot.Constants;
-import frc.robot.subsystems.ClimberSubsystem;
-import frc.robot.subsystems.IndexerSubsystem;
-import frc.robot.subsystems.IntakeSubsystem;
-import frc.robot.subsystems.LoaderSubsystem;
-import frc.robot.subsystems.ManualShooterSubsystem;
-import frc.robot.subsystems.PoseEstimationSubsystem;
+import frc.robot.subsystems.*;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.utils.FlipPose2d;
 
@@ -66,11 +61,12 @@ public final class Autos {
             IndexerSubsystem indexerSubsystem,
             LoaderSubsystem loaderSubsystem,
             ClimberSubsystem climberSubsystem,
-            IntakeSubsystem intakeSubsystem) {
+            IntakeSubsystem intakeSubsystem,
+            PivotSubsystem pivotSubsystem) {
 
-        var readyPos = new FlipPose2d(new Translation2d(1.47, 3.72), new Rotation2d(Units.degreesToRadians(1.5)));
-        var backPos = new FlipPose2d(new Translation2d(0.57, 3.72), new Rotation2d(Units.degreesToRadians(1.5)));
-        var climbPos = new FlipPose2d(new Translation2d(1.02, 3.72), new Rotation2d(Units.degreesToRadians(1.5)));
+        var readyPos = new FlipPose2d(new Translation2d(1.5, 3.72), new Rotation2d(Units.degreesToRadians(1.5)));
+        var backPos = new FlipPose2d(new Translation2d(0.96, 3.72), new Rotation2d(Units.degreesToRadians(2.0)));
+        var climbPos = new FlipPose2d(new Translation2d(1.05, 3.72), new Rotation2d(Units.degreesToRadians(2.0)));
 
         return Commands.sequence(
                 new ParallelDeadlineGroup(
@@ -79,7 +75,8 @@ public final class Autos {
                                 poseEstimationSubsystem,
                                 indexerSubsystem,
                                 loaderSubsystem,
-                                intakeSubsystem)
+                                intakeSubsystem,
+                                pivotSubsystem)
                 ),
                 new ParallelDeadlineGroup(
                         new DriveToPoseCommand(drive, readyPos)
@@ -108,7 +105,8 @@ public final class Autos {
             PoseEstimationSubsystem poseEstimationSubsystem,
             IndexerSubsystem indexerSubsystem,
             LoaderSubsystem loaderSubsystem,
-            IntakeSubsystem intakeSubsystem
+            IntakeSubsystem intakeSubsystem,
+            PivotSubsystem pivotSubsystem
     ) {
         return Commands.sequence(
                 new ParallelDeadlineGroup(
@@ -119,7 +117,8 @@ public final class Autos {
                         new ManualShooterCommand(manualShooterSubsystem, Constants.Shooter.shooterSpeedScore)
                 ),
                 new ParallelDeadlineGroup(
-                        new TimerCommand(Duration.ofSeconds(5)),
+                        new TimerCommand(Duration.ofSeconds(4)),
+                        new PivotCommand(pivotSubsystem, Constants.Intake.intakeSpeed),
                         new IntakeCommand(intakeSubsystem, Constants.Intake.intakeSpeed),
                         new IndexerCommand(indexerSubsystem, Constants.Indexer.indexerSpeed),
                         new ManualShooterCommand(manualShooterSubsystem, Constants.Shooter.shooterSpeedScore),

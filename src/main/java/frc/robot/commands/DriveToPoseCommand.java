@@ -21,8 +21,8 @@ public class DriveToPoseCommand extends Command {
     private final Duration hold;
 
     // TODO: these probably will need to be configured, or will go out of control all over the place
-    private final PIDController xController = new PIDController(0.2, 0, 0);
-    private final PIDController yController = new PIDController(0.2, 0, 0);
+    private final PIDController xController = new PIDController(0.3, 0.0, 0);
+    private final PIDController yController = new PIDController(0.3, 0.0, 0);
     private final PIDController thetaController = new PIDController(1.0, 0.0, 0);
 
     public DriveToPoseCommand(
@@ -99,7 +99,7 @@ public class DriveToPoseCommand extends Command {
         double distanceError = currentPose.getTranslation().getDistance(targetPose.getTranslation());
         double angleError = Math.abs(currentPose.getRotation().minus(targetPose.getRotation()).getDegrees());
 
-        boolean isCloseEnough = distanceError < .3 && angleError < 1;
+        boolean isCloseEnough = distanceError < 0.05 && angleError < 0.5;
 
         if (isCloseEnough) {
             var now = System.currentTimeMillis();

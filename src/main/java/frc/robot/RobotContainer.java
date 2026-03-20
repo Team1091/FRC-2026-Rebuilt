@@ -151,7 +151,8 @@ public class RobotContainer {
                 indexerSubsystem,
                 loaderSubsystem,
                 climberSubsystem,
-                intakeSubsystem
+                intakeSubsystem,
+                pivotSubsystem
         ));
 
         autoChooser.addOption("\uD83D\uDE0E", Autos.yoloSwaggins(drive,
@@ -170,7 +171,8 @@ public class RobotContainer {
                 poseEstimationSubsystem,
                 indexerSubsystem,
                 loaderSubsystem,
-                intakeSubsystem
+                intakeSubsystem,
+                pivotSubsystem
         ));
         autoChooser.addOption("Drive Back", Autos.driveBackScore(
                 drive,

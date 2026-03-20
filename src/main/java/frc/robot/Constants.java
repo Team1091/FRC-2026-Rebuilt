@@ -43,7 +43,7 @@ public final class Constants {
         // Manual Drive
         public static final double manualMaxLinearSpeed = Units.feetToMeters(14.5);
         // Auto
-        public static final double autoMaxLinearSpeed = Units.feetToMeters(3.0);
+        public static final double autoMaxLinearSpeed = Units.feetToMeters(12.5);
 
         public static final double linearDeadband = 0.1;
         public static final double rotationalDeadband = 0.1;
@@ -92,8 +92,8 @@ public final class Constants {
         public static final boolean disabled = false;
         public static final int leftMotorChannel = 13;
         // public static final int rightMotorChannel = 14;
-        public static final double shooterSpeedPass = 0.5;
-        public static final double shooterSpeedScore = 0.5;
+        public static final double shooterSpeedPass = 0.6;
+        public static final double shooterSpeedScore = 0.6;
         // TODO: we may want target RPMs here for the flywheel
     }
 
@@ -131,7 +131,7 @@ public final class Constants {
         public static final int leftMotorChannel = 9;
         public static final int rightMotorChannel = 10;
         public static final double climbingSpeed = 1.0;
-        public static final int maxEncoderCount = 250;
+        public static final int maxEncoderCount = 280;
     }
 
     public static final class Camera {
