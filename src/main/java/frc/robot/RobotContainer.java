@@ -5,6 +5,9 @@
 package frc.robot;
 
 import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -12,12 +15,15 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
+import frc.robot.commands.ClimberOverrideCommand;
 import frc.robot.commands.DriveCommand;
+import frc.robot.commands.DriveToPoseCommand;
 import frc.robot.commands.IndexerCommand;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.LoaderCommand;
@@ -25,6 +31,7 @@ import frc.robot.commands.ManualClimbCommand;
 import frc.robot.commands.ManualHoodCommand;
 import frc.robot.commands.ManualShooterCommand;
 import frc.robot.commands.PivotCommand;
+import frc.robot.commands.TimerCommand;
 import frc.robot.enums.StartPosish;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.HoodSubsystem;
@@ -38,6 +45,9 @@ import frc.robot.subsystems.PoseEstimationSubsystem;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.gyro.GyroIOPigeon2;
 import frc.robot.subsystems.drive.module.ModuleIOTalonFX;
+import frc.robot.utils.FlipPose2d;
+
+import java.time.Duration;
 
 import static frc.robot.Constants.Swerve.BACK_LEFT;
 import static frc.robot.Constants.Swerve.BACK_RIGHT;
@@ -66,7 +76,7 @@ public class RobotContainer {
 
     // Replace with CommandPS4Controller or CommandJoystick if needed
     private final CommandXboxController driverController = new CommandXboxController(OperatorConstants.kDriverControllerPort);
-    private final CommandXboxController buttonBoard = new CommandXboxController(1);
+    private final CommandXboxController secondController = new CommandXboxController(1);
 
     // This lets us select the command to run in autonomous
     private SendableChooser<Command> autoChooser;
@@ -146,7 +156,6 @@ public class RobotContainer {
         autoChooser.setDefaultOption("Do Nothing", new WaitCommand(1.0));
         autoChooser.addOption("Shoot and Climb", Autos.scoreAndClimb(
                 drive,
-                poseEstimationSubsystem,
                 manualShooterSubsystem,
                 indexerSubsystem,
                 loaderSubsystem,
@@ -154,28 +163,24 @@ public class RobotContainer {
                 intakeSubsystem
         ));
 
-        autoChooser.addOption("\uD83D\uDE0E", Autos.yoloSwaggins(drive,
-                poseEstimationSubsystem,
-                manualShooterSubsystem,
-                indexerSubsystem,
-                loaderSubsystem,
-                climberSubsystem,
-                intakeSubsystem));
+//        autoChooser.addOption("\uD83D\uDE0E", Autos.yoloSwaggins(drive,
+//                poseEstimationSubsystem,
+//                manualShooterSubsystem,
+//                indexerSubsystem,
+//                loaderSubsystem,
+//                climberSubsystem,
+//                intakeSubsystem));
 
-        autoChooser.addOption("Drive Forward", Autos.driveForward(drive));
-        autoChooser.addOption("Manual Align", Autos.manualAlign(drive));
-        autoChooser.addOption("Bare Minimum", Autos.driveBackAndScore(
+//        autoChooser.addOption("Drive Forward", Autos.driveForward(drive));
+//        autoChooser.addOption("Manual Align", Autos.manualAlign(drive));
+        autoChooser.addOption("Drive Back and Score", Autos.driveBackAndScore(
                 drive,
                 manualShooterSubsystem,
-                poseEstimationSubsystem,
                 indexerSubsystem,
                 loaderSubsystem,
                 intakeSubsystem
         ));
-        autoChooser.addOption("Drive Back", Autos.driveBackScore(
-                drive,
-                poseEstimationSubsystem
-        ));
+        autoChooser.addOption("Drive Back", Autos.driveBack(drive));
         SmartDashboard.putData("Auto Mode", autoChooser);
     }
 
@@ -241,19 +246,17 @@ public class RobotContainer {
 
         // Intake
 //        driverController.a().whileTrue(new RunIntakeCommand(intakeSubsystem, IntakeState.HARVEST));
+        driverController.y().toggleOnTrue(teleAutoClimb(drive, climberSubsystem));
         driverController.x().whileTrue(new IntakeCommand(intakeSubsystem, Constants.Intake.intakeSpeed));
         driverController.b().whileTrue(new PivotCommand(pivotSubsystem, Constants.Pivot.pivotSpeedOut));
         driverController.a().whileTrue(new PivotCommand(pivotSubsystem, Constants.Pivot.pivotSpeedIn));
         driverController.povUp().whileTrue(new ManualHoodCommand(manualHoodSubsystem, Constants.Hood.hoodSpeed));
         driverController.povDown().whileTrue(new ManualHoodCommand(manualHoodSubsystem, -Constants.Hood.hoodSpeed));
 
-//        buttonBoard.a().whileTrue(new ManualHoodCommand(manualHoodSubsystem, Constants.Hood.hoodSpeed));
-//        buttonBoard.b().whileTrue(new ManualHoodCommand(manualHoodSubsystem, -Constants.Hood.hoodSpeed));
-
-
-//        buttonBoard.a().whileTrue(up);
-//        buttonBoard.b().whileTrue(down);
-
+        secondController.b().whileTrue(new ManualHoodCommand(manualHoodSubsystem, Constants.Hood.hoodSpeed));
+        secondController.a().whileTrue(new ManualHoodCommand(manualHoodSubsystem, -Constants.Hood.hoodSpeed));
+        secondController.x().whileTrue(new ClimberOverrideCommand(climberSubsystem, -Constants.Climber.climbingSpeed));
+        secondController.y().whileTrue(new ClimberOverrideCommand(climberSubsystem, Constants.Climber.climbingSpeed));
 
     }
 
@@ -270,5 +273,37 @@ public class RobotContainer {
     public static boolean isOnRed() {
         var alliance = DriverStation.getAlliance();
         return alliance.filter(value -> value == DriverStation.Alliance.Red).isPresent();
+    }
+
+    public static Command teleAutoClimb(
+            Drive drive,
+            ClimberSubsystem climberSubsystem
+            ) {
+
+        //TODO: IF YOU CHANGE THE POS HERE CHANGE IT IN AUTOS AS WELL(scoreAndClimb COMMAND)
+        var readyPos = new FlipPose2d(new Translation2d(1.55, 3.72), new Rotation2d(Units.degreesToRadians(-1.5)));
+        var backPos = new FlipPose2d(new Translation2d(0.57, 3.72), new Rotation2d(Units.degreesToRadians(-1.5)));
+        var climbPos = new FlipPose2d(new Translation2d(1.02, 3.72), new Rotation2d(Units.degreesToRadians(-1.5)));
+
+        return Commands.sequence(
+                new ParallelDeadlineGroup(
+                        new DriveToPoseCommand(drive, readyPos)
+                ),
+                new ParallelDeadlineGroup(
+                        new DriveToPoseCommand(drive, backPos)
+                ),
+                new ParallelDeadlineGroup(
+                        new TimerCommand(Duration.ofSeconds(3)),
+                        new ManualClimbCommand(climberSubsystem, Constants.Climber.climbingSpeed)
+                ),
+                new ParallelDeadlineGroup(
+                        new DriveToPoseCommand(drive, climbPos)
+                ),
+                new ParallelDeadlineGroup(
+                        new TimerCommand(Duration.ofSeconds(3)),
+                        new ManualClimbCommand(climberSubsystem, -Constants.Climber.climbingSpeed)),
+
+                new ManualClimbCommand(climberSubsystem, -Constants.Climber.climbingSpeed)
+        );
     }
 }

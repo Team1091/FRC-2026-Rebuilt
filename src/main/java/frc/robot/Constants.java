@@ -88,6 +88,7 @@ public final class Constants {
         };
     }
 
+
     public static final class Shooter {
         public static final boolean disabled = false;
         public static final int leftMotorChannel = 13;
