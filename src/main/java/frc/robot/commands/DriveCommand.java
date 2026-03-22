@@ -26,11 +26,12 @@ public class DriveCommand {
             DoubleSupplier ySupplier,
             DoubleSupplier omegaSupplier
     ) {
-        var redReverse = RobotContainer.isOnRed() && drive.getIsFieldOriented() ? -1 : 1;
+        var redReverse = RobotContainer.isOnRed() && drive.getIsFieldOriented() ? 1 : -1;
         return Commands.run(
                 () -> {
-                    double x = xSupplier.getAsDouble() * redReverse * -1;
-                    double y = ySupplier.getAsDouble() * redReverse;
+
+                    double x = xSupplier.getAsDouble() * redReverse;
+                    double y = ySupplier.getAsDouble() * redReverse * -1;
                     double omega = MathUtil.applyDeadband(omegaSupplier.getAsDouble(), Constants.Swerve.rotationalDeadband);
 
                     // Apply deadband

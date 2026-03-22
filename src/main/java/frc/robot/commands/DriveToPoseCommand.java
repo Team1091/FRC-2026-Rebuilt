@@ -99,7 +99,7 @@ public class DriveToPoseCommand extends Command {
         double distanceError = currentPose.getTranslation().getDistance(targetPose.getTranslation());
         double angleError = Math.abs(currentPose.getRotation().minus(targetPose.getRotation()).getDegrees());
 
-        boolean isCloseEnough = distanceError < 0.05 && angleError < 0.5;
+        boolean isCloseEnough = distanceError < 0.1 && angleError < 0.5;
 
         if (isCloseEnough) {
             var now = System.currentTimeMillis();

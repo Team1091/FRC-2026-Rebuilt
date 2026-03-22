@@ -154,7 +154,16 @@ public class RobotContainer {
     private void configureAutonomous() {
         autoChooser = new SendableChooser<>();
         autoChooser.setDefaultOption("Do Nothing", new WaitCommand(1.0));
-        autoChooser.addOption("Shoot and Climb", Autos.scoreAndClimb(
+        autoChooser.addOption("Shoot and Climb Blue", Autos.scoreAndClimbBlueSide(
+                drive,
+                manualShooterSubsystem,
+                indexerSubsystem,
+                loaderSubsystem,
+                climberSubsystem,
+                intakeSubsystem,
+                pivotSubsystem
+        ));
+        autoChooser.addOption("Shoot and Climb Red", Autos.scoreAndClimbRedSide(
                 drive,
                 manualShooterSubsystem,
                 indexerSubsystem,
@@ -174,7 +183,7 @@ public class RobotContainer {
 
 //        autoChooser.addOption("Drive Forward", Autos.driveForward(drive));
 //        autoChooser.addOption("Manual Align", Autos.manualAlign(drive));
-        autoChooser.addOption("Drive Back and Score", Autos.driveBackAndScore(
+        autoChooser.addOption("Drive Back and Score", Autos.driveBackAndScoreBlueSide(
                 drive,
                 manualShooterSubsystem,
                 indexerSubsystem,

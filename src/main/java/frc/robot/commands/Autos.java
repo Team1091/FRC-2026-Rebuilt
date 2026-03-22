@@ -20,15 +20,23 @@ import java.time.Duration;
 
 public final class Autos {
 
-    public static Command driveBackwards(
+    public static Command driveBackwardsBlue(
             Drive drive
     ) {
-        var newPos = new FlipPose2d(new Translation2d(2.41, 3.78), new Rotation2d(Units.degreesToRadians(6.5)));
+        var newPos = new FlipPose2d(new Translation2d(2.1, 3.78), new Rotation2d(Units.degreesToRadians(6.5)));
 
         return new DriveToPoseCommand(drive, newPos);
     }
 
-    public static Command driveBackAndScore(
+    public static Command driveBackwardsRed(
+            Drive drive
+    ) {
+        var newPos = new FlipPose2d(new Translation2d(14.4, 3.78), new Rotation2d(Units.degreesToRadians(6.5)));
+
+        return new DriveToPoseCommand(drive, newPos);
+    }
+
+    public static Command driveBackAndScoreBlueSide(
             Drive drive,
             ManualShooterSubsystem manualShooterSubsystem,
             IndexerSubsystem indexerSubsystem,
@@ -38,7 +46,7 @@ public final class Autos {
     ) {
         return Commands.sequence(
                 new ParallelDeadlineGroup(
-                        driveBackwards(drive)
+                        driveBackwardsBlue(drive)
                 ),
                 new ParallelRaceGroup(
                         new TimerCommand(Duration.ofSeconds(1)),
@@ -55,7 +63,34 @@ public final class Autos {
         );
     }
 
-    public static Command scoreAndClimb(
+    public static Command driveBackAndScoreRedSide(
+            Drive drive,
+            ManualShooterSubsystem manualShooterSubsystem,
+            IndexerSubsystem indexerSubsystem,
+            LoaderSubsystem loaderSubsystem,
+            IntakeSubsystem intakeSubsystem,
+            PivotSubsystem pivotSubsystem
+    ) {
+        return Commands.sequence(
+                new ParallelDeadlineGroup(
+                        driveBackwardsRed(drive)
+                ),
+                new ParallelRaceGroup(
+                        new TimerCommand(Duration.ofSeconds(1)),
+                        new ManualShooterCommand(manualShooterSubsystem, Constants.Shooter.shooterSpeedScore)
+                ),
+                new ParallelDeadlineGroup(
+                        new TimerCommand(Duration.ofSeconds(4)),
+                        new PivotCommand(pivotSubsystem, Constants.Intake.intakeSpeed),
+                        new IntakeCommand(intakeSubsystem, Constants.Intake.intakeSpeed),
+                        new IndexerCommand(indexerSubsystem, Constants.Indexer.indexerSpeed),
+                        new ManualShooterCommand(manualShooterSubsystem, Constants.Shooter.shooterSpeedScore),
+                        new LoaderCommand(loaderSubsystem, Constants.Loader.loaderSpeed)
+                )
+        );
+    }
+
+    public static Command scoreAndClimbBlueSide(
             Drive drive,
             ManualShooterSubsystem manualShooterSubsystem,
             IndexerSubsystem indexerSubsystem,
@@ -71,7 +106,51 @@ public final class Autos {
 
         return Commands.sequence(
                 new ParallelDeadlineGroup(
-                        driveBackAndScore(drive,
+                        driveBackAndScoreBlueSide(drive,
+                                manualShooterSubsystem,
+                                indexerSubsystem,
+                                loaderSubsystem,
+                                intakeSubsystem,
+                                pivotSubsystem)
+                ),
+                new ParallelDeadlineGroup(
+                        new DriveToPoseCommand(drive, readyPos)
+                ),
+                new ParallelDeadlineGroup(
+                        new DriveToPoseCommand(drive, backPos)
+                ),
+                new ParallelDeadlineGroup(
+                        new TimerCommand(Duration.ofSeconds(3)),
+                        new ManualClimbCommand(climberSubsystem, Constants.Climber.climbingSpeed)
+                ),
+                new ParallelDeadlineGroup(
+                        new DriveToPoseCommand(drive, climbPos)
+                ),
+                new ParallelDeadlineGroup(
+                        new TimerCommand(Duration.ofSeconds(3)),
+                        new ManualClimbCommand(climberSubsystem, -Constants.Climber.climbingSpeed)),
+
+                new ManualClimbCommand(climberSubsystem, -Constants.Climber.climbingSpeed)
+        );
+    }
+
+    public static Command scoreAndClimbRedSide(
+            Drive drive,
+            ManualShooterSubsystem manualShooterSubsystem,
+            IndexerSubsystem indexerSubsystem,
+            LoaderSubsystem loaderSubsystem,
+            ClimberSubsystem climberSubsystem,
+            IntakeSubsystem intakeSubsystem,
+            PivotSubsystem pivotSubsystem) {
+
+        //TODO: CHANGE IN ROBOT CONTAINER BECAUSE IT HAS THESE POS TOO
+        var readyPos = new FlipPose2d(new Translation2d(1.5, 3.72), new Rotation2d(Units.degreesToRadians(1.5)));
+        var backPos = new FlipPose2d(new Translation2d(0.96, 3.72), new Rotation2d(Units.degreesToRadians(2.0)));
+        var climbPos = new FlipPose2d(new Translation2d(1.05, 3.72), new Rotation2d(Units.degreesToRadians(2.0)));
+
+        return Commands.sequence(
+                new ParallelDeadlineGroup(
+                        driveBackAndScoreRedSide(drive,
                                 manualShooterSubsystem,
                                 indexerSubsystem,
                                 loaderSubsystem,
